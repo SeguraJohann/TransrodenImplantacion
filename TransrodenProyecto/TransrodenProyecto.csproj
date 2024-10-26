@@ -145,6 +145,7 @@
     <Compile Include="Controllers\FacturacionsController.cs" />
     <Compile Include="Controllers\HistorialsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MarketingController.cs" />
     <Compile Include="Controllers\PaquetesCargasControllerController.cs" />
     <Compile Include="Controllers\PaquetesController.cs" />
     <Compile Include="Controllers\UsuariosController.cs" />
@@ -429,6 +430,7 @@
     <Content Include="Views\RecuperarClave\RecuperarClave.cshtml" />
     <Content Include="Views\Facturacions\DetalleFacturacionUsuario.cshtml" />
     <Content Include="Views\RecuperarClave\CambioClave.cshtml" />
+    <Content Include="Views\Marketing\Marketing.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
