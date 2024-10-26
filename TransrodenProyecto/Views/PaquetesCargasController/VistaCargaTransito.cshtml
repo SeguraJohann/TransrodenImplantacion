@@ -1,0 +1,59 @@
+﻿@using TransrodenProyecto.Models
+@model TransrodenProyecto.ViewModels.PaqueteCargaViewModel
+
+@{
+    Layout = null;
+}
+
+<h3>Cargas</h3>
+<br>
+<a href="@Url.Action("Create", "Cargas")" class="btn btn-danger">
+    <i class="fas fa-user-plus"></i> Agregar Carga
+</a>
+<br>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id Carga</th>
+            <th>Transportista</th>
+            <th>Estado</th>
+            <th>Paquetes Asignados</th>
+            <th>Ver Paquetes</th>
+            <th>Cambiar Estado</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var carga in Model.Cargas)
+        {
+            <tr>
+                <td>@carga.Id_Carga</td>
+                <td>@carga.Usuario.Nombre</td>
+                <td>@carga.Estado.ToString()</td>
+                <td>@carga.NumeroPaquetes</td>
+                <td>
+                    <a href="@Url.Action("CargaPaquetes", "PaquetesCargasController", new { idCarga = carga.Id_Carga })" class="btn btn-success">
+                        Ver Paquetes
+                    </a>
+                </td>
+                <td>
+                    @using (Html.BeginForm("ActualizarEstadoCargaGlobal", "PaquetesCargasController", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("idCarga", carga.Id_Carga)
+
+                        <select name="nuevoEstado" class="form-control">
+                            <option value="">Estado</option>
+                            <option value="BodegaSJ">BodegaSJ</option>
+                            <option value="BodegaPZ">BodegaPZ</option>
+                            <option value="EnTransito">EnTransito</option>
+                            <option value="Entregado">Entregado</option>
+                        </select>
+
+                        <button type="submit" class="btn btn-primary mt-2">Actualizar</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

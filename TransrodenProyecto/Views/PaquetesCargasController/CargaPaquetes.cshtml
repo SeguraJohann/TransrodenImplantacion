@@ -1,0 +1,77 @@
+﻿@using TransrodenProyecto.Models
+@model TransrodenProyecto.ViewModels.PaqueteCargaViewModel
+
+@{
+    Layout = null;
+}
+
+
+<h2>Paquetes de la Carga</h2>
+<br>
+
+<div class="container mt-5">
+    <h4>Transportista: @Model.Cargas.First().Usuario.Nombre</h4>
+    <h4>Estado: @Model.Cargas.First().Estado.ToString()</h4>
+    <h4>Paquetes Asignados: @Model.Cargas.First().NumeroPaquetes</h4>
+
+    <table class="table mt-4">
+        <thead>
+            <tr>
+                <th>Número de Rastreo</th>
+                <th>Emisor</th>
+                <th>Receptor</th>
+                <th>Estado</th>
+                <th>Detalles del Paquete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var paquete in Model.Paquetes)
+            {
+                <tr>
+                    <td>@paquete.NumeroRastreo</td>
+                    <td>@paquete.NombreEmisor</td>
+                    <td>@paquete.NombreReceptor</td>
+                    <td>@paquete.Estado.ToString()</td>
+                    <td>
+                        <a href="@Url.Action("Details", "Paquetes", new { id = paquete.Id_Paquete })" class="btn btn-primary">
+                            Ver
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+    @if (Session["Usuario"] != null)
+    {
+        // Obtener la sede del usuario desde la sesión
+        var sedeUsuario = Session["Sede"] != null ? (Sede)Session["Sede"] : Sede.SanJose; // Valor por defecto
+
+        // Determinar la URL según la sede
+        string urlCargas;
+        if (sedeUsuario == Sede.SanJose)
+        {
+            urlCargas = Url.Action("AsignarPaqueteSJCarga", "PaquetesCargasController");
+        }
+        else if (sedeUsuario == Sede.PerezZeledon)
+        {
+            urlCargas = Url.Action("AsignarPaquetePZCarga", "PaquetesCargasController");
+        }
+        else
+        {
+            urlCargas = "#"; // En caso de que la sede no sea válida, puedes redirigir a una página de error o similar.
+        }
+
+        // Enlace a Cargas
+        <a href="@urlCargas" class="btn btn-success">Regresar</a>
+    }
+    else
+    {
+        <a href="@Url.Action("Login", "Cuenta")" class="btn btn-danger">
+            <span class="d-block"><i class="fas fa-user"></i></span>
+            Login
+        </a>
+    }
+
+</div>

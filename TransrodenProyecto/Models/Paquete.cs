@@ -22,12 +22,19 @@ namespace TransrodenProyecto.Models
         [Required]
         public TipoPaquete Tipo { get; set; }
 
+
+        //Enum
+        [Required]
+        public OrigenPaquete Origen { get; set; }
+
+
         //Enum
         public EstadoPaquete Estado { get; set; }
 
         public Paquete()
         {
             Estado = EstadoPaquete.SinAsignar; //Poner EstadoPaquete en valor 0 por defecto
+            Origen = OrigenPaquete.Otro; //Origen del paquete en 0 por defecto
         }
 
 

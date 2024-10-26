@@ -25,6 +25,14 @@ namespace TransrodenProyecto.Models
         Entregado = 8
     }
 
+    public enum OrigenPaquete
+    {
+        Otro = 0,
+        SanJose = 1,
+        PerezZeledon = 2   
+    }
+
+
     public enum EstadoCarga
     {
         Asignado = 0,

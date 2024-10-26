@@ -14,22 +14,24 @@ namespace TransrodenProyecto.Models
         public int Id_Carga { get; set; }
 
 
-
-        public int Id_Usuario { get; set; }
+        // Para que acepte null
+        public int? Id_Usuario { get; set; }
         public Usuario Usuario { get; set; }
 
 
-        public string Direccion { get; set; }
+        //Requerido
+        public string Descripcion { get; set; }
 
 
-        public int NumeroPaquetes { get; set; }
+        //Permite null
+        public int? NumeroPaquetes { get; set; }
+
 
         //Enum
-        [Required]
         public EstadoCarga Estado { get; set; }
 
 
-        public DateTime fecha_recibo { get; set; }
+        public DateTime? fecha_creacion { get; set; }
 
 
         public List<Paquete> Paquetes { get; set; }

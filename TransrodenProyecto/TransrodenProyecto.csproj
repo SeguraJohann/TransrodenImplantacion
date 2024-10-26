@@ -163,6 +163,7 @@
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\RecuperarClaveController.cs" />
+    <Compile Include="ViewModels\PaqueteCargaAsignacionViewModel.cs" />
     <Compile Include="ViewModels\PaqueteCargaViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -383,11 +384,6 @@
     <Content Include="Views\Camions\Details.cshtml" />
     <Content Include="Views\Camions\Edit.cshtml" />
     <Content Include="Views\Camions\Index.cshtml" />
-    <Content Include="Views\Cargas\Create.cshtml" />
-    <Content Include="Views\Cargas\Delete.cshtml" />
-    <Content Include="Views\Cargas\Details.cshtml" />
-    <Content Include="Views\Cargas\Edit.cshtml" />
-    <Content Include="Views\Cargas\Index.cshtml" />
     <Content Include="Views\Envios\Create.cshtml" />
     <Content Include="Views\Envios\Delete.cshtml" />
     <Content Include="Views\Envios\Details.cshtml" />
@@ -430,10 +426,16 @@
     <Content Include="Views\RecuperarClave\CambioClave.cshtml" />
     <Content Include="Views\PaquetesCargasController\AsignarPaqueteSJCarga.cshtml" />
     <Content Include="Views\PaquetesCargasController\AsignarPaquetePZCarga.cshtml" />
+    <Content Include="Views\Cargas\Create.cshtml" />
+    <Content Include="Views\Cargas\Delete.cshtml" />
+    <Content Include="Views\Cargas\Details.cshtml" />
+    <Content Include="Views\Cargas\Edit.cshtml" />
+    <Content Include="Views\Cargas\Index.cshtml" />
+    <Content Include="Views\PaquetesCargasController\CargaPaquetes.cshtml" />
+    <Content Include="Views\PaquetesCargasController\VistaCargaTransito.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Login\" />
     <Folder Include="Views\View\" />
   </ItemGroup>
   <ItemGroup>

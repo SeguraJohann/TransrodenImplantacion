@@ -10,5 +10,7 @@ namespace TransrodenProyecto.ViewModels
     {
         public List<Paquete> Paquetes { get; set; }
         public List<Carga> Cargas { get; set; }
+
+
     }
 }

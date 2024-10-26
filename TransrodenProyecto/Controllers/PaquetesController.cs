@@ -75,6 +75,7 @@ namespace TransrodenProyecto.Controllers
             return View();
         }
 
+
         // Crear y guardar el paquete
         [HttpPost]
         public async Task<ActionResult> RegistrarPaquete(Paquete model)
@@ -84,20 +85,29 @@ namespace TransrodenProyecto.Controllers
                 // Obtener la sede del usuario desde la sesión
                 int? sedeValue = Session["Sede"] as int?;
                 EstadoPaquete estado; // Cambiar a EstadoPaquete
+                OrigenPaquete origen; // Cambiar a OrigenPaquete
+
 
                 if (sedeValue.HasValue)
                 {
                     // Dependiendo de la sede, asignar el estado correspondiente
                     estado = sedeValue.Value == (int)Sede.SanJose ? EstadoPaquete.SinAsignarSJ : EstadoPaquete.SinAsignarPZ;
+                    origen = sedeValue.Value == (int)Sede.SanJose ? OrigenPaquete.SanJose : OrigenPaquete.PerezZeledon;
                 }
                 else
                 {
                     estado = EstadoPaquete.SinAsignar; // Valor por defecto si no hay sede
+                    origen = OrigenPaquete.Otro;
                 }
+
+
+
+
                 var nuevoPaquete = new Paquete
                 {
                     NumeroRastreo = GenerarNumeroRastreo(),
                     Tipo = model.Tipo,
+                    Origen = origen,
                     Estado = estado,
                     NombreEmisor = model.NombreEmisor,
                     CedulaEmisor = model.CedulaEmisor,
@@ -121,6 +131,9 @@ namespace TransrodenProyecto.Controllers
 
             return View(model);
         }
+
+
+
 
         // Numero de tracking
         private string GenerarNumeroRastreo()
@@ -215,6 +228,7 @@ namespace TransrodenProyecto.Controllers
                     paqueteExistente.fecha_recibo = paquete.fecha_recibo;
                     paqueteExistente.fecha_entrega = paquete.fecha_entrega;
                     paqueteExistente.Estado = paquete.Estado;
+                    paqueteExistente.Origen = paquete.Origen;
 
                     // Guardar los cambios en el paquete
                     db.Entry(paqueteExistente).State = EntityState.Modified;
