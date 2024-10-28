@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     Layout = null;
 }
 
@@ -160,10 +161,10 @@
             <!-- Ancho de la caja login -->
             <div class="col-lg-4 col-md-6">
                 <div class="bg-white rounded p-4 p-sm-5 shadow-sm">
-                    <h2 class="text-center mb-4">Recuperacion de contraseña</h2>
+                    <h2 class="text-center mb-4">Envío de boletín</h2>
 
 
-                    @using (Html.BeginForm("RecuperarClave", "RecuperarClave", FormMethod.Post))
+                    @using (Html.BeginForm("RecuperarClave", "CorreoEnviado", FormMethod.Post))
                     {
                         @Html.AntiForgeryToken()
 
@@ -171,9 +172,9 @@
 
                         <div class="form-group">
 
-                            <h1>Se ha enviado una nueva contraseña a tu correo</h1>
+                            <h1>Se ha enviado el correo a todos los clientes.</h1>
                             <br>
-                            <a href="@Url.Action("Login", "Cuenta")" class="btn btn-primary">Volver a Login</a>
+                            <a href="@Url.Action("Login", "Cuenta")" class="btn btn-primary">Volver a inicio</a>
 
                         </div>
                     }

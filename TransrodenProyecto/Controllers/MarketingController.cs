@@ -24,7 +24,10 @@ namespace TransrodenProyecto.Controllers
         {
             return View();
         }
-
+        public ActionResult CorreoEnviado()
+        {
+            return View();
+        }
 
         [HttpPost]
         public ActionResult EnviarBoletin(string Asunto, string Mensaje, HttpPostedFileBase Imagen)
@@ -71,7 +74,7 @@ namespace TransrodenProyecto.Controllers
 
                 // Enviar el correo
                 smtpClient.Send(mailMessage);
-                return Content("Boletín enviado exitosamente a todos los clientes.");
+                return RedirectToAction("CorreoEnviado");
             }
             catch (Exception ex)
             {

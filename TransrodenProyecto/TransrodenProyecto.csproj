@@ -431,6 +431,7 @@
     <Content Include="Views\Facturacions\DetalleFacturacionUsuario.cshtml" />
     <Content Include="Views\RecuperarClave\CambioClave.cshtml" />
     <Content Include="Views\Marketing\Marketing.cshtml" />
+    <Content Include="Views\Marketing\CorreoEnviado.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
