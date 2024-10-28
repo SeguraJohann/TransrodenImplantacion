@@ -25,6 +25,7 @@ namespace TransrodenProyecto.Models
         Entregado = 8
     }
 
+    //Para poder quitar un paquete de una carga y ponerlo en su estado original
     public enum OrigenPaquete
     {
         Otro = 0,
@@ -41,6 +42,16 @@ namespace TransrodenProyecto.Models
         BodegaSJ = 3,
         Entregado = 4
     }
+
+
+    //Para colocar la carga en la vista correcta
+    public enum OrigenCarga
+    {
+        Otro = 0,
+        SanJose = 1,
+        PerezZeledon = 2
+    }
+
 
     public enum EstadoEnvio
     {

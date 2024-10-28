@@ -1,0 +1,86 @@
+﻿@using TransrodenProyecto.Models
+@model TransrodenProyecto.ViewModels.PaqueteCargaViewModel
+
+@{
+    Layout = null;
+}
+
+<div class="container mt-5">
+
+
+    <div class="row">
+        <!-- Lista de paquetes-->
+        <div class="col-md-6">
+            <h3>Paquetes Sin Carga Asignada</h3>
+            <br>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Número de Rastreo</th>
+                        <th>Emisor</th>
+                        <th>Receptor</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Paquetes.Count; i++)
+                    {
+                        var paquete = Model.Paquetes[i];
+                        <tr>
+                            <td>@paquete.NumeroRastreo</td>
+                            <td>@paquete.NombreEmisor</td>
+                            <td>@paquete.NombreReceptor</td>
+                            <td>@paquete.Estado.ToString()</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    <!-- Paquetes recibidos -->
+    <div class="col-md-6">
+        <h3>Paquetes recibidos pendiente de entrega</h3>
+        <br>
+        <br>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Numero de Rastreo</th>
+                    <th>Emisor</th>
+                    <th>Receptor</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var paquete in Model.PaquetesRecibidos)
+                {
+                    <tr>
+                        <td>@paquete.NumeroRastreo</td>
+                        <td>@paquete.NombreEmisor</td>
+                        <td>@paquete.NombreReceptor</td>
+                        <td>@paquete.Estado.ToString()</td>
+                        <td>
+                            @using (Html.BeginForm("ActualizarEstadoPaquete", "PaquetesCargasController", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("idPaquete", paquete.Id_Paquete)
+
+                                <select name="nuevoEstado" class="form-control">
+                                    <option value="">Estado</option>
+                                    <option value="BodegaSJ">BodegaSJ</option>
+                                    <option value="Entregado">Entregado</option>
+                                </select>
+
+                                <button type="submit" class="btn btn-danger mt-2">Actualizar</button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    </div>
+
+</div>
+

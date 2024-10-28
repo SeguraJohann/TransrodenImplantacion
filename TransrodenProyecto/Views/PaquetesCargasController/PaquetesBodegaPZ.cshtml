@@ -1,0 +1,128 @@
+﻿@using TransrodenProyecto.Models
+@model TransrodenProyecto.ViewModels.PaqueteCargaViewModel
+
+@{
+    Layout = null;
+}
+
+
+<div class="container mt-5">
+   
+
+    <br>
+    <br>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Paquetes Pendientes de Envio</h3>
+
+            <!-- Formulario para asignar múltiples paquetes a una carga -->
+            @using (Html.BeginForm("AsignarPaqueteACargaPZ", "PaquetesCargasController", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Número de Rastreo</th>
+                            <th>Emisor</th>
+                            <th>Receptor</th>
+                            <th>Estado</th>
+                            <th>Asignar a Carga</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Paquetes.Count; i++)
+                        {
+                            var paquete = Model.Paquetes[i];
+                            <tr>
+                                <td>@paquete.NumeroRastreo</td>
+                                <td>@paquete.NombreEmisor</td>
+                                <td>@paquete.NombreReceptor</td>
+                                <td>@paquete.Estado.ToString()</td>
+                                <td>
+                                    @Html.Hidden($"PaqueteCargaAsignaciones[{i}].IdPaquete", paquete.Id_Paquete)
+
+                                    <select name="PaqueteCargaAsignaciones[@i].IdCarga" class="form-control">
+                                        <option value="">Seleccionar Carga</option>
+                                        @foreach (var carga in Model.Cargas)
+                                        {
+                                            <option value="@carga.Id_Carga">
+                                                @carga.Descripcion - Usuario: @carga.Usuario.Nombre
+                                            </option>
+                                        }
+                                    </select>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <button type="submit" class="btn btn-primary">Asignar Carga</button>
+            }
+        </div>
+
+
+        <div class="col-md-6">
+            <h3>Cargas</h3>
+            <br>
+            <a href="@Url.Action("Create", "Cargas")" class="btn btn-danger">
+                <i class="fas fa-user-plus"></i> Agregar Carga
+            </a>
+            <br>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id Carga</th>
+                        <th>Transportista</th>
+                        <th>Estado</th>
+                        <th>Paquetes Asignados</th>
+                        <th>Ver Paquetes</th>
+                        <th>Editar Carga</th>
+                        <th>Cambiar Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var carga in Model.Cargas)
+                    {
+                        <tr>
+                            <td>@carga.Id_Carga</td>
+                            <td>@carga.Usuario.Nombre</td>
+                            <td>@carga.Estado.ToString()</td>
+                            <td>@carga.NumeroPaquetes</td>
+                            <td>
+                                <a href="@Url.Action("CargaPaquetes", "PaquetesCargasController", new { idCarga = carga.Id_Carga })" class="btn btn-success">
+                                    Ver
+                                </a>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("Edit", "Cargas", new { id = carga.Id_Carga })" class="btn btn-primary">
+                                    Editar
+                                </a>
+                            </td>
+                            <td>
+                                @using (Html.BeginForm("ActualizarEstadoCargaPZ", "PaquetesCargasController", FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.Hidden("idCarga", carga.Id_Carga)
+
+                                    <select name="nuevoEstado" class="form-control">
+                                        <option value="">Estado</option>
+                                        <option value="BodegaSJ">BodegaSJ</option>
+                                        <option value="BodegaPZ">BodegaPZ</option>
+                                        <option value="EnTransito">EnTransito</option>
+                                        <option value="Entregado">Entregado</option>
+                                    </select>
+
+                                    <button type="submit" class="btn btn-danger mt-2">Actualizar</button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<br>

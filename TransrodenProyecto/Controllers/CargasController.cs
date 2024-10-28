@@ -87,6 +87,7 @@ namespace TransrodenProyecto.Controllers
                 if (sede.HasValue && (Sede)sede.Value == Sede.PerezZeledon)
                 {
                     carga.Estado = EstadoCarga.BodegaPZ;
+                    carga.Origen = OrigenCarga.PerezZeledon;
                     db.Cargas.Add(carga);
                     db.SaveChanges();
                     return RedirectToAction("AsignarPaquetePZCarga", "PaquetesCargasController");
@@ -94,6 +95,7 @@ namespace TransrodenProyecto.Controllers
                 else if (sede.HasValue && (Sede)sede.Value == Sede.SanJose)
                 {
                     carga.Estado = EstadoCarga.BodegaSJ;
+                    carga.Origen = OrigenCarga.SanJose;
                     db.Cargas.Add(carga);
                     db.SaveChanges();
                     return RedirectToAction("AsignarPaqueteSJCarga", "PaquetesCargasController");
@@ -129,17 +131,53 @@ namespace TransrodenProyecto.Controllers
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id_Carga,Id_Usuario,Descripcion,NumeroPaquetes,Estado,fecha_creacion")] Carga carga)
+        public ActionResult Edit([Bind(Include = "Id_Carga,Id_Usuario,Descripcion,NumeroPaquetes,Estado,Origen,fecha_creacion")] Carga carga)
         {
+
+            if (Session["UsuarioId"] == null)
+            {
+                return RedirectToAction("Login", "Cuenta");
+            }
+
+            // Obtener el usuario
+            var usuarioId = (int)Session["UsuarioId"];
+            var usuarioRol = (Rol)Session["UsuarioRol"];
+            var sede = (int?)Session["Sede"];
+
+            if (usuarioRol != Rol.Bodeguero)
+            {
+                ModelState.AddModelError("", "Solo los usuarios bodegueros pueden editar cargas.");
+                ViewBag.Id_Usuario = new SelectList(db.Usuarios.Where(u => u.Rol == Rol.Transportista), "Id_Usuario", "Nombre", carga.Id_Usuario);
+                return View(carga);
+            }
+
+
             if (ModelState.IsValid)
             {
-                db.Entry(carga).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                // Estado de la sede del usuario bodeguero
+                if (sede.HasValue && (Sede)sede.Value == Sede.PerezZeledon)
+                {
+                    db.Entry(carga).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("AsignarPaquetePZCarga", "PaquetesCargasController");
+                }
+                else if (sede.HasValue && (Sede)sede.Value == Sede.SanJose)
+                {
+                    db.Entry(carga).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("AsignarPaqueteSJCarga", "PaquetesCargasController");
+                }
+                
             }
             ViewBag.Id_Usuario = new SelectList(db.Usuarios, "Id_Usuario", "Nombre", carga.Id_Usuario);
             return View(carga);
+
+
         }
+
+
+
+
 
         // GET: Cargas/Delete/5
         public ActionResult Delete(int? id)
@@ -162,9 +200,47 @@ namespace TransrodenProyecto.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Carga carga = db.Cargas.Find(id);
-            db.Cargas.Remove(carga);
-            db.SaveChanges();
+
+
+            if (Session["UsuarioId"] == null)
+            {
+                return RedirectToAction("Login", "Cuenta");
+            }
+
+            // Obtener el usuario
+            var usuarioId = (int)Session["UsuarioId"];
+            var usuarioRol = (Rol)Session["UsuarioRol"];
+            var sede = (int?)Session["Sede"];
+
+
+            if (usuarioRol != Rol.Bodeguero)
+            {
+                ModelState.AddModelError("", "Solo los usuarios bodegueros pueden editar cargas.");
+                ViewBag.Id_Usuario = new SelectList(db.Usuarios.Where(u => u.Rol == Rol.Transportista), "Id_Usuario", "Nombre", carga.Id_Usuario);
+                return View(carga);
+            }
+
+
+            if (ModelState.IsValid)
+            {
+                // Estado de la sede del usuario bodeguero
+                if (sede.HasValue && (Sede)sede.Value == Sede.PerezZeledon)
+                {
+                    db.Cargas.Remove(carga);
+                    db.SaveChanges();
+                    return RedirectToAction("AsignarPaquetePZCarga", "PaquetesCargasController");
+                }
+                else if (sede.HasValue && (Sede)sede.Value == Sede.SanJose)
+                {
+                    db.Cargas.Remove(carga);
+                    db.SaveChanges();
+                    return RedirectToAction("AsignarPaqueteSJCarga", "PaquetesCargasController");
+                }
+
+            }
             return RedirectToAction("Index");
+
+
         }
 
         protected override void Dispose(bool disposing)

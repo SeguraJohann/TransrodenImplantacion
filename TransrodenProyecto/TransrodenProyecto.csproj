@@ -433,6 +433,8 @@
     <Content Include="Views\Cargas\Index.cshtml" />
     <Content Include="Views\PaquetesCargasController\CargaPaquetes.cshtml" />
     <Content Include="Views\PaquetesCargasController\VistaCargaTransito.cshtml" />
+    <Content Include="Views\PaquetesCargasController\PaquetesBodegaSJ.cshtml" />
+    <Content Include="Views\PaquetesCargasController\PaquetesBodegaPZ.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

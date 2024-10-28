@@ -31,6 +31,11 @@ namespace TransrodenProyecto.Models
         public EstadoCarga Estado { get; set; }
 
 
+        //Enum
+        public OrigenCarga Origen { get; set; }
+
+
+
         public DateTime? fecha_creacion { get; set; }
 
 

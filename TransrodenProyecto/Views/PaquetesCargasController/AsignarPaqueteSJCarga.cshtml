@@ -189,26 +189,23 @@
     </div>
     <!-- Navbar -->
 
+    <br>
+    <div class="d-flex justify-content-center ">
+        <a href="@Url.Action("VistaCargaTransito", "PaquetesCargasController")" class="btn btn-primary">
+            <i class="fa fa-truck"></i> Ver cargas en Transito
+        </a>
+    </div>
+
+
 
 
     <div class="container mt-5">
-        @if (Session["Usuario"] != null)
-        {
-            int? sedeValue = Session["Sede"] as int?;
-            string sedeTexto = sedeValue.HasValue ?
-                ((Sede)sedeValue.Value == Sede.SanJose ? "San José" : "Perez Zeledón") :
-                "";
-
-            <h2 class="navbar-text">Lista de Paquetes y Cargas @sedeTexto</h2>
-        }
-
-        <br>
-        <br>
+        
 
         <div class="row">
+            <!-- Lista de paquetes-->
             <div class="col-md-6">
-                <h3>Paquetes</h3>
-
+                <h3>Paquetes Sin Carga Asignada</h3>
 
                 @using (Html.BeginForm("AsignarPaqueteACargaSJ", "PaquetesCargasController", FormMethod.Post))
                 {
@@ -241,7 +238,7 @@
                                             @foreach (var carga in Model.Cargas)
                                             {
                                                 <option value="@carga.Id_Carga">
-                                                    @carga.Descripcion - Usuario: @carga.Usuario.Nombre
+                                                    Carga: @carga.Id_Carga - Camionero: @carga.Usuario.Nombre
                                                 </option>
                                             }
                                         </select>
@@ -251,16 +248,18 @@
                         </tbody>
                     </table>
 
-                    <button type="submit" class="btn btn-primary">Asignar Carga</button>
+                    <button type="submit" class="btn btn-success">Asignar Carga</button>
                 }
             </div>
 
+            <!-- Cargas para enviar -->
             <div class="col-md-6">
                 <h3>Cargas</h3>
                 <br>
                 <a href="@Url.Action("Create", "Cargas")" class="btn btn-danger">
                     <i class="fas fa-user-plus"></i> Agregar Carga
                 </a>
+                <br>
                 <br>
 
                 <table class="table">
@@ -271,7 +270,7 @@
                             <th>Estado</th>
                             <th>Paquetes Asignados</th>
                             <th>Ver Paquetes</th>
-                            <th>Editar Carga</th>
+                            <th>Acciones</th>
                             <th>Cambiar Estado</th>
                         </tr>
                     </thead>
@@ -290,7 +289,10 @@
                                 </td>
                                 <td>
                                     <a href="@Url.Action("Edit", "Cargas", new { id = carga.Id_Carga })" class="btn btn-primary">
-                                        Editar
+                                        Editar 
+                                    </a>
+                                    <a href="@Url.Action("Delete", "Cargas", new { id = carga.Id_Carga })" class="btn btn-danger">
+                                        Borrar
                                     </a>
                                 </td>
                                 <td>
@@ -302,8 +304,60 @@
                                         <select name="nuevoEstado" class="form-control">
                                             <option value="">Estado</option>
                                             <option value="BodegaSJ">BodegaSJ</option>
-                                            <option value="BodegaPZ">BodegaPZ</option>
                                             <option value="EnTransito">EnTransito</option>
+                                        </select>
+
+                                        <button type="submit" class="btn btn-danger mt-2">Actualizar</button>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <br>
+        <br>
+
+        <!-- Cargas recibidas -->
+        <div class="row">
+            <div class="col-md-6 offset-md-6">
+                <h3>Cargas Recibidas</h3>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Id Carga</th>
+                            <th>Transportista</th>
+                            <th>Estado</th>
+                            <th>Paquetes Asignados</th>
+                            <th>Ver Paquetes</th>
+                            <th>Editar Carga</th>
+                            <th>Cambiar Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var carga in Model.CargasRecibidas)
+                        {
+                            <tr>
+                                <td>@carga.Id_Carga</td>
+                                <td>@carga.Usuario.Nombre</td>
+                                <td>@carga.Estado.ToString()</td>
+                                <td>@carga.NumeroPaquetes</td>
+                                <td>
+                                    <a href="@Url.Action("CargaPaquetes", "PaquetesCargasController", new { idCarga = carga.Id_Carga })" class="btn btn-success">
+                                        Ver
+                                    </a>
+                                </td>
+                                <td>
+                                    @using (Html.BeginForm("EstadoCargaSJ", "PaquetesCargasController", FormMethod.Post))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        @Html.Hidden("idCarga", carga.Id_Carga)
+
+                                        <select name="nuevoEstado" class="form-control">
+                                            <option value="">Estado</option>
+                                            <option value="BodegaSJ">BodegaSJ</option>
                                             <option value="Entregado">Entregado</option>
                                         </select>
 
@@ -317,7 +371,6 @@
             </div>
         </div>
     </div>
-    <br>
 
 
 

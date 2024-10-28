@@ -18,8 +18,9 @@ namespace TransrodenProyecto.Controllers
         {
             var viewModel = new PaqueteCargaViewModel
             {
-                Paquetes = db.Paquetes.Where(p => p.Estado == EstadoPaquete.SinAsignarSJ).ToList(),
-                Cargas = db.Cargas.Include(c => c.Usuario).Where(c => c.Estado == EstadoCarga.BodegaSJ).ToList()
+                Paquetes = db.Paquetes.Where(p => p.Estado == EstadoPaquete.SinAsignarSJ && p.Origen == OrigenPaquete.SanJose).ToList(),
+                Cargas = db.Cargas.Include(c => c.Usuario).Where(c => c.Estado == EstadoCarga.BodegaSJ && c.Origen == OrigenCarga.SanJose).ToList(),
+                CargasRecibidas = db.Cargas.Include(c => c.Usuario).Where(c => c.Estado == EstadoCarga.BodegaSJ && c.Origen == OrigenCarga.PerezZeledon).ToList()
             };
 
             return View(viewModel);
@@ -30,8 +31,9 @@ namespace TransrodenProyecto.Controllers
         {
             var viewModel = new PaqueteCargaViewModel
             {
-                Paquetes = db.Paquetes.Where(p => p.Estado == EstadoPaquete.SinAsignarPZ).ToList(),
-                Cargas = db.Cargas.Include(c => c.Usuario).Where(c => c.Estado == EstadoCarga.BodegaPZ).ToList()
+                Paquetes = db.Paquetes.Where(p => p.Estado == EstadoPaquete.SinAsignarPZ && p.Origen == OrigenPaquete.PerezZeledon).ToList(),
+                Cargas = db.Cargas.Include(c => c.Usuario).Where(c => c.Estado == EstadoCarga.BodegaPZ && c.Origen == OrigenCarga.PerezZeledon).ToList(),
+                CargasRecibidas = db.Cargas.Include(c => c.Usuario).Where(c => c.Estado == EstadoCarga.BodegaPZ && c.Origen == OrigenCarga.SanJose).ToList()
             };
 
             return View(viewModel);
@@ -48,6 +50,30 @@ namespace TransrodenProyecto.Controllers
             return View(viewModel);
         }
 
+
+        public ActionResult PaquetesBodegaSJ()
+        {
+            var viewModel = new PaqueteCargaViewModel
+            {
+                Paquetes = db.Paquetes.Where(p => p.Estado == EstadoPaquete.SinAsignarSJ && p.Origen == OrigenPaquete.SanJose).ToList(),
+                PaquetesRecibidos = db.Paquetes.Where(p => p.Estado == EstadoPaquete.BodegaSJ && p.Origen == OrigenPaquete.PerezZeledon).ToList()
+            };
+
+            return View(viewModel);
+        }
+
+
+
+        public ActionResult PaquetesBodegaPZ()
+        {
+            var viewModel = new PaqueteCargaViewModel
+            {
+                Paquetes = db.Paquetes.Where(p => p.Estado == EstadoPaquete.SinAsignarPZ && p.Origen == OrigenPaquete.PerezZeledon).ToList(),
+                PaquetesRecibidos = db.Paquetes.Where(p => p.Estado == EstadoPaquete.BodegaPZ && p.Origen == OrigenPaquete.SanJose).ToList()
+            };
+
+            return View(viewModel);
+        }
 
 
 
@@ -139,11 +165,53 @@ namespace TransrodenProyecto.Controllers
 
 
 
-
-        public ActionResult CargaPaquetes(int idCarga)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult QuitarPaquete(int idPaquete, int idCarga)
         {
 
-            
+            //Se busca primero el paquete
+            var paquete = db.Paquetes.FirstOrDefault(p => p.Id_Paquete == idPaquete && p.Id_Carga == idCarga);
+            var carga = db.Cargas.FirstOrDefault(c => c.Id_Carga.Equals(idCarga));
+
+
+            if (paquete == null)
+            {
+                return HttpNotFound("El paquete no fue encontrado o no pertenece a la carga especificada.");
+            }
+
+
+            // Aqui vuelve a pasar a nulo (estado original del campo)
+            paquete.Id_Carga = null;
+
+
+            // Poner el estado original del paquete
+            if (paquete.Origen == OrigenPaquete.SanJose)
+            {
+                paquete.Estado = EstadoPaquete.SinAsignarSJ;
+            }
+            else if (paquete.Origen == OrigenPaquete.PerezZeledon)
+            {
+                paquete.Estado = EstadoPaquete.SinAsignarPZ;
+            }
+            else
+            {
+                paquete.Estado = EstadoPaquete.SinAsignar;
+            }
+
+            carga.NumeroPaquetes = (carga.NumeroPaquetes ?? 0) - 1;
+
+            db.SaveChanges();
+
+            return RedirectToAction("CargaPaquetes", new { idCarga = idCarga });
+        }
+
+
+
+
+
+        public ActionResult CargaPaquetes(int idCarga)
+        {            
             var carga = db.Cargas.Include(c => c.Usuario).FirstOrDefault(c => c.Id_Carga == idCarga);
 
             if (carga == null)
@@ -289,6 +357,84 @@ namespace TransrodenProyecto.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public ActionResult EstadoCargaSJ(int idCarga, string nuevoEstado)
+        {
+
+            if (string.IsNullOrEmpty(nuevoEstado))
+            {
+                ModelState.AddModelError("", "Seleccione un Estado!!");
+                return RedirectToAction("AsignarPaqueteSJCarga");
+            }
+
+
+            var carga = db.Cargas.Include(c => c.Paquetes).FirstOrDefault(c => c.Id_Carga == idCarga);
+
+            if (carga == null)
+            {
+                return HttpNotFound("Carga no encontrada!");
+            }
+
+
+
+            // TryParse convierte un string en un valor enum
+            if (Enum.TryParse<EstadoCarga>(nuevoEstado, out var estadoResult))
+            {
+                carga.Estado = estadoResult;
+
+                db.SaveChanges();
+            }
+            else
+            {
+                ModelState.AddModelError("", "Estado invalido!!");
+            }
+
+            return RedirectToAction("AsignarPaqueteSJCarga");
+        }
+
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EstadoCargaPZ(int idCarga, string nuevoEstado)
+        {
+
+            if (string.IsNullOrEmpty(nuevoEstado))
+            {
+                ModelState.AddModelError("", "Seleccione un Estado!!");
+                return RedirectToAction("AsignarPaquetePZCarga");
+            }
+
+
+            var carga = db.Cargas.Include(c => c.Paquetes).FirstOrDefault(c => c.Id_Carga == idCarga);
+
+            if (carga == null)
+            {
+                return HttpNotFound("Carga no encontrada!");
+            }
+
+
+
+            // TryParse convierte un string en un valor enum
+            if (Enum.TryParse<EstadoCarga>(nuevoEstado, out var estadoResult))
+            {
+                carga.Estado = estadoResult;
+
+                db.SaveChanges();
+            }
+            else
+            {
+                ModelState.AddModelError("", "Estado invalido!!");
+            }
+
+            return RedirectToAction("AsignarPaquetePZCarga");
+        }
+
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult ActualizarEstadoCargaGlobal(int idCarga, string nuevoEstado)
         {
 
@@ -344,6 +490,34 @@ namespace TransrodenProyecto.Controllers
             return RedirectToAction("VistaCargaTransito");
         }
 
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ActualizarEstadoPaquete(int idPaquete, string nuevoEstado)
+        {
+            if (string.IsNullOrEmpty(nuevoEstado))
+            {
+                TempData["Error"] = "Seleccione un estado válido.";
+                return RedirectToAction("PaquetesBodegaSJ");
+            }
+
+            var paquete = db.Paquetes.Find(idPaquete);
+            if (paquete == null)
+            {
+                TempData["Error"] = "Paquete no encontrado!!";
+                return RedirectToAction("PaquetesBodegaSJ");
+            }
+
+
+            paquete.Estado = (EstadoPaquete)Enum.Parse(typeof(EstadoPaquete), nuevoEstado);
+            db.SaveChanges();
+
+
+            TempData["Success"] = "El estado del paquete se ha actualizado correctamente.";
+            return RedirectToAction("PaquetesBodegaSJ");
+        }
 
 
     }
