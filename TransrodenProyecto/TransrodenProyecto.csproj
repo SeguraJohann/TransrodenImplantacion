@@ -145,6 +145,7 @@
     <Compile Include="Controllers\FacturacionsController.cs" />
     <Compile Include="Controllers\HistorialsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MarketingController.cs" />
     <Compile Include="Controllers\PaquetesCargasControllerController.cs" />
     <Compile Include="Controllers\PaquetesController.cs" />
     <Compile Include="Controllers\PaquetesEnviosControllerController.cs" />
@@ -458,6 +459,8 @@
     <Content Include="Views\Envios\DetailsTransp.cshtml" />
     <Content Include="Views\PaquetesCargasController\CargaPaquetesViewTransp.cshtml" />
     <Content Include="Views\Paquetes\DetailsTransp.cshtml" />
+    <Content Include="Views\Marketing\Marketing.cshtml" />
+    <Content Include="Views\Marketing\CorreoEnviado.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
