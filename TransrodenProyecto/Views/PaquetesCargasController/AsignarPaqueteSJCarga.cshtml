@@ -119,11 +119,11 @@
                             string urlCargas;
                             if (sedeUsuario == Sede.SanJose)
                             {
-                                urlCargas = Url.Action("AsignarPaqueteSJCarga", "PaquetesCargasController");
+                                urlCargas = Url.Action("DashboardSJ", "PaquetesCargasController");
                             }
                             else if (sedeUsuario == Sede.PerezZeledon)
                             {
-                                urlCargas = Url.Action("AsignarPaquetePZCarga", "PaquetesCargasController");
+                                urlCargas = Url.Action("DashBoardPZ", "PaquetesCargasController");
                             }
                             else
                             {
@@ -131,7 +131,7 @@
                             }
 
                             // Enlace a Cargas
-                            <a href="@urlCargas" class="nav-item nav-link">Cargas</a>
+                            <a href="@urlCargas" class="nav-item nav-link">Tracking</a>
                         }
                         else
                         {
@@ -332,7 +332,6 @@
                             <th>Estado</th>
                             <th>Paquetes Asignados</th>
                             <th>Ver Paquetes</th>
-                            <th>Editar Carga</th>
                             <th>Cambiar Estado</th>
                         </tr>
                     </thead>
@@ -345,7 +344,7 @@
                                 <td>@carga.Estado.ToString()</td>
                                 <td>@carga.NumeroPaquetes</td>
                                 <td>
-                                    <a href="@Url.Action("CargaPaquetes", "PaquetesCargasController", new { idCarga = carga.Id_Carga })" class="btn btn-success">
+                                    <a href="@Url.Action("CargaPaquetesView", "PaquetesCargasController", new { idCarga = carga.Id_Carga })" class="btn btn-success">
                                         Ver
                                     </a>
                                 </td>

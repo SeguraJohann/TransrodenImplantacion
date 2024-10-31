@@ -14,6 +14,38 @@ namespace TransrodenProyecto.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+
+        // ++++++++++++++++++++++++++++++++++++++++++ Vista del modulo de tracking ++++++++++++++++++++++++++++++++++
+
+        //Menu para todo relacionado a Tracking SJ
+        public ActionResult DashboardSJ()
+        {
+            return View();
+        }
+
+
+        //Menu para todo relacionado a Tracking PZ
+        public ActionResult DashboardPZ()
+        {
+            return View();
+        }
+
+
+        //Menu para la bodega de SJ
+        public ActionResult BodegaSJ()
+        {
+            return View();
+        }
+
+
+        //Menu para la bodega de PZ
+        public ActionResult BodegaPZ()
+        {
+            return View();
+        }
+
+
+        //Asignar paquetes a las cargas desde SJ
         public ActionResult AsignarPaqueteSJCarga()
         {
             var viewModel = new PaqueteCargaViewModel
@@ -27,6 +59,7 @@ namespace TransrodenProyecto.Controllers
         }
 
 
+        //Asignar paquetes a las cargas desde PZ
         public ActionResult AsignarPaquetePZCarga()
         {
             var viewModel = new PaqueteCargaViewModel
@@ -40,23 +73,30 @@ namespace TransrodenProyecto.Controllers
         }
 
 
+        //Ver cargas en transito
         public ActionResult VistaCargaTransito()
         {
             var viewModel = new PaqueteCargaViewModel
             {
-                Cargas = db.Cargas.Include(c => c.Usuario).Where(c => c.Estado == EstadoCarga.EnTransito).ToList()
+                Cargas = db.Cargas.Include(c => c.Usuario).Where(c => c.Estado == EstadoCarga.EnTransito).ToList(),
+                Envios = db.Envios.Include(c => c.Usuario).Where(c => c.Estado == EstadoEnvio.EnTransito).ToList()
             };
 
             return View(viewModel);
         }
 
 
+
+        //Todos los paquetes que se encuentra en la bodega SJ
         public ActionResult PaquetesBodegaSJ()
         {
             var viewModel = new PaqueteCargaViewModel
             {
-                Paquetes = db.Paquetes.Where(p => p.Estado == EstadoPaquete.SinAsignarSJ && p.Origen == OrigenPaquete.SanJose).ToList(),
-                PaquetesRecibidos = db.Paquetes.Where(p => p.Estado == EstadoPaquete.BodegaSJ && p.Origen == OrigenPaquete.PerezZeledon).ToList()
+                //PAQUETES QUE VIENEN SINASIGNAR, PAQUETES ASIGNADOS Y PAQUETES DE ORIGEN PZ
+                Paquetes = db.Paquetes.Where(p => p.Estado == EstadoPaquete.SinAsignarSJ && p.Origen == OrigenPaquete.SanJose ||
+                p.Estado == EstadoPaquete.BodegaSJ && p.Origen == OrigenPaquete.SanJose ||
+                p.Estado == EstadoPaquete.BodegaSJ && p.Origen == OrigenPaquete.PerezZeledon).ToList(),
+
             };
 
             return View(viewModel);
@@ -64,12 +104,32 @@ namespace TransrodenProyecto.Controllers
 
 
 
+        //Todos los paquetes que se encuentra en la bodega SJ que no son domicilio
+        public ActionResult PaquetesReclamoSJ()
+        {
+            var viewModel = new PaqueteCargaViewModel
+            {
+                //PAQUETES ORIGEN PZ SIN DOMICILIO
+                Paquetes = db.Paquetes.Where(p => p.Estado == EstadoPaquete.BodegaSJ && p.Origen == OrigenPaquete.PerezZeledon && p.Domicilio == false).ToList(),
+            };
+
+            return View(viewModel);
+        }
+
+
+
+
+
+        //Todos los paquetes que se encuentra en la bodega PZ
         public ActionResult PaquetesBodegaPZ()
         {
             var viewModel = new PaqueteCargaViewModel
             {
-                Paquetes = db.Paquetes.Where(p => p.Estado == EstadoPaquete.SinAsignarPZ && p.Origen == OrigenPaquete.PerezZeledon).ToList(),
-                PaquetesRecibidos = db.Paquetes.Where(p => p.Estado == EstadoPaquete.BodegaPZ && p.Origen == OrigenPaquete.SanJose).ToList()
+                //PAQUETES QUE VIENEN SINASIGNAR, PAQUETES ASIGNADOS Y PAQUETES DE ORIGEN SJ
+                Paquetes = db.Paquetes.Where(p => p.Estado == EstadoPaquete.SinAsignarPZ && p.Origen == OrigenPaquete.PerezZeledon ||
+                p.Estado == EstadoPaquete.BodegaPZ && p.Origen == OrigenPaquete.PerezZeledon ||
+                p.Estado == EstadoPaquete.BodegaPZ && p.Origen == OrigenPaquete.SanJose).ToList(),
+
             };
 
             return View(viewModel);
@@ -78,6 +138,24 @@ namespace TransrodenProyecto.Controllers
 
 
 
+        //Todos los paquetes que se encuentra en la bodega SJ que no son domicilio
+        public ActionResult PaquetesReclamoPZ()
+        {
+            var viewModel = new PaqueteCargaViewModel
+            {
+                //PAQUETES ORIGEN PZ SIN DOMICILIO
+                Paquetes = db.Paquetes.Where(p => p.Estado == EstadoPaquete.BodegaPZ && p.Origen == OrigenPaquete.SanJose && p.Domicilio == false).ToList(),
+            };
+
+            return View(viewModel);
+        }
+
+
+
+        // ++++++++++++++++++++++++++++++++++++++++++ Metodo del modulo de tracking ++++++++++++++++++++++++++++++++++
+
+
+        // Metodo para asignar los paquetes a las cargas SJ
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AsignarPaqueteACargaSJ(List<PaqueteCargaAsignacionViewModel> paqueteCargaAsignaciones)
@@ -90,7 +168,7 @@ namespace TransrodenProyecto.Controllers
 
             foreach (var asignacion in paqueteCargaAsignaciones)
             {
-                
+
                 if (asignacion.IdCarga > 0)
                 {
                     // Verifica si la carga existe
@@ -100,11 +178,11 @@ namespace TransrodenProyecto.Controllers
                         continue; // Continuar si la carga no es valida
                     }
 
-                    // Obtenie el paquete que se va asignar
+                    // Obtiene el paquete que se va asignar
                     var paquete = db.Paquetes.FirstOrDefault(p => p.Id_Paquete == asignacion.IdPaquete && p.Estado == EstadoPaquete.SinAsignarSJ);
                     if (paquete == null)
                     {
-                        continue; 
+                        continue;
                     }
 
 
@@ -122,7 +200,7 @@ namespace TransrodenProyecto.Controllers
 
 
 
-
+        // Metodo para asignar los paquetes a las cargas PZ
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AsignarPaqueteACargaPZ(List<PaqueteCargaAsignacionViewModel> paqueteCargaAsignaciones)
@@ -142,7 +220,7 @@ namespace TransrodenProyecto.Controllers
                     var carga = db.Cargas.FirstOrDefault(c => c.Id_Carga == asignacion.IdCarga && c.Estado == EstadoCarga.BodegaPZ);
                     if (carga == null)
                     {
-                        continue; 
+                        continue;
                     }
 
                     var paquete = db.Paquetes.FirstOrDefault(p => p.Id_Paquete == asignacion.IdPaquete && p.Estado == EstadoPaquete.SinAsignarPZ);
@@ -165,6 +243,7 @@ namespace TransrodenProyecto.Controllers
 
 
 
+        // Metodo para quitar los paquetes de una carga
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult QuitarPaquete(int idPaquete, int idCarga)
@@ -209,9 +288,59 @@ namespace TransrodenProyecto.Controllers
 
 
 
-
+        // Muestra los paquetes que estan asignados a la carga pero para las vistas de asignacion
         public ActionResult CargaPaquetes(int idCarga)
-        {            
+        {
+            var carga = db.Cargas.Include(c => c.Usuario).FirstOrDefault(c => c.Id_Carga == idCarga);
+
+            if (carga == null)
+            {
+                return HttpNotFound("Cargas no encontradas");
+            }
+
+            // Paquetes asociados a la carga
+            var paquetes = db.Paquetes.Where(p => p.Id_Carga == idCarga).ToList();
+
+
+            // Este viewModel funciona para cargar la vista
+            var viewModel = new PaqueteCargaViewModel
+            {
+                Cargas = new List<Carga> { carga },
+                Paquetes = paquetes
+            };
+
+            return View(viewModel);
+        }
+
+
+        //Para otras vista donde solo se requiera ver el paquete nada mas
+        public ActionResult CargaPaquetesView(int idCarga)
+        {
+            var carga = db.Cargas.Include(c => c.Usuario).FirstOrDefault(c => c.Id_Carga == idCarga);
+
+            if (carga == null)
+            {
+                return HttpNotFound("Cargas no encontradas");
+            }
+
+            // Paquetes asociados a la carga
+            var paquetes = db.Paquetes.Where(p => p.Id_Carga == idCarga).ToList();
+
+
+            // Este viewModel funciona para cargar la vista
+            var viewModel = new PaqueteCargaViewModel
+            {
+                Cargas = new List<Carga> { carga },
+                Paquetes = paquetes
+            };
+
+            return View(viewModel);
+        }
+
+
+
+        public ActionResult CargaPaquetesViewTransp(int idCarga)
+        {
             var carga = db.Cargas.Include(c => c.Usuario).FirstOrDefault(c => c.Id_Carga == idCarga);
 
             if (carga == null)
@@ -236,6 +365,9 @@ namespace TransrodenProyecto.Controllers
 
 
 
+
+
+        // Actualizar el estado de la carga la cual tambien cambiara la de los paquetes SJ
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ActualizarEstadoCargaSJ(int idCarga, string nuevoEstado)
@@ -295,7 +427,7 @@ namespace TransrodenProyecto.Controllers
 
 
 
-
+        // Actualizar el estado de la carga la cual tambien cambiara la de los paquetes PZ
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ActualizarEstadoCargaPZ(int idCarga, string nuevoEstado)
@@ -354,7 +486,7 @@ namespace TransrodenProyecto.Controllers
         }
 
 
-
+        //Cambia el estado solo de la carga, esto es para las cargas que vienen de PZ
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EstadoCargaSJ(int idCarga, string nuevoEstado)
@@ -381,6 +513,11 @@ namespace TransrodenProyecto.Controllers
             {
                 carga.Estado = estadoResult;
 
+                if (carga.Estado == EstadoCarga.Entregado)
+                {
+                    carga.fecha_entrega = DateTime.Now;
+                }
+
                 db.SaveChanges();
             }
             else
@@ -393,7 +530,7 @@ namespace TransrodenProyecto.Controllers
 
 
 
-
+        //Cambia el estado solo de la carga, esto es para las cargas que vienen de SJ
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EstadoCargaPZ(int idCarga, string nuevoEstado)
@@ -413,12 +550,15 @@ namespace TransrodenProyecto.Controllers
                 return HttpNotFound("Carga no encontrada!");
             }
 
-
-
             // TryParse convierte un string en un valor enum
             if (Enum.TryParse<EstadoCarga>(nuevoEstado, out var estadoResult))
             {
                 carga.Estado = estadoResult;
+
+                if (carga.Estado == EstadoCarga.Entregado)
+                {
+                    carga.fecha_entrega = DateTime.Now;
+                }
 
                 db.SaveChanges();
             }
@@ -433,6 +573,44 @@ namespace TransrodenProyecto.Controllers
 
 
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EstadoCargaTransp(int idCarga, string nuevoEstado)
+        {
+
+            if (string.IsNullOrEmpty(nuevoEstado))
+            {
+                ModelState.AddModelError("", "Seleccione un Estado!!");
+                return Redirect("CargasTransportista");
+            }
+
+
+            var carga = db.Cargas.Include(c => c.Paquetes).FirstOrDefault(c => c.Id_Carga == idCarga);
+
+            if (carga == null)
+            {
+                return HttpNotFound("Carga no encontrada!");
+            }
+
+            // TryParse convierte un string en un valor enum
+            if (Enum.TryParse<EstadoCarga>(nuevoEstado, out var estadoResult))
+            {
+                carga.Estado = estadoResult;
+
+                db.SaveChanges();
+            }
+            else
+            {
+                ModelState.AddModelError("", "Estado invalido!!");
+            }
+
+            return Redirect("CargasTransportista");
+        }
+
+
+
+
+        // Cambiar el estado de las cargas en la vista de cargas en transito
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ActualizarEstadoCargaGlobal(int idCarga, string nuevoEstado)
@@ -492,7 +670,7 @@ namespace TransrodenProyecto.Controllers
 
 
 
-
+        // Cambia solo el estado del paquete
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ActualizarEstadoPaquete(int idPaquete, string nuevoEstado)
@@ -512,11 +690,89 @@ namespace TransrodenProyecto.Controllers
 
 
             paquete.Estado = (EstadoPaquete)Enum.Parse(typeof(EstadoPaquete), nuevoEstado);
+            
+            if (paquete.Estado == EstadoPaquete.Entregado)
+            {
+                paquete.fecha_entrega = DateTime.Now;
+            }
+
             db.SaveChanges();
 
 
             TempData["Success"] = "El estado del paquete se ha actualizado correctamente.";
-            return RedirectToAction("PaquetesBodegaSJ");
+            //return RedirectToAction("PaquetesBodegaSJ");
+            //Redirige a la vista desde donde fue accionado el metodo
+            return Redirect(Request.UrlReferrer.ToString());
+        }
+
+
+
+        // ++++++++++++++++++++++++++++++++++++++++++ Vista transportista del modulo de tracking ++++++++++++++++++++++++++++++++++
+
+        
+        // Muesta todos las cargas que tiene el usuario Transportista asignado
+        public ActionResult CargasTransportista()
+        {
+            // Verificar si la sesión contiene la información del usuario
+            if (Session["UsuarioId"] == null)
+            {
+                return RedirectToAction("Login", "Cuenta");
+            }
+
+            // Obtener el usuario
+            var usuarioId = (int)Session["UsuarioId"];
+            var usuarioRol = (Rol)Session["UsuarioRol"];
+
+
+            // Verificar si 'sede' tiene un valor antes de convertirlo
+            var cargas = new List<Carga>();
+
+            if (usuarioRol == Rol.Transportista)
+            {
+                //MUESTRA LAS CARGAS QUE SON PERTENECIENTES AL TRANSPORTISTA Y TENGAN ESTADO ENTRANSITO, BODEGASJ, BODEGAPZ
+                cargas = db.Cargas.Include(c => c.Usuario).Where(c => c.Id_Usuario == usuarioId && c.Estado == EstadoCarga.EnTransito 
+                    || c.Id_Usuario == usuarioId && c.Estado == EstadoCarga.BodegaSJ 
+                    || c.Id_Usuario == usuarioId && c.Estado == EstadoCarga.BodegaPZ).ToList();
+            }
+
+            var viewModel = new PaqueteCargaViewModel
+            {
+                Cargas = cargas
+            };
+
+            return View(viewModel);
+        }
+
+
+        // Muesta todos las cargas entregadas que tiene el usuario Transportista asignado
+        public ActionResult CargasEntregadasTransportista()
+        {
+            // Verificar si la sesión contiene la información del usuario
+            if (Session["UsuarioId"] == null)
+            {
+                return RedirectToAction("Login", "Cuenta");
+            }
+
+            // Obtener el usuario
+            var usuarioId = (int)Session["UsuarioId"];
+            var usuarioRol = (Rol)Session["UsuarioRol"];
+
+
+            // Verificar si 'sede' tiene un valor antes de convertirlo
+            var cargas = new List<Carga>();
+
+            if (usuarioRol == Rol.Transportista)
+            {
+                //MUESTRA LAS CARGAS QUE SON PERTENECIENTES AL TRANSPORTISTA Y TENGAN ESTADO ENTRANSITO, BODEGASJ, BODEGAPZ
+                cargas = db.Cargas.Include(c => c.Usuario).Where(c => c.Id_Usuario == usuarioId && c.Estado == EstadoCarga.Entregado).ToList();
+            }
+
+            var viewModel = new PaqueteCargaViewModel
+            {
+                Cargas = cargas
+            };
+
+            return View(viewModel);
         }
 
 

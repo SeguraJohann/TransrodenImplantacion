@@ -40,7 +40,8 @@ namespace TransrodenProyecto.Models
         EnTransito = 1,
         BodegaPZ = 2,
         BodegaSJ = 3,
-        Entregado = 4
+        Entregado = 4,
+        Averia = 5
     }
 
 

@@ -199,7 +199,14 @@ namespace TransrodenProyecto.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Carga carga = db.Cargas.Find(id);
+            Carga carga = db.Cargas.Include(c => c.Paquetes).FirstOrDefault(c => c.Id_Carga == id);
+
+
+            if (carga.Paquetes != null && carga.Paquetes.Any())
+            {
+                ModelState.AddModelError("", "Debes quitar los paquetes asociados antes de eliminar esta carga!!!");
+                return Redirect(Request.UrlReferrer.ToString());
+            }
 
 
             if (Session["UsuarioId"] == null)
@@ -239,9 +246,10 @@ namespace TransrodenProyecto.Controllers
 
             }
             return RedirectToAction("Index");
-
-
         }
+
+
+
 
         protected override void Dispose(bool disposing)
         {

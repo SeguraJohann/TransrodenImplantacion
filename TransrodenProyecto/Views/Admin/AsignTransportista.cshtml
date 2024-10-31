@@ -1,4 +1,4 @@
-﻿
+﻿@using TransrodenProyecto.Models
 @{
     Layout = null;
 }
@@ -97,7 +97,7 @@
 
                     <div class="navbar-nav mx-0 mx-lg-auto">
                         <!-- <a href="index.html" class="nav-item nav-link active">Inicio</a> -->
-                        <a href="@Url.Action("IndexTransportista", "Admin")" class="nav-item nav-link">
+                        <a href="@Url.Action("IndexTransportista", "Admin")" class="nav-item nav-link active">
                             Inicio
                         </a>
 
@@ -107,23 +107,12 @@
                         </a>
 
 
-                        <!--
-                        <a href="service.html" class="nav-item nav-link">
-                            Clientes
-                        </a> -->
-                        <!--
-
-                        <a href="service.html" class="nav-item nav-link">
-                            Inventario
-                        </a>
-                            -->
-
-                        <div class="nav-item dropdown active">
+                        <div class="nav-item dropdown">
                             <a href="#" class="nav-link" data-bs-toggle="dropdown">
                                 <span class="dropdown-toggle">Tracking</span>
                             </a>
                             <div class="dropdown-menu">
-                                <a href="@Url.Action("IndexTransportista", "Modulo4")" class="dropdown-item">Tracking Admin</a>
+                                <a href="@Url.Action("AsignTransportista", "Admin")" class="dropdown-item">Tracking Admin</a>
                                 <a href="@Url.Action("TrackingAdmin", "Modulo4")" class="dropdown-item">Rastreo Paquete</a>
                             </div>
                         </div>
@@ -149,7 +138,6 @@
         </div>
     </div>
     <!-- Navbar -->
-
     <!-- Dashboard Start -->
     <div class="container-fluid blog py-5">
         <div class="container py-5">
@@ -157,7 +145,7 @@
                 <h4 class="text-primary">Transroden Express SA</h4>
                 <h1 class="display-4 mb-4">Centro de asignaciones</h1>
                 <p class="mb-0">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tenetur adipisci facilis cupiditate recusandae aperiam temporibus corporis itaque quis facere, numquam, ad culpa deserunt sint dolorem autem obcaecati, ipsam mollitia hic.
+                    Esta es una vista donde un usuario transportista puede ver que cargas tiene asigandas, asi como los envios domicilios pendientes de entrega
                 </p>
             </div>
             <div class="row g-4 justify-content-center">
@@ -170,15 +158,10 @@
                             </div>
                         </div>
                         <div class="blog-content p-4">
-                            <div class="blog-comment d-flex justify-content-between mb-3">
-                                <div class="small"><span class="fa fa-user text-primary"></span>Transportista</div>
-                                <div class="small"><span class="fa fa-calendar text-primary"></span> 30 Dec 2025</div>
-                                <div class="small"><span class="fa fa-truck text-primary"></span> 1 Cargas</div>
-                            </div>
-                            <a href="#" class="h4 d-inline-block mb-3">Ver cargas asignadas</a>
-                            <p class="mb-3">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eius libero soluta impedit eligendi? Quibusdam, laudantium.</p>
+                            <a href="#" class="h4 d-inline-block mb-3">Ver Cargas Asignadas</a>
+                            <p class="mb-3">Aqui se muestran las cargas asignadas para el transportista</p>
                             <div>
-                                <button onclick="location.href='@Url.Action("CargasTransportista", "Modulo4")'" type="submit" class="btn btn-primary w-100">Consultar</button>
+                                <button onclick="location.href='@Url.Action("CargasTransportista", "PaquetesCargasController")'" type="submit" class="btn btn-primary w-100">Consultar</button>
                             </div>
                         </div>
                     </div>
@@ -190,19 +173,14 @@
                         <div class="blog-img">
                             <img src="~/Content/assets/img/paquete.jpg" class="img-fluid rounded-top w-100" alt="">
                             <div class="blog-categiry py-2 px-4">
-                                <span>Paquetes</span>
+                                <span>Envios</span>
                             </div>
                         </div>
                         <div class="blog-content p-4">
-                            <div class="blog-comment d-flex justify-content-between mb-3">
-                                <div class="small"><span class="fa fa-user text-primary"></span> Transportista</div>
-                                <div class="small"><span class="fa fa-calendar text-primary"></span> 30 Dec 2025</div>
-                                <div class="small"><span class="fa fa-box text-primary"></span> 10 Paquetes</div>
-                            </div>
-                            <a href="#" class="h4 d-inline-block mb-3">Ver paquetes asignados</a>
-                            <p class="mb-3">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eius libero soluta impedit eligendi? Quibusdam, laudantium.</p>
+                            <a href="#" class="h4 d-inline-block mb-3">Ver Envios Domicilios Asignados</a>
+                            <p class="mb-3">Aqui se muestran los envios domicilios asignados para el transportista</p>
                             <div>
-                                <button onclick="location.href='@Url.Action("PaquetesTransportista", "Modulo4")'" type="submit" class="btn btn-primary w-100">Consultar</button>
+                                <button onclick="location.href='@Url.Action("EnviosTransportista", "PaquetesEnviosController")'" type="submit" class="btn btn-primary w-100">Consultar</button>
                             </div>
                         </div>
                     </div>
@@ -218,15 +196,10 @@
                             </div>
                         </div>
                         <div class="blog-content p-4">
-                            <div class="blog-comment d-flex justify-content-between mb-3">
-                                <div class="small"><span class="fa fa-user text-primary"></span>Transportista</div>
-                                <div class="small"><span class="fa fa-calendar text-primary"></span> 30 Dec 2025</div>
-                                <div class="small"><span class="fa fa-clipboard-list text-primary"></span> Historial</div>
-                            </div>
-                            <a href="#" class="h4 d-inline-block mb-3">Historial de cargas y paquetes</a>
-                            <p class="mb-3">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eius libero soluta impedit eligendi? Quibusdam, laudantium.</p>
+                            <a href="#" class="h4 d-inline-block mb-3">Historial de Cargas y Paquetes</a>
+                            <p class="mb-3">Aqui se muestra un historial de cargas y envios realizados</p>
                             <div>
-                                <button onclick="location.href='@Url.Action("HistorialTransportista", "Modulo4")'" type="submit" class="btn btn-primary w-100">Consultar</button>
+                                <button onclick="location.href='@Url.Action("CargasEntregadasTransportista", "PaquetesCargasController")'" type="submit" class="btn btn-primary w-100">Consultar</button>
                             </div>
                         </div>
                     </div>
@@ -272,49 +245,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!--
-                    <div class="pt-5" style="border-top: 1px solid rgba(255, 255, 255, 0.08);">
-                        <div class="row g-0">
-                            <div class="col-12">
-                                <div class="row g-4">
-                                    <div class="col-lg-6 col-xl-4">
-                                        <div class="d-flex">
-                                            <div class="btn-xl-square bg-primary text-white rounded p-4 me-4">
-                                                <i class="fas fa-map-marker-alt fa-2x"></i>
-                                            </div>
-                                            <div>
-                                                <h4 class="text-white">Address</h4>
-                                                <p class=" text-white mb-0">San Isidro - Perez Zeledon, Barrio Mexico - San Jose</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 col-xl-4">
-                                        <div class="d-flex">
-                                            <div class="btn-xl-square bg-primary text-white rounded p-4 me-4">
-                                                <i class="fas fa-envelope fa-2x"></i>
-                                            </div>
-                                            <div>
-                                                <h4 class="text-white">Correo</h4>
-                                                <p class="text-white mb-0">transroden@gmail.com</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 col-xl-4">
-                                        <div class="d-flex">
-                                            <div class="btn-xl-square bg-primary text-white rounded p-4 me-4">
-                                                <i class="fa fa-phone-alt fa-2x"></i>
-                                            </div>
-                                            <div>
-                                                <h4 class="text-white">Telefono</h4>
-                                                <p class=" text-white mb-0">+506 0000 0000</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
             </div>
         </div>

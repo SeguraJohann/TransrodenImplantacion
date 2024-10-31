@@ -119,11 +119,11 @@
                             string urlCargas;
                             if (sedeUsuario == Sede.SanJose)
                             {
-                                urlCargas = Url.Action("AsignarPaqueteSJCarga", "PaquetesCargasController");
+                                urlCargas = Url.Action("DashboardSJ", "PaquetesCargasController");
                             }
                             else if (sedeUsuario == Sede.PerezZeledon)
                             {
-                                urlCargas = Url.Action("AsignarPaquetePZCarga", "PaquetesCargasController");
+                                urlCargas = Url.Action("DashBoardPZ", "PaquetesCargasController");
                             }
                             else
                             {
@@ -131,7 +131,7 @@
                             }
 
                             // Enlace a Cargas
-                            <a href="@urlCargas" class="nav-item nav-link">Cargas</a>
+                            <a href="@urlCargas" class="nav-item nav-link">Tracking</a>
                         }
                         else
                         {

@@ -6,34 +6,6 @@
 }
 
 <!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Delete</title>
-</head>
-<body>
-
-</body>
-</html>
-
-
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Edit</title>
-</head>
-<body>
-
-</body>
-</html>
-
-
-
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -147,11 +119,11 @@
                             string urlCargas;
                             if (sedeUsuario == Sede.SanJose)
                             {
-                                urlCargas = Url.Action("AsignarPaqueteSJCarga", "PaquetesCargasController");
+                                urlCargas = Url.Action("DashboardSJ", "PaquetesCargasController");
                             }
                             else if (sedeUsuario == Sede.PerezZeledon)
                             {
-                                urlCargas = Url.Action("AsignarPaquetePZCarga", "PaquetesCargasController");
+                                urlCargas = Url.Action("DashBoardPZ", "PaquetesCargasController");
                             }
                             else
                             {
@@ -159,7 +131,7 @@
                             }
 
                             // Enlace a Cargas
-                            <a href="@urlCargas" class="nav-item nav-link">Cargas</a>
+                            <a href="@urlCargas" class="nav-item nav-link">Tracking</a>
                         }
                         else
                         {
@@ -267,6 +239,7 @@
                 <dd>
                     @Html.DisplayFor(model => model.fecha_creacion)
                 </dd>
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
             </dl>
 
@@ -274,40 +247,40 @@
             {
                 @Html.AntiForgeryToken()
 
-        <div class="form-actions no-color">
-            <input type="submit" value="Eliminar" class="btn btn-danger" /> 
+                <div class="form-actions no-color">
+                    <input type="submit" value="Eliminar" class="btn btn-danger" />
 
-            @if (Session["Usuario"] != null)
-            {
-                // Obtener la sede del usuario desde la sesión
-                var sedeUsuario = Session["Sede"] != null ? (Sede)Session["Sede"] : Sede.SanJose; // Valor por defecto
+                    @if (Session["Usuario"] != null)
+                    {
+                        // Obtener la sede del usuario desde la sesión
+                        var sedeUsuario = Session["Sede"] != null ? (Sede)Session["Sede"] : Sede.SanJose; // Valor por defecto
 
-                // Determinar la URL según la sede
-                string urlCargas;
-                if (sedeUsuario == Sede.SanJose)
-                {
-                    urlCargas = Url.Action("AsignarPaqueteSJCarga", "PaquetesCargasController");
-                }
-                else if (sedeUsuario == Sede.PerezZeledon)
-                {
-                    urlCargas = Url.Action("AsignarPaquetePZCarga", "PaquetesCargasController");
-                }
-                else
-                {
-                    urlCargas = "#"; // En caso de que la sede no sea válida, puedes redirigir a una página de error o similar.
-                }
+                        // Determinar la URL según la sede
+                        string urlCargas;
+                        if (sedeUsuario == Sede.SanJose)
+                        {
+                            urlCargas = Url.Action("AsignarPaqueteSJCarga", "PaquetesCargasController");
+                        }
+                        else if (sedeUsuario == Sede.PerezZeledon)
+                        {
+                            urlCargas = Url.Action("AsignarPaquetePZCarga", "PaquetesCargasController");
+                        }
+                        else
+                        {
+                            urlCargas = "#"; // En caso de que la sede no sea válida, puedes redirigir a una página de error o similar.
+                        }
 
-                // Enlace a Cargas
-                <a href="@urlCargas" class="btn btn-primary"> < Regresar</a>
-            }
-            else
-            {
-                <a href="@Url.Action("Login", "Cuenta")" class="btn btn-danger">
-                    <span class="d-block"><i class="fas fa-user"></i></span>
-                    Login
-                </a>
-            }
-        </div>
+                        // Enlace a Cargas
+                        <a href="@urlCargas" class="btn btn-primary"> < Regresar</a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Login", "Cuenta")" class="btn btn-danger">
+                            <span class="d-block"><i class="fas fa-user"></i></span>
+                            Login
+                        </a>
+                    }
+                </div>
             }
         </div>
 

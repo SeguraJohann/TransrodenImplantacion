@@ -147,6 +147,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PaquetesCargasControllerController.cs" />
     <Compile Include="Controllers\PaquetesController.cs" />
+    <Compile Include="Controllers\PaquetesEnviosControllerController.cs" />
     <Compile Include="Controllers\UsuariosController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -165,6 +166,8 @@
     <Compile Include="Controllers\RecuperarClaveController.cs" />
     <Compile Include="ViewModels\PaqueteCargaAsignacionViewModel.cs" />
     <Compile Include="ViewModels\PaqueteCargaViewModel.cs" />
+    <Compile Include="ViewModels\PaqueteEnvioAsignacionViewModel.cs" />
+    <Compile Include="ViewModels\PaqueteEnvioViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\assets\css\bootstrap.min.css" />
@@ -176,6 +179,7 @@
     <Content Include="Content\assets\img\blog-2.png" />
     <Content Include="Content\assets\img\blog-3.png" />
     <Content Include="Content\assets\img\blog-4.png" />
+    <Content Include="Content\assets\img\Bodega.jpg" />
     <Content Include="Content\assets\img\camion.jpg" />
     <Content Include="Content\assets\img\camiones.jpg" />
     <Content Include="Content\assets\img\camionrojo.jpg" />
@@ -185,6 +189,7 @@
     <Content Include="Content\assets\img\corporativo.png" />
     <Content Include="Content\assets\img\domicilio.jpg" />
     <Content Include="Content\assets\img\encomiendas.jpg" />
+    <Content Include="Content\assets\img\EnTransito.png" />
     <Content Include="Content\assets\img\entrega.jpg" />
     <Content Include="Content\assets\img\entregado.jpg" />
     <Content Include="Content\assets\img\envioencomienda.png" />
@@ -435,9 +440,28 @@
     <Content Include="Views\PaquetesCargasController\VistaCargaTransito.cshtml" />
     <Content Include="Views\PaquetesCargasController\PaquetesBodegaSJ.cshtml" />
     <Content Include="Views\PaquetesCargasController\PaquetesBodegaPZ.cshtml" />
+    <Content Include="Views\PaquetesCargasController\DashboardSJ.cshtml" />
+    <Content Include="Views\PaquetesCargasController\DashboardPZ.cshtml" />
+    <Content Include="Views\PaquetesCargasController\BodegaSJ.cshtml" />
+    <Content Include="Views\PaquetesCargasController\PaquetesReclamoSJ.cshtml" />
+    <Content Include="Views\PaquetesCargasController\BodegaPZ.cshtml" />
+    <Content Include="Views\PaquetesCargasController\PaquetesReclamoPZ.cshtml" />
+    <Content Include="Views\PaquetesCargasController\CargasTransportista.cshtml" />
+    <Content Include="Views\PaquetesCargasController\CargasEntregadasTransportista.cshtml" />
+    <Content Include="Views\PaquetesEnviosController\DomicilioPZCarga.cshtml" />
+    <Content Include="Views\PaquetesEnviosController\DomicilioSJCarga.cshtml" />
+    <Content Include="Views\PaquetesEnviosController\EnvioPaquetes.cshtml" />
+    <Content Include="Views\PaquetesEnviosController\VistaEnvioTransito.cshtml" />
+    <Content Include="Views\PaquetesEnviosController\EnviosTransportista.cshtml" />
+    <Content Include="Views\PaquetesCargasController\CargaPaquetesView.cshtml" />
+    <Content Include="Views\PaquetesEnviosController\EnvioPaquetesTransport.cshtml" />
+    <Content Include="Views\Envios\DetailsTransp.cshtml" />
+    <Content Include="Views\PaquetesCargasController\CargaPaquetesViewTransp.cshtml" />
+    <Content Include="Views\Paquetes\DetailsTransp.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\PaquetesEnvios\" />
     <Folder Include="Views\View\" />
   </ItemGroup>
   <ItemGroup>

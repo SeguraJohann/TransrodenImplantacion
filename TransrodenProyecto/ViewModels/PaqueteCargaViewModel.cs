@@ -14,6 +14,6 @@ namespace TransrodenProyecto.ViewModels
         public List<Carga> Cargas { get; set; }
         public List<Carga> CargasRecibidas { get; set; }
 
-
+        public List<Envio> Envios { get; set; }
     }
 }

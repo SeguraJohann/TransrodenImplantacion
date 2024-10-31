@@ -69,6 +69,24 @@ namespace TransrodenProyecto.Controllers
             return View(paquete);
         }
 
+        // GET: Paquetes/Details/5
+        public ActionResult DetailsTransp(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Paquete paquete = db.Paquetes.Find(id);
+            if (paquete == null)
+            {
+                return HttpNotFound();
+            }
+            return View(paquete);
+        }
+
+
+
+
         // GET: Paquetes/RegistrarPaquete
         public ActionResult RegistrarPaquete()
         {
@@ -203,7 +221,7 @@ namespace TransrodenProyecto.Controllers
         // POST: Paquetes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id_Paquete,NumeroRastreo,Tipo,NombreEmisor,CedulaEmisor,NombreReceptor,CedulaReceptor,Domicilio,Direccion,TelefonoDomicilio,Cantidad,Pago,Descripcion,Id_Carga,Id_Envio,fecha_recibo,fecha_entrega,Estado")] Paquete paquete)
+        public async Task<ActionResult> Edit([Bind(Include = "Id_Paquete,NumeroRastreo,Tipo,Origen,NombreEmisor,CedulaEmisor,NombreReceptor,CedulaReceptor,Domicilio,Direccion,TelefonoDomicilio,Cantidad,Pago,Descripcion,Id_Carga,Id_Envio,fecha_recibo,fecha_entrega,Estado")] Paquete paquete)
         {
             if (ModelState.IsValid)
             {
@@ -230,7 +248,7 @@ namespace TransrodenProyecto.Controllers
                     paqueteExistente.Estado = paquete.Estado;
                     paqueteExistente.Origen = paquete.Origen;
 
-                    // Guardar los cambios en el paquete
+
                     db.Entry(paqueteExistente).State = EntityState.Modified;
 
                     // Buscar la facturación asociada usando el Id_Paquete

@@ -119,11 +119,11 @@
                             string urlCargas;
                             if (sedeUsuario == Sede.SanJose)
                             {
-                                urlCargas = Url.Action("AsignarPaqueteSJCarga", "PaquetesCargasController");
+                                urlCargas = Url.Action("DashboardSJ", "PaquetesCargasController");
                             }
                             else if (sedeUsuario == Sede.PerezZeledon)
                             {
-                                urlCargas = Url.Action("AsignarPaquetePZCarga", "PaquetesCargasController");
+                                urlCargas = Url.Action("DashBoardPZ", "PaquetesCargasController");
                             }
                             else
                             {
@@ -131,7 +131,7 @@
                             }
 
                             // Enlace a Cargas
-                            <a href="@urlCargas" class="nav-item nav-link">Cargas</a>
+                            <a href="@urlCargas" class="nav-item nav-link">Tracking</a>
                         }
                         else
                         {
@@ -192,7 +192,7 @@
 
 
     <div class="container mt-5">
-        
+
 
         <h1>Cargas En Transito!!</h1>
         <br>
@@ -201,6 +201,7 @@
             <thead>
                 <tr>
                     <th>Id Carga</th>
+                    <th>Origen</th>
                     <th>Transportista</th>
                     <th>Estado</th>
                     <th>Paquetes Asignados</th>
@@ -213,11 +214,12 @@
                 {
                     <tr>
                         <td>@carga.Id_Carga</td>
+                        <td>@carga.Origen</td>
                         <td>@carga.Usuario.Nombre</td>
                         <td>@carga.Estado.ToString()</td>
                         <td>@carga.NumeroPaquetes</td>
                         <td>
-                            <a href="@Url.Action("CargaPaquetes", "PaquetesCargasController", new { idCarga = carga.Id_Carga })" class="btn btn-success">
+                            <a href="@Url.Action("CargaPaquetesView", "PaquetesCargasController", new { idCarga = carga.Id_Carga })" class="btn btn-success">
                                 Ver Paquetes
                             </a>
                         </td>
@@ -242,39 +244,65 @@
             </tbody>
         </table>
         <br>
-        @if (Session["Usuario"] != null)
-        {
-            // Obtener la sede del usuario desde la sesión
-            var sedeUsuario = Session["Sede"] != null ? (Sede)Session["Sede"] : Sede.SanJose; // Valor por defecto
+    </div>
+    <br>
 
-            // Determinar la URL según la sede
-            string urlCargas;
-            if (sedeUsuario == Sede.SanJose)
-            {
-                urlCargas = Url.Action("AsignarPaqueteSJCarga", "PaquetesCargasController");
-            }
-            else if (sedeUsuario == Sede.PerezZeledon)
-            {
-                urlCargas = Url.Action("AsignarPaquetePZCarga", "PaquetesCargasController");
-            }
-            else
-            {
-                urlCargas = "#"; // En caso de que la sede no sea válida, puedes redirigir a una página de error o similar.
-            }
+    <!-- Aqui van los envios en transito -->
+    <div class="container mt-5">
 
-            // Enlace a Cargas
-            <a href="@urlCargas" class="btn btn-success">Regresar</a>
-        }
-        else
-        {
-            <a href="@Url.Action("Login", "Cuenta")" class="btn btn-danger">
-                <span class="d-block"><i class="fas fa-user"></i></span>
-                Login
-            </a>
-        }
+        <h3>Envios</h3>
+        <br>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id Envio</th>
+                    <th>Transportista</th>
+                    <th>Estado</th>
+                    <th>Paquetes Asignados</th>
+                    <th>Ver Paquetes</th>
+                    <!--<th>Cambiar Estado</th>-->
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var envio in Model.Envios)
+                {
+                    <tr>
+                        <td>@envio.Id_Envio</td>
+                        <td>@envio.Usuario.Nombre</td>
+                        <td>@envio.Estado.ToString()</td>
+                        <td>@envio.NumeroPaquetes</td>
+                        <td>
+                            <a href="@Url.Action("EnvioPaquetes", "PaquetesEnviosController", new { idEnvio = envio.Id_Envio })" class="btn btn-success">
+                                Ver Paquetes
+                            </a>
+                        </td>
+                        <!--
+                      <td>
+                         @using (Html.BeginForm("ActualizarEstadoEnvioGlobal", "PaquetesEnviosController", FormMethod.Post))
+                         {
+                             @Html.AntiForgeryToken()
+                             @Html.Hidden("idEnvio", envio.Id_Envio)
+
+                             <select name="nuevoEstado" class="form-control">
+                                 <option value="">Estado</option>
+                                 <option value="BodegaSJ">BodegaSJ</option>
+                                 <option value="BodegaPZ">BodegaPZ</option>
+                                 <option value="EnTransito">EnTransito</option>
+                                 <option value="Entregado">Entregado</option>
+                             </select>
+
+                             <button type="submit" class="btn btn-primary mt-2">Actualizar</button>
+                         }
+                     </td>
+                     -->
+                    </tr>
+                }
+            </tbody>
+        </table>
 
     </div>
-    
+
 
     <br>
     <br>

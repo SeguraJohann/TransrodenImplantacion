@@ -36,10 +36,28 @@ namespace TransrodenProyecto.Controllers
             return View(envio);
         }
 
+
+        // GET: Envios/Details/5
+        public ActionResult DetailsTransp(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Envio envio = db.Envios.Find(id);
+            if (envio == null)
+            {
+                return HttpNotFound();
+            }
+            return View(envio);
+        }
+
+
+
         // GET: Envios/Create
         public ActionResult Create()
         {
-            ViewBag.Id_Usuario = new SelectList(db.Usuarios, "Id_Usuario", "Nombre");
+            ViewBag.Id_Usuario = new SelectList(db.Usuarios.Where(u => u.Rol == Rol.Transportista), "Id_Usuario", "Nombre");
             return View();
         }
 
@@ -48,18 +66,52 @@ namespace TransrodenProyecto.Controllers
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id_Envio,Id_Usuario,Estado")] Envio envio)
+        public ActionResult Create([Bind(Include = "Id_Envio,Id_Usuario,Descripcion")] Envio envio)
         {
-            if (ModelState.IsValid)
+
+            if (Session["UsuarioId"] == null)
             {
-                db.Envios.Add(envio);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Login", "Cuenta");
             }
 
-            ViewBag.Id_Usuario = new SelectList(db.Usuarios, "Id_Usuario", "Nombre", envio.Id_Usuario);
+            // Obtener el usuario
+            var usuarioId = (int)Session["UsuarioId"];
+            var usuarioRol = (Rol)Session["UsuarioRol"];
+            var sede = (int?)Session["Sede"];
+
+            if (usuarioRol != Rol.Bodeguero)
+            {
+                ModelState.AddModelError("", "Solo los usuarios bodegueros pueden crear envios.");
+                ViewBag.Id_Usuario = new SelectList(db.Usuarios.Where(u => u.Rol == Rol.Transportista), "Id_Usuario", "Nombre", envio.Id_Usuario);
+                return View(envio);
+            }
+
+            if (ModelState.IsValid)
+            {
+
+
+                // Estado de la sede del usuario bodeguero
+                if (sede.HasValue && (Sede)sede.Value == Sede.SanJose)
+                {
+                    envio.Estado = EstadoEnvio.BodegaSJ;
+                    db.Envios.Add(envio);
+                    db.SaveChanges();
+                    return RedirectToAction("DomicilioSJCarga", "PaquetesEnviosController");
+                }
+                else if (sede.HasValue && (Sede)sede.Value == Sede.PerezZeledon)
+                {
+                    envio.Estado = EstadoEnvio.BodegaPZ;
+                    db.Envios.Add(envio);
+                    db.SaveChanges();
+                    return RedirectToAction("DomicilioPZCarga", "PaquetesEnviosController");
+                }
+            }
+
+
+            ViewBag.Id_Usuario = new SelectList(db.Usuarios.Where(u => u.Rol == Rol.Transportista), "Id_Usuario", "Nombre", envio.Id_Usuario);
             return View(envio);
         }
+
 
         // GET: Envios/Edit/5
         public ActionResult Edit(int? id)
@@ -82,13 +134,42 @@ namespace TransrodenProyecto.Controllers
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id_Envio,Id_Usuario,Estado")] Envio envio)
+        public ActionResult Edit([Bind(Include = "Id_Envio,Id_Usuario,NumeroPaquetes,Descripcion,Estado")] Envio envio)
         {
+
+            if (Session["UsuarioId"] == null)
+            {
+                return RedirectToAction("Login", "Cuenta");
+            }
+
+            // Obtener el usuario
+            var usuarioId = (int)Session["UsuarioId"];
+            var usuarioRol = (Rol)Session["UsuarioRol"];
+            var sede = (int?)Session["Sede"];
+
+            if (usuarioRol != Rol.Bodeguero)
+            {
+                ModelState.AddModelError("", "Solo los usuarios bodegueros pueden editar cargas.");
+                ViewBag.Id_Usuario = new SelectList(db.Usuarios.Where(u => u.Rol == Rol.Transportista), "Id_Usuario", "Nombre", envio.Id_Usuario);
+                return View(envio);
+            }
+
             if (ModelState.IsValid)
             {
-                db.Entry(envio).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+
+                if (sede.HasValue && (Sede)sede.Value == Sede.PerezZeledon)
+                {
+                    db.Entry(envio).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("DomicilioPZCarga", "PaquetesEnviosController");
+                }
+                else if (sede.HasValue && (Sede)sede.Value == Sede.SanJose)
+                {
+                    db.Entry(envio).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("DomicilioSJCarga", "PaquetesEnviosController");
+                }
+
             }
             ViewBag.Id_Usuario = new SelectList(db.Usuarios, "Id_Usuario", "Nombre", envio.Id_Usuario);
             return View(envio);
@@ -114,11 +195,50 @@ namespace TransrodenProyecto.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Envio envio = db.Envios.Find(id);
-            db.Envios.Remove(envio);
-            db.SaveChanges();
+            Envio envio = db.Envios.Include(c => c.Paquetes).FirstOrDefault(c => c.Id_Envio == id);
+
+
+            // Para evitar eliminar cargas con paquetes asociados
+            if (envio.Paquetes != null && envio.Paquetes.Any())
+            {
+                ModelState.AddModelError("", "Debes quitar los paquetes asociados antes de eliminar este envio!!!");
+                return Redirect(Request.UrlReferrer.ToString());
+            }
+
+
+            if (Session["UsuarioId"] == null)
+            {
+                return RedirectToAction("Login", "Cuenta");
+            }
+
+            // Obtener el usuario
+            var usuarioId = (int)Session["UsuarioId"];
+            var usuarioRol = (Rol)Session["UsuarioRol"];
+            var sede = (int?)Session["Sede"];
+
+
+            
+
+            if (ModelState.IsValid)
+            {
+                // Estado de la sede del usuario bodeguero
+                if (sede.HasValue && (Sede)sede.Value == Sede.PerezZeledon)
+                {
+                    db.Envios.Remove(envio);
+                    db.SaveChanges();
+                    return RedirectToAction("DomicilioPZCarga", "PaquetesEnviosController");
+                }
+                else if (sede.HasValue && (Sede)sede.Value == Sede.SanJose)
+                {
+                    db.Envios.Remove(envio);
+                    db.SaveChanges();
+                    return RedirectToAction("DomicilioSJCarga", "PaquetesEnviosController");
+                }
+            }
             return RedirectToAction("Index");
         }
+
+
 
         protected override void Dispose(bool disposing)
         {

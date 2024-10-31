@@ -38,6 +38,8 @@ namespace TransrodenProyecto.Models
 
         public DateTime? fecha_creacion { get; set; }
 
+        public DateTime? fecha_entrega { get; set; }
+
 
         public List<Paquete> Paquetes { get; set; }
     }
