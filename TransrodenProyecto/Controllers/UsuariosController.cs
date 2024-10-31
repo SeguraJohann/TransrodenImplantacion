@@ -24,7 +24,7 @@ namespace TransrodenProyecto.Controllers
             var usuarios = db.Usuarios.ToList()
                 .OrderBy(u => u.Rol == Rol.Cliente ? 4 :
                               u.Rol == Rol.Transportista ? 3 :
-                              u.Rol == Rol.Bodeguero ? 2 : 1) 
+                              u.Rol == Rol.Bodeguero ? 2 : 1)
                 .ToList();
 
             if (!string.IsNullOrEmpty(searchCed))
@@ -62,7 +62,7 @@ namespace TransrodenProyecto.Controllers
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id_Usuario,Nombre,Apellidos,Cedula,Correo,Clave,Telefono,Rol")] Usuario usuario)
+        public ActionResult Create([Bind(Include = "Id_Usuario,Nombre,Apellidos,Cedula,Correo,Clave,Telefono,Rol,Sede")] Usuario usuario)
         {
             if (ModelState.IsValid)
             {
@@ -96,7 +96,7 @@ namespace TransrodenProyecto.Controllers
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id_Usuario,Nombre,Apellidos,Cedula,Correo,Clave,Telefono,Rol")] Usuario usuario)
+        public ActionResult Edit([Bind(Include = "Id_Usuario,Nombre,Apellidos,Cedula,Correo,Clave,Telefono,Rol,Sede")] Usuario usuario)
         {
             if (ModelState.IsValid)
             {

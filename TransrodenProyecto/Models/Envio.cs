@@ -17,10 +17,14 @@ namespace TransrodenProyecto.Models
         public int Id_Usuario { get; set; }
         public Usuario Usuario { get; set; }
 
+        //Permite null
+        public int? NumeroPaquetes { get; set; }
 
+        //Requerido
+        public string Descripcion { get; set; }
         //Enum
         [Required]
-        public int Estado { get; set; }
+        public EstadoEnvio Estado { get; set; }
 
 
         public List<Paquete> Paquetes { get; set; }
