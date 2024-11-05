@@ -164,6 +164,39 @@ namespace TransrodenProyecto.Controllers
             return Sb.ToString();
         }
 
+        //Codigo para la busqueda y para el buscador
+        public ActionResult GetUsuarios(int page = 1, string searchCed = null)
+        {
+            int pageSize = 7;
+
+            // Filtra los usuarios si hay un criterio de búsqueda
+            var usuariosQuery = db.Usuarios.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchCed))
+            {
+                usuariosQuery = usuariosQuery.Where(u => u.Cedula.Contains(searchCed));
+            }
+
+            // Aplica el ordenamiento y paginación
+            var usuarios = usuariosQuery
+                .OrderBy(u => u.Rol == Rol.Cliente ? 4 :
+                              u.Rol == Rol.Transportista ? 3 :
+                              u.Rol == Rol.Bodeguero ? 2 : 1)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            int totalUsuarios = usuariosQuery.Count();
+            var totalPages = (int)Math.Ceiling((double)totalUsuarios / pageSize);
+
+            return Json(new
+            {
+                data = usuarios,
+                totalPages = totalPages
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+
 
     }
 }
