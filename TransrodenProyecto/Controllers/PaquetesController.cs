@@ -69,11 +69,30 @@ namespace TransrodenProyecto.Controllers
             return View(paquete);
         }
 
+        // GET: Paquetes/Details/5
+        public ActionResult DetailsTransp(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Paquete paquete = db.Paquetes.Find(id);
+            if (paquete == null)
+            {
+                return HttpNotFound();
+            }
+            return View(paquete);
+        }
+
+
+
+
         // GET: Paquetes/RegistrarPaquete
         public ActionResult RegistrarPaquete()
         {
             return View();
         }
+
 
         // Crear y guardar el paquete
         [HttpPost]
@@ -81,11 +100,33 @@ namespace TransrodenProyecto.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Obtener la sede del usuario desde la sesión
+                int? sedeValue = Session["Sede"] as int?;
+                EstadoPaquete estado; // Cambiar a EstadoPaquete
+                OrigenPaquete origen; // Cambiar a OrigenPaquete
+
+
+                if (sedeValue.HasValue)
+                {
+                    // Dependiendo de la sede, asignar el estado correspondiente
+                    estado = sedeValue.Value == (int)Sede.SanJose ? EstadoPaquete.SinAsignarSJ : EstadoPaquete.SinAsignarPZ;
+                    origen = sedeValue.Value == (int)Sede.SanJose ? OrigenPaquete.SanJose : OrigenPaquete.PerezZeledon;
+                }
+                else
+                {
+                    estado = EstadoPaquete.SinAsignar; // Valor por defecto si no hay sede
+                    origen = OrigenPaquete.Otro;
+                }
+
+
+
+
                 var nuevoPaquete = new Paquete
                 {
                     NumeroRastreo = GenerarNumeroRastreo(),
                     Tipo = model.Tipo,
-                    Estado = model.Estado,
+                    Origen = origen,
+                    Estado = estado,
                     NombreEmisor = model.NombreEmisor,
                     CedulaEmisor = model.CedulaEmisor,
                     NombreReceptor = model.NombreReceptor,
@@ -108,6 +149,9 @@ namespace TransrodenProyecto.Controllers
 
             return View(model);
         }
+
+
+
 
         // Numero de tracking
         private string GenerarNumeroRastreo()
@@ -177,7 +221,7 @@ namespace TransrodenProyecto.Controllers
         // POST: Paquetes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id_Paquete,NumeroRastreo,Tipo,NombreEmisor,CedulaEmisor,NombreReceptor,CedulaReceptor,Domicilio,Direccion,TelefonoDomicilio,Cantidad,Pago,Descripcion,Id_Carga,Id_Envio,fecha_recibo,fecha_entrega,Estado")] Paquete paquete)
+        public async Task<ActionResult> Edit([Bind(Include = "Id_Paquete,NumeroRastreo,Tipo,Origen,NombreEmisor,CedulaEmisor,NombreReceptor,CedulaReceptor,Domicilio,Direccion,TelefonoDomicilio,Cantidad,Pago,Descripcion,Id_Carga,Id_Envio,fecha_recibo,fecha_entrega,Estado")] Paquete paquete)
         {
             if (ModelState.IsValid)
             {
@@ -202,8 +246,9 @@ namespace TransrodenProyecto.Controllers
                     paqueteExistente.fecha_recibo = paquete.fecha_recibo;
                     paqueteExistente.fecha_entrega = paquete.fecha_entrega;
                     paqueteExistente.Estado = paquete.Estado;
+                    paqueteExistente.Origen = paquete.Origen;
 
-                    // Guardar los cambios en el paquete
+
                     db.Entry(paqueteExistente).State = EntityState.Modified;
 
                     // Buscar la facturación asociada usando el Id_Paquete

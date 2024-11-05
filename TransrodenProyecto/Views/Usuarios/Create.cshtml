@@ -1,4 +1,5 @@
-﻿@model TransrodenProyecto.Models.Usuario
+﻿@using TransrodenProyecto.Models
+@model TransrodenProyecto.Models.Usuario
 
 @{
     Layout = null;
@@ -99,17 +100,48 @@
 
                     <div class="navbar-nav mx-0 mx-lg-auto">
 
-                        <a href="@Url.Action("IndexAdmin", "Admin")" class="nav-item nav-link">
+                        <a href="@Url.Action("IndexAdmin", "Admin")" class="nav-item nav-link active">
                             Inicio
                         </a>
 
-                        <a href="@Url.Action("Index","Usuarios")" class="nav-item nav-link active">
+                        <a href="@Url.Action("Index","Usuarios")" class="nav-item nav-link">
                             Usuarios
                         </a>
 
                         <a href="@Url.Action("Index","Paquetes")" class="nav-item nav-link">
                             Paqueteria
                         </a>
+
+                        @if (Session["Usuario"] != null)
+                        {
+                            // Obtener la sede del usuario desde la sesión
+                            var sedeUsuario = Session["Sede"] != null ? (Sede)Session["Sede"] : Sede.SanJose; // Valor por defecto
+
+                            // Determinar la URL según la sede
+                            string urlCargas;
+                            if (sedeUsuario == Sede.SanJose)
+                            {
+                                urlCargas = Url.Action("DashboardSJ", "PaquetesCargasController");
+                            }
+                            else if (sedeUsuario == Sede.PerezZeledon)
+                            {
+                                urlCargas = Url.Action("DashBoardPZ", "PaquetesCargasController");
+                            }
+                            else
+                            {
+                                urlCargas = "#"; // En caso de que la sede no sea válida, puedes redirigir a una página de error o similar.
+                            }
+
+                            // Enlace a Cargas
+                            <a href="@urlCargas" class="nav-item nav-link">Tracking</a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Login", "Cuenta")" class="nav-item nav-link">
+                                <span class="d-block"><i class="fas fa-user"></i></span>
+                                Cuenta
+                            </a>
+                        }
 
                         <a href="@Url.Action("Index","Facturacions")" class="nav-item nav-link">
                             Facturacion
@@ -157,7 +189,6 @@
             </nav>
         </div>
     </div>
-    <!-- Navbar -->
     <!-- Navbar -->
 
 
@@ -226,10 +257,24 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.Rol, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.EnumDropDownListFor(model => model.Rol, "Selecciona el Rol del usuario", new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EnumDropDownListFor(model => model.Rol, "Selecciona el Rol del usuario", new { @class = "form-control", id = "rolSelect" }) <!-- Asegúrate de incluir el id -->
                         @Html.ValidationMessageFor(model => model.Rol, "", new { @class = "text-danger" })
                     </div>
                 </div>
+
+                <div class="form-group" id="sedeDiv" style="display: none;">
+                    @Html.LabelFor(model => model.Sede, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.Sede,
+                            new SelectList(Enum.GetValues(typeof(TransrodenProyecto.Models.Sede)).Cast<Sede>().Select(s => new { Value = (int)s, Text = s.ToString() }), "Value", "Text"),
+                            "Seleccione una sede",
+                            new { @class = "form-control", @id = "sedeSelect" })
+                        @Html.ValidationMessageFor(model => model.Sede, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+
 
                 <br>
                 <br>
@@ -289,48 +334,7 @@
                         </div>
                     </div>
 
-                    <!--
-                    <div class="pt-5" style="border-top: 1px solid rgba(255, 255, 255, 0.08);">
-                        <div class="row g-0">
-                            <div class="col-12">
-                                <div class="row g-4">
-                                    <div class="col-lg-6 col-xl-4">
-                                        <div class="d-flex">
-                                            <div class="btn-xl-square bg-primary text-white rounded p-4 me-4">
-                                                <i class="fas fa-map-marker-alt fa-2x"></i>
-                                            </div>
-                                            <div>
-                                                <h4 class="text-white">Address</h4>
-                                                <p class=" text-white mb-0">San Isidro - Perez Zeledon, Barrio Mexico - San Jose</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 col-xl-4">
-                                        <div class="d-flex">
-                                            <div class="btn-xl-square bg-primary text-white rounded p-4 me-4">
-                                                <i class="fas fa-envelope fa-2x"></i>
-                                            </div>
-                                            <div>
-                                                <h4 class="text-white">Correo</h4>
-                                                <p class="text-white mb-0">transroden@gmail.com</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 col-xl-4">
-                                        <div class="d-flex">
-                                            <div class="btn-xl-square bg-primary text-white rounded p-4 me-4">
-                                                <i class="fa fa-phone-alt fa-2x"></i>
-                                            </div>
-                                            <div>
-                                                <h4 class="text-white">Telefono</h4>
-                                                <p class=" text-white mb-0">+506 0000 0000</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
+
                 </div>
             </div>
         </div>
@@ -370,6 +374,20 @@
 
     <!-- Template Javascript -->
     <script src="~/Content/assets/js/main.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#rolSelect").change(function () {
+                var selectedRole = $(this).val();
+                if (selectedRole == "1") { // Bodeguero
+                    $("#sedeDiv").show();
+                } else {
+                    $("#sedeDiv").hide();
+                    $("#sedeSelect").val("0"); // Reset the Sede dropdown
+                }
+            });
+        });
+    </script>
+
 </body>
 
 </html>

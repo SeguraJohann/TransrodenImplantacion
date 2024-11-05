@@ -9,6 +9,11 @@ namespace TransrodenProyecto.ViewModels
     public class PaqueteCargaViewModel
     {
         public List<Paquete> Paquetes { get; set; }
+        public List<Paquete> PaquetesRecibidos { get; set; }
+
         public List<Carga> Cargas { get; set; }
+        public List<Carga> CargasRecibidas { get; set; }
+
+        public List<Envio> Envios { get; set; }
     }
 }

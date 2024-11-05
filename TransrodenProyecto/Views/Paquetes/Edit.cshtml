@@ -1,4 +1,5 @@
-﻿@model TransrodenProyecto.Models.Paquete
+﻿@using TransrodenProyecto.Models
+@model TransrodenProyecto.Models.Paquete
 
 @{
     Layout = null;
@@ -85,7 +86,6 @@
     </div>
     <!-- Topbar -->
     <!-- Navbar -->
-    <!-- Navbar -->
     <div class="container-fluid nav-bar px-0 px-lg-0 py-lg-0" id="maincontainer">
         <div class="container" id="containertop">
             <nav class="navbar navbar-expand-lg navbar-light">
@@ -99,7 +99,7 @@
 
                     <div class="navbar-nav mx-0 mx-lg-auto">
 
-                        <a href="@Url.Action("IndexAdmin", "Admin")" class="nav-item nav-link">
+                        <a href="@Url.Action("IndexAdmin", "Admin")" class="nav-item nav-link active">
                             Inicio
                         </a>
 
@@ -107,9 +107,40 @@
                             Usuarios
                         </a>
 
-                        <a href="@Url.Action("Index","Paquetes")" class="nav-item nav-link active">
+                        <a href="@Url.Action("Index","Paquetes")" class="nav-item nav-link">
                             Paqueteria
                         </a>
+
+                        @if (Session["Usuario"] != null)
+                        {
+                            // Obtener la sede del usuario desde la sesión
+                            var sedeUsuario = Session["Sede"] != null ? (Sede)Session["Sede"] : Sede.SanJose; // Valor por defecto
+
+                            // Determinar la URL según la sede
+                            string urlCargas;
+                            if (sedeUsuario == Sede.SanJose)
+                            {
+                                urlCargas = Url.Action("DashboardSJ", "PaquetesCargasController");
+                            }
+                            else if (sedeUsuario == Sede.PerezZeledon)
+                            {
+                                urlCargas = Url.Action("DashBoardPZ", "PaquetesCargasController");
+                            }
+                            else
+                            {
+                                urlCargas = "#"; // En caso de que la sede no sea válida, puedes redirigir a una página de error o similar.
+                            }
+
+                            // Enlace a Cargas
+                            <a href="@urlCargas" class="nav-item nav-link">Tracking</a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Login", "Cuenta")" class="nav-item nav-link">
+                                <span class="d-block"><i class="fas fa-user"></i></span>
+                                Cuenta
+                            </a>
+                        }
 
                         <a href="@Url.Action("Index","Facturacions")" class="nav-item nav-link">
                             Facturacion
@@ -189,12 +220,22 @@
                 <!-- Comboboxes -->
                 <!-- Tipo del Paquete -->
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Estado, "Tipo del Paquete", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.Tipo, "Tipo del Paquete", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         @Html.EnumDropDownListFor(model => model.Tipo, new { @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.Tipo, "", new { @class = "text-danger" })
                     </div>
                 </div>
+
+                <!-- Origen -->
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Origen, "Origen del Paquete", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EnumDropDownListFor(model => model.Origen, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Origen, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
 
                 <!-- Estado del Paquete -->
                 <div class="form-group">
@@ -204,6 +245,7 @@
                         @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })
                     </div>
                 </div>
+
                 <!--Fin de Comboxoeds-->
 
                 <div class="form-group">
@@ -311,10 +353,11 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.fecha_recibo, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.EditorFor(model => model.fecha_recibo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(model => model.fecha_recibo, new { htmlAttributes = new { @class = "form-control", type = "date" } })
                         @Html.ValidationMessageFor(model => model.fecha_recibo, "", new { @class = "text-danger" })
                     </div>
                 </div>
+
 
                 <div class="form-group">
                     @Html.LabelFor(model => model.fecha_entrega, htmlAttributes: new { @class = "control-label col-md-2" })

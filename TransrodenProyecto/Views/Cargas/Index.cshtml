@@ -21,7 +21,16 @@
                 @Html.DisplayNameFor(model => model.Usuario.Nombre)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Descripcion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumeroPaquetes)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Estado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.fecha_creacion)
             </th>
             <th></th>
         </tr>
@@ -32,7 +41,16 @@
                 @Html.DisplayFor(modelItem => item.Usuario.Nombre)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Descripcion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumeroPaquetes)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Estado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.fecha_creacion)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id=item.Id_Carga }) |

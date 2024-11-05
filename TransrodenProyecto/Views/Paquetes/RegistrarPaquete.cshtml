@@ -1,4 +1,5 @@
-﻿@model TransrodenProyecto.Models.Paquete
+﻿@using TransrodenProyecto.Models
+@model TransrodenProyecto.Models.Paquete
 
 @{
     Layout = null;
@@ -97,7 +98,7 @@
 
                     <div class="navbar-nav mx-0 mx-lg-auto">
 
-                        <a href="@Url.Action("IndexAdmin", "Admin")" class="nav-item nav-link">
+                        <a href="@Url.Action("IndexAdmin", "Admin")" class="nav-item nav-link active">
                             Inicio
                         </a>
 
@@ -105,9 +106,40 @@
                             Usuarios
                         </a>
 
-                        <a href="@Url.Action("Index","Paquetes")" class="nav-item nav-link active">
+                        <a href="@Url.Action("Index","Paquetes")" class="nav-item nav-link">
                             Paqueteria
                         </a>
+
+                        @if (Session["Usuario"] != null)
+                        {
+                            // Obtener la sede del usuario desde la sesión
+                            var sedeUsuario = Session["Sede"] != null ? (Sede)Session["Sede"] : Sede.SanJose; // Valor por defecto
+
+                            // Determinar la URL según la sede
+                            string urlCargas;
+                            if (sedeUsuario == Sede.SanJose)
+                            {
+                                urlCargas = Url.Action("DashboardSJ", "PaquetesCargasController");
+                            }
+                            else if (sedeUsuario == Sede.PerezZeledon)
+                            {
+                                urlCargas = Url.Action("DashBoardPZ", "PaquetesCargasController");
+                            }
+                            else
+                            {
+                                urlCargas = "#"; // En caso de que la sede no sea válida, puedes redirigir a una página de error o similar.
+                            }
+
+                            // Enlace a Cargas
+                            <a href="@urlCargas" class="nav-item nav-link">Tracking</a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Login", "Cuenta")" class="nav-item nav-link">
+                                <span class="d-block"><i class="fas fa-user"></i></span>
+                                Cuenta
+                            </a>
+                        }
 
                         <a href="@Url.Action("Index","Facturacions")" class="nav-item nav-link">
                             Facturacion
@@ -167,139 +199,144 @@
         {
             @Html.AntiForgeryToken()
 
-            <div class="form-horizontal">
+    <div class="form-horizontal">
 
-                <hr />
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Tipo, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EnumDropDownListFor(model => model.Tipo, "Selecciona el Tipo de Paquete", new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Tipo, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <!-- Estado del Paquete -->
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Estado, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EnumDropDownListFor(model => model.Estado, "SinAsignar", new { @class = "form-control", @disabled = "disabled" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.NombreEmisor, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.NombreEmisor, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.NombreEmisor, "", new { @class = "text-danger" })
-                    </div>
-                </div>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.CedulaEmisor, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.CedulaEmisor, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.CedulaEmisor, "", new { @class = "text-danger" })
-                    </div>
-                </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Tipo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EnumDropDownListFor(model => model.Tipo, "Selecciona el Tipo de Paquete", new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Tipo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- Origen -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.Origen, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EnumDropDownListFor(model => model.Origen, new { @class = "form-control" })
+            </div>
+        </div>
 
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.NombreReceptor, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.NombreReceptor, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.NombreReceptor, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.CedulaReceptor, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.CedulaReceptor, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.CedulaReceptor, "", new { @class = "text-danger" })
-                    </div>
-                </div>
+        <!-- Estado del Paquete -->
+        <div class="form-group">
+            @Html.LabelFor(model => model.Estado, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EnumDropDownListFor(model => model.Estado, new { @class = "form-control" })
+            </div>
+        </div>
 
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Domicilio, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        <div class="checkbox">
-                            @Html.CheckBoxFor(model => model.Domicilio)
-                            @Html.ValidationMessageFor(model => model.Domicilio, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.NombreEmisor, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NombreEmisor, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NombreEmisor, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Direccion, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Direccion, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Direccion, "", new { @class = "text-danger" })
-                    </div>
-                </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.CedulaEmisor, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CedulaEmisor, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CedulaEmisor, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.TelefonoDomicilio, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.TelefonoDomicilio, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.TelefonoDomicilio, "", new { @class = "text-danger" })
-                    </div>
-                </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.NombreReceptor, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NombreReceptor, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NombreReceptor, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Cantidad, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Cantidad, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Cantidad, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Pago, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        <div class="checkbox">
-                            @Html.CheckBoxFor(model => model.Pago)
-                            @Html.ValidationMessageFor(model => model.Pago, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.CedulaReceptor, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CedulaReceptor, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CedulaReceptor, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Descripcion, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.TextAreaFor(model => model.Descripcion, new { @class = "form-control", rows = 4 })
-                        @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <br>
-
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Registrar Paquete" class="btn btn-primary" />
-                    </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Domicilio, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.CheckBoxFor(model => model.Domicilio)
+                    @Html.ValidationMessageFor(model => model.Domicilio, "", new { @class = "text-danger" })
                 </div>
             </div>
-        }
-        <br>
+        </div>
 
-        <div>
-            @Html.ActionLink("Volver a la lista", "Index", null, new { @class = "btn btn-success" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Direccion, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Direccion, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Direccion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TelefonoDomicilio, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.TelefonoDomicilio, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TelefonoDomicilio, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Cantidad, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Cantidad, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Cantidad, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Pago, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.CheckBoxFor(model => model.Pago)
+                    @Html.ValidationMessageFor(model => model.Pago, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Descripcion, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Descripcion, new { @class = "form-control", rows = 4 })
+                @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
+            </div>
         </div>
         <br>
 
+        <div class="form-actions no-color">
+            <input type="submit" value="Registrar Paquete" class="btn btn-success" />
+            @Html.ActionLink("Volver a la lista", "Index", null, new { @class = "btn btn-primary" })
+
+            <br>
+        </div>
+
+
+    </div>
+        }
+        <br>
         @section Scripts {
             @Scripts.Render("~/bundles/jqueryval")
         }
-
 
     </div>
 
@@ -343,48 +380,7 @@
                         </div>
                     </div>
 
-                    <!--
-                    <div class="pt-5" style="border-top: 1px solid rgba(255, 255, 255, 0.08);">
-                        <div class="row g-0">
-                            <div class="col-12">
-                                <div class="row g-4">
-                                    <div class="col-lg-6 col-xl-4">
-                                        <div class="d-flex">
-                                            <div class="btn-xl-square bg-primary text-white rounded p-4 me-4">
-                                                <i class="fas fa-map-marker-alt fa-2x"></i>
-                                            </div>
-                                            <div>
-                                                <h4 class="text-white">Address</h4>
-                                                <p class=" text-white mb-0">San Isidro - Perez Zeledon, Barrio Mexico - San Jose</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 col-xl-4">
-                                        <div class="d-flex">
-                                            <div class="btn-xl-square bg-primary text-white rounded p-4 me-4">
-                                                <i class="fas fa-envelope fa-2x"></i>
-                                            </div>
-                                            <div>
-                                                <h4 class="text-white">Correo</h4>
-                                                <p class="text-white mb-0">transroden@gmail.com</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 col-xl-4">
-                                        <div class="d-flex">
-                                            <div class="btn-xl-square bg-primary text-white rounded p-4 me-4">
-                                                <i class="fa fa-phone-alt fa-2x"></i>
-                                            </div>
-                                            <div>
-                                                <h4 class="text-white">Telefono</h4>
-                                                <p class=" text-white mb-0">+506 0000 0000</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
+
                 </div>
             </div>
         </div>

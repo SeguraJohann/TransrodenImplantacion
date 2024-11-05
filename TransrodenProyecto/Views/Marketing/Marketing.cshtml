@@ -1,7 +1,9 @@
-﻿@model TransrodenProyecto.Models.Usuario
+﻿@using TransrodenProyecto.Models
+@model TransrodenProyecto.Models.Usuario
 @{
-    ViewBag.Title = "Marketing";
+    Layout = null;
 }
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -86,46 +88,62 @@
     <div class="container-fluid nav-bar px-0 px-lg-0 py-lg-0" id="maincontainer">
         <div class="container" id="containertop">
             <nav class="navbar navbar-expand-lg navbar-light">
-                <!-- <a href="#" class="navbar-brand p-0"> -->
-                <!--<h1 class="text-primary mb-0"><i class="fab fa-slack me-2"></i> LifeSure</h1> -->
+
                 <img src="~/Content/assets/img/Logo.png" alt="Logo" width="230" height="150">
-                <!-- </a> -->
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                     <span class="fa fa-bars"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
 
                     <div class="navbar-nav mx-0 mx-lg-auto">
-                        <!-- <a href="index.html" class="nav-item nav-link active">Inicio</a> -->
-                        <a href="@Url.Action("IndexAdmin", "Prueba")" class="nav-item nav-link">
+
+                        <a href="@Url.Action("IndexAdmin", "Admin")" class="nav-item nav-link active">
                             Inicio
                         </a>
 
-                        <a href="about.html" class="nav-item nav-link">
-                            Administracion
-                        </a>
-                        <!-- <a href="about.html" class="nav-item nav-link">Sucursales</a> -->
-
-                        <a href="service.html" class="nav-item nav-link">
-                            Clientes
+                        <a href="@Url.Action("Index","Usuarios")" class="nav-item nav-link">
+                            Usuarios
                         </a>
 
-                        <!-- <a href="service.html" class="nav-item nav-link">Rastreo</a> -->
-
-                        <a href="service.html" class="nav-item nav-link">
-                            Inventario
+                        <a href="@Url.Action("Index","Paquetes")" class="nav-item nav-link">
+                            Paqueteria
                         </a>
 
+                        @if (Session["Usuario"] != null)
+                        {
+                            // Obtener la sede del usuario desde la sesión
+                            var sedeUsuario = Session["Sede"] != null ? (Sede)Session["Sede"] : Sede.SanJose; // Valor por defecto
 
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link" data-bs-toggle="dropdown">
-                                <span class="dropdown-toggle">Tracking</span>
+                            // Determinar la URL según la sede
+                            string urlCargas;
+                            if (sedeUsuario == Sede.SanJose)
+                            {
+                                urlCargas = Url.Action("DashboardSJ", "PaquetesCargasController");
+                            }
+                            else if (sedeUsuario == Sede.PerezZeledon)
+                            {
+                                urlCargas = Url.Action("DashBoardPZ", "PaquetesCargasController");
+                            }
+                            else
+                            {
+                                urlCargas = "#"; // En caso de que la sede no sea válida, puedes redirigir a una página de error o similar.
+                            }
+
+                            // Enlace a Cargas
+                            <a href="@urlCargas" class="nav-item nav-link">Tracking</a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Login", "Cuenta")" class="nav-item nav-link">
+                                <span class="d-block"><i class="fas fa-user"></i></span>
+                                Cuenta
                             </a>
-                            <div class="dropdown-menu">
-                                <a href="@Url.Action("IndexGenBod", "Modulo4")" class="dropdown-item">Tracking Admin</a>
-                                <a href="@Url.Action("TrackingAdmin", "Modulo4")" class="dropdown-item">Rastreo Paquete</a>
-                            </div>
-                        </div>
+                        }
+
+                        <a href="@Url.Action("Index","Facturacions")" class="nav-item nav-link">
+                            Facturacion
+                        </a>
 
 
                         <div class="nav-item dropdown">
@@ -141,15 +159,29 @@
                         </div>
 
 
-                        <a href="contact.html" class="nav-item nav-link active" id="contact">
+
+
+                        <a href="@Url.Action("Marketing","Marketing")" class="nav-item nav-link" id="contact">
                             Mercadeo
                         </a>
-                        <!-- <a href="contact.html" class="nav-item nav-link" id="contact">Cuenta</a> -->
 
-                        <div class="nav-btn px-1">
-                            <!-- <button class="btn-search btn btn-primary btn-md-square rounded-circle flex-shrink-0" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fas fa-search"></i></button> -->
-                            <a href="#" class="btn btn-primary rounded-circle py-3 px-4 ms-3 flex-shrink-0"><i class="fas fa-user"></i></a>
-                        </div>
+
+
+                        @if (Session["Usuario"] != null)
+                        {
+                            <a href="@Url.Action("Logout", "Cuenta")" class="nav-item nav-link">
+                                <span class="d-block"><i class="fas fa-sign-out-alt"></i></span>
+                                @Session["Usuario"]
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Login", "Cuenta")" class="nav-item nav-link">
+                                <span class="d-block"><i class="fas fa-user"></i></span>
+                                Cuenta
+                            </a>
+                        }
+
                     </div>
                 </div>
             </nav>
@@ -187,12 +219,10 @@
                             <label for="asunto" class="form-label">Asunto</label>
                             <textarea class="form-control" id="asunto" name="Asunto" rows="2" placeholder="Escriba el asunto del boletín" required></textarea>
                         </div>
-
                         <div class="display-6 mb-3">
                             <label for="mensaje" class="form-label">Mensaje</label>
                             <textarea class="form-control" id="mensaje" name="Mensaje" rows="6" placeholder="Escriba el mensaje del boletín" required></textarea>
                         </div>
-
                         <div class="display-6 mb-3">
                             <label for="imagen" class="form-label">Subir Imagen</label>
                             <input type="file" class="form-control" id="imagen" name="Imagen" accept="image/*" onchange="previewImage(event)">
@@ -200,16 +230,14 @@
                                 <img id="preview" src="#" alt="Vista previa de la imagen" style="display: none; max-width: 200px; max-height: 200px;" />
                             </div>
                         </div>
-
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary" style="background-color: #ADD8E6; border-color: #ADD8E6;">Enviar Boletín</button>
+                            <button type="submit" id="submitBtn" class="btn btn-lg" style="background-color: #cccccc; border-color: #cccccc; color: #666666;" disabled>Enviar Boletín</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
     <script>
         function previewImage(event) {
             var preview = document.getElementById('preview');
@@ -220,10 +248,44 @@
             };
             reader.readAsDataURL(event.target.files[0]);
         }
+
+        function checkFields() {
+            const asunto = document.getElementById('asunto').value.trim();
+            const mensaje = document.getElementById('mensaje').value.trim();
+            const submitBtn = document.getElementById('submitBtn');
+
+            if (asunto && mensaje) {
+                // Estado desbloqueado - Aquí están los cambios de apariencia
+                submitBtn.removeAttribute('disabled');
+                submitBtn.style.backgroundColor = '#E4080A'; // Verde más vibrante
+                submitBtn.style.borderColor = '#E4080A';
+                submitBtn.style.color = 'white';
+                submitBtn.style.cursor = 'pointer';
+                submitBtn.style.transform = 'scale(1)';
+                submitBtn.style.boxShadow = '0 2px 4px rgba(0,0,0,0.2)';
+            } else {
+                // Estado bloqueado
+                submitBtn.setAttribute('disabled', '');
+                submitBtn.style.backgroundColor = '#cccccc'; // Gris claro
+                submitBtn.style.borderColor = '#cccccc';
+                submitBtn.style.color = '#666666'; // Texto gris oscuro
+                submitBtn.style.cursor = 'not-allowed';
+                submitBtn.style.transform = 'scale(0.98)';
+                submitBtn.style.boxShadow = 'none';
+            }
+        }
+
+        // Agregar listeners para los campos de texto
+        document.getElementById('asunto').addEventListener('input', checkFields);
+        document.getElementById('mensaje').addEventListener('input', checkFields);
+
+        // Agregar estilos de transición al botón
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.style.transition = 'all 0.3s ease';
+
+        // Ejecutar la verificación inicial
+        checkFields();
     </script>
-
-
-    <!--Marketing END-->
     <!-- Footer Start -->
     <div class="container-fluid footer py-5 wow fadeIn" data-wow-delay="0.2s">
         <div class="container py-5">

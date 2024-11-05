@@ -15,13 +15,24 @@ namespace TransrodenProyecto.Models
     public enum EstadoPaquete
     {
         SinAsignar = 0,
-        Asignado = 1,
-        EnTransito = 2,
-        BodegaPZ = 3,
-        BodegaSJ = 4,
-        Domicilio = 5,
-        Entregado = 6
+        SinAsignarSJ = 1,
+        SinAsignarPZ = 2,
+        Asignado = 3,
+        EnTransito = 4,
+        BodegaPZ = 5,
+        BodegaSJ = 6,
+        Domicilio = 7,
+        Entregado = 8
     }
+
+    //Para poder quitar un paquete de una carga y ponerlo en su estado original
+    public enum OrigenPaquete
+    {
+        Otro = 0,
+        SanJose = 1,
+        PerezZeledon = 2   
+    }
+
 
     public enum EstadoCarga
     {
@@ -29,8 +40,19 @@ namespace TransrodenProyecto.Models
         EnTransito = 1,
         BodegaPZ = 2,
         BodegaSJ = 3,
-        Entregado = 4
+        Entregado = 4,
+        Averia = 5
     }
+
+
+    //Para colocar la carga en la vista correcta
+    public enum OrigenCarga
+    {
+        Otro = 0,
+        SanJose = 1,
+        PerezZeledon = 2
+    }
+
 
     public enum EstadoEnvio
     {
@@ -46,6 +68,12 @@ namespace TransrodenProyecto.Models
         Bodeguero = 1,
         Transportista = 2,
         Cliente = 3
+    }
+
+    public enum Sede
+    {
+        SanJose = 0,
+        PerezZeledon = 1
     }
 
 }

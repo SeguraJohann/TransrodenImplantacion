@@ -1,4 +1,4 @@
-﻿
+﻿@using TransrodenProyecto.Models
 @{
     Layout = null;
 }
@@ -108,6 +108,37 @@
                             Paqueteria
                         </a>
 
+                        @if (Session["Usuario"] != null)
+                        {
+                            // Obtener la sede del usuario desde la sesión
+                            var sedeUsuario = Session["Sede"] != null ? (Sede)Session["Sede"] : Sede.SanJose; // Valor por defecto
+
+                            // Determinar la URL según la sede
+                            string urlCargas;
+                            if (sedeUsuario == Sede.SanJose)
+                            {
+                                urlCargas = Url.Action("DashboardSJ", "PaquetesCargasController");
+                            }
+                            else if (sedeUsuario == Sede.PerezZeledon)
+                            {
+                                urlCargas = Url.Action("DashBoardPZ", "PaquetesCargasController");
+                            }
+                            else
+                            {
+                                urlCargas = "#"; // En caso de que la sede no sea válida, puedes redirigir a una página de error o similar.
+                            }
+
+                            // Enlace a Cargas
+                            <a href="@urlCargas" class="nav-item nav-link">Tracking</a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Login", "Cuenta")" class="nav-item nav-link">
+                                <span class="d-block"><i class="fas fa-user"></i></span>
+                                Cuenta
+                            </a>
+                        }
+
                         <a href="@Url.Action("Index","Facturacions")" class="nav-item nav-link">
                             Facturacion
                         </a>
@@ -128,7 +159,7 @@
 
 
 
-                        <a href="@Url.Action("Marketing","Modulo6")" class="nav-item nav-link" id="contact">
+                        <a href="@Url.Action("Marketing","Marketing")" class="nav-item nav-link" id="contact">
                             Mercadeo
                         </a>
 
@@ -155,7 +186,7 @@
         </div>
     </div>
     <!-- Navbar -->
-    
+
 
     <div class="container mt-5">
 
