@@ -461,6 +461,8 @@
     <Content Include="Views\Envios\DetailsTransp.cshtml" />
     <Content Include="Views\PaquetesCargasController\CargaPaquetesViewTransp.cshtml" />
     <Content Include="Views\Paquetes\DetailsTransp.cshtml" />
+    <Content Include="Views\Marketing\Marketing.cshtml" />
+    <Content Include="Views\Marketing\CorreoEnviado.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
