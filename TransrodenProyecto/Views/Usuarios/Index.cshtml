@@ -228,9 +228,12 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Rol)
                 </th>
-                <td>
+                <th>
+                    @Html.DisplayNameFor(model => model.NotifCli)
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.Sede)
-                </td>
+                </th>
                 <th></th>
             </tr>
 
@@ -256,6 +259,9 @@
                         @Html.DisplayFor(modelItem => item.Rol)
                     </td>
                     <td>
+                        @Html.DisplayFor(modelItem => item.NotifCli)
+                    </td>
+                    <td>
                         @(item.Sede.ToString())
                     </td>
                     <td>
@@ -265,7 +271,7 @@
                     </td>
                 </tr>
             }
-            </thead>
+            
             <tbody></tbody>
         </table>
 
