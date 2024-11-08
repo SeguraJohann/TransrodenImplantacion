@@ -195,7 +195,7 @@
     <div class="container mt-5">
 
 
-        <h2 class="mb-4">Crear Usuario</h2>
+        <h2 class="text-center">Crear Usuario</h2>
 
 
         @using (Html.BeginForm())
@@ -257,7 +257,7 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.Rol, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.EnumDropDownListFor(model => model.Rol, "Selecciona el Rol del usuario", new { @class = "form-control", id = "rolSelect" }) <!-- Asegúrate de incluir el id -->
+                        @Html.EnumDropDownListFor(model => model.Rol, "Selecciona el Rol del usuario", new { @class = "form-control", id = "rolSelect" }) 
                         @Html.ValidationMessageFor(model => model.Rol, "", new { @class = "text-danger" })
                     </div>
                 </div>

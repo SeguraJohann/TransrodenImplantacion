@@ -196,98 +196,123 @@
     <!-- Navbar -->
 
 
+
     <div class="container mt-5">
+        <h2 class="text-center">Detalles de la Facturación</h2>
+        <br>
 
 
-        <h2>Detalles de la Facturación</h2>
+        <div class="form-horizontal">
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Información de la Factura</h3>
-            </div>
-            <div class="panel-body">
-                <dl class="dl-horizontal">
-                    <dt>Factura N°:</dt>
-                    <dd>@Model.Id_Facturacion</dd>
 
-                    <dt>Fecha de Emisión:</dt>
-                    <dd>@Model.Fecha.ToString("dd/MM/yyyy")</dd>
+            <div class="row">
+                <!-- Columna izquierda -->
+                <div class="col-md-6">
 
-                    <dt>Precio:</dt>
-                    <dd>@String.Format("{0:C}", Model.Precio)</dd>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Información de la Factura</h3>
+                        </div>
+                        <div class="panel-body">
+                            <dl class="dl-horizontal">
+                                <dt>Factura N°:</dt>
+                                <dd>@Model.Id_Facturacion</dd>
 
-                    <dt>Subtotal:</dt>
-                    <dd>@String.Format("{0:C}", Model.Iva)</dd>
+                                <dt>Fecha de Emisión:</dt>
+                                <dd>@Model.Fecha.ToString("dd/MM/yyyy")</dd>
 
-                    <dt>Total:</dt>
-                    <dd>@String.Format("{0:C}", Model.Total)</dd>
-                </dl>
-            </div>
-        </div>
+                                <dt>Precio:</dt>
+                                <dd>@String.Format("{0:C}", Model.Precio)</dd>
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Detalles del Paquete</h3>
-            </div>
-            <div class="panel-body">
-                <dl class="dl-horizontal">
-                    <dt>Paquete N°:</dt>
-                    <dd>@Model.Paquete.Id_Paquete</dd>
+                                <dt>Subtotal:</dt>
+                                <dd>@String.Format("{0:C}", Model.Iva)</dd>
 
-                    <dt>Rastreo N°:</dt>
-                    <dd>@Model.Paquete.NumeroRastreo</dd>
+                                <dt>Total:</dt>
+                                <dd>@String.Format("{0:C}", Model.Total)</dd>
+                            </dl>
+                        </div>
+                    </div>
 
-                    <dt>Cantidad:</dt>
-                    <dd>@Model.Paquete.Cantidad</dd>
 
-                    <dt>Emisor:</dt>
-                    <dd>@Model.Paquete.NombreEmisor</dd>
-
-                    <dt>Cédula del Emisor:</dt>
-                    <dd>@Model.Paquete.CedulaEmisor</dd>
-
-                    <dt>Receptor:</dt>
-                    <dd>@Model.Paquete.NombreReceptor</dd>
-
-                    <dt>Destino:</dt>
-                    <dd>@Model.Paquete.Direccion</dd>
-                </dl>
-            </div>
-        </div>
-
-        @if (Model.Usuario != null)
-        {
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Detalles del Usuario Asociado</h3>
                 </div>
-                <div class="panel-body">
-                    <dl class="dl-horizontal">
-                        <dt>Usuario N°:</dt>
-                        <dd>@Model.Usuario.Id_Usuario</dd>
 
-                        <dt>Nombre:</dt>
-                        <dd>@Model.Usuario.Nombre</dd>
 
-                        <dt>Cédula:</dt>
-                        <dd>@Model.Usuario.Cedula</dd>
+                <!-- Columna derecha -->
+                <div class="col-md-6">
 
-                        <dt>Email:</dt>
-                        <dd>@Model.Usuario.Correo</dd>
-                    </dl>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Detalles del Paquete</h3>
+                        </div>
+                        <div class="panel-body">
+                            <dl class="dl-horizontal">
+                                <dt>Paquete N°:</dt>
+                                <dd>@Model.Paquete.Id_Paquete</dd>
+
+                                <dt>Rastreo N°:</dt>
+                                <dd>@Model.Paquete.NumeroRastreo</dd>
+
+                                <dt>Cantidad:</dt>
+                                <dd>@Model.Paquete.Cantidad</dd>
+
+                                <dt>Emisor:</dt>
+                                <dd>@Model.Paquete.NombreEmisor</dd>
+
+                                <dt>Cédula del Emisor:</dt>
+                                <dd>@Model.Paquete.CedulaEmisor</dd>
+
+                                <dt>Receptor:</dt>
+                                <dd>@Model.Paquete.NombreReceptor</dd>
+
+                                <dt>Destino:</dt>
+                                <dd>@Model.Paquete.Direccion</dd>
+                            </dl>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
-        }
-        else
-        {
-            <div class="alert alert-warning">
-                <strong>Nota:</strong> No hay un usuario asociado con la cédula del emisor.
-            </div>
-        }
+            <br>
+
+            @if (Model.Usuario != null)
+            {
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Detalles del Usuario Asociado</h3>
+                    </div>
+                    <div class="panel-body">
+                        <dl class="dl-horizontal">
+                            <dt>Usuario N°:</dt>
+                            <dd>@Model.Usuario.Id_Usuario</dd>
+
+                            <dt>Nombre:</dt>
+                            <dd>@Model.Usuario.Nombre</dd>
+
+                            <dt>Cédula:</dt>
+                            <dd>@Model.Usuario.Cedula</dd>
+
+                            <dt>Email:</dt>
+                            <dd>@Model.Usuario.Correo</dd>
+                        </dl>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning">
+                    <strong>Nota:</strong> No hay un usuario asociado con la cédula del emisor.
+                </div>
+            }
+
+        </div>
 
         <a href="@Url.Action("Index", "Facturacions")" class="btn btn-primary">Volver a la lista de facturaciones</a>
+
     </div>
     <br>
+
+
 
 
     <!--

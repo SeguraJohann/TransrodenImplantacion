@@ -464,7 +464,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\PaquetesEnvios\" />
     <Folder Include="Views\View\" />
   </ItemGroup>
   <ItemGroup>
