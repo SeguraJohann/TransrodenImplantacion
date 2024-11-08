@@ -192,32 +192,22 @@
     </div>
     <!-- Navbar -->
 
-
+    <!-- Buevo codigo para ordenar -->
     <div class="container mt-5">
-
-
-
-
         <div class="d-flex justify-content-end mb-4">
-
-
             <a href="@Url.Action("Create", "Usuarios")" class="btn btn-danger">
                 <i class="fas fa-user-plus"></i> Agregar Usuario
             </a>
         </div>
 
-        <form method="get" action="@Url.Action("Index", "Usuarios")">
-            <div class="form-group">
-                <label for="searchId">Buscar Usuario:</label>
-                <input type="number" name="searchCed" id="searchCed" class="form-control" placeholder="Ingresa numero cedula" />
-                <br>
-                <button type="submit" class="btn btn-primary">Buscar</button>
-            </div>
-        </form>
-        <br>
+        <div class="form-group">
+            <label for="searchId">Buscar Usuario:</label>
+            <input type="number" id="searchCed" class="form-control" placeholder="Ingresa número de cédula" />
+        </div>
 
-        <h2 class="text-center">Lista de Usuarios</h2>
         <br>
+        <h2 class="mb-4">Lista de Usuarios</h2>
+
         <table class="table">
             <tr>
                 <th>
@@ -238,9 +228,12 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Rol)
                 </th>
-                <td>
+                <th>
+                    @Html.DisplayNameFor(model => model.NotifCli)
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.Sede)
-                </td>
+                </th>
                 <th></th>
             </tr>
 
@@ -266,6 +259,9 @@
                         @Html.DisplayFor(modelItem => item.Rol)
                     </td>
                     <td>
+                        @Html.DisplayFor(modelItem => item.NotifCli)
+                    </td>
+                    <td>
                         @(item.Sede.ToString())
                     </td>
                     <td>
@@ -275,14 +271,86 @@
                     </td>
                 </tr>
             }
-
+            
+            <tbody></tbody>
         </table>
+
+        <nav>
+            <ul class="pagination" id="pagination"></ul>
+        </nav>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $(document).ready(function () {
+        let currentPage = 1;
+
+        function loadUsuarios(page, searchCed = '') {
+            $.ajax({
+                url: '@Url.Action("GetUsuarios", "Usuarios")',
+                type: 'GET',
+                data: { page: page, searchCed: searchCed },
+                success: function (response) {
+                    const usuarios = response.data;
+                    const totalPages = response.totalPages;
+
+                    let tableBody = '';
+                    usuarios.forEach(usuario => {
+                        tableBody += `
+                            <tr>
+                                <td>${usuario.Nombre}</td>
+                                <td>${usuario.Apellidos}</td>
+                                <td>${usuario.Cedula}</td>
+                                <td>${usuario.Correo}</td>
+                                <td>${usuario.Telefono}</td>
+                                <td>${usuario.Rol}</td>
+                                <td>
+                                    <a href="/Usuarios/Edit/${usuario.Id_Usuario}" class="btn btn-success">Editar</a>
+                                    <a href="/Usuarios/Details/${usuario.Id_Usuario}" class="btn btn-primary">Detalles</a>
+                                    <a href="/Usuarios/Delete/${usuario.Id_Usuario}" class="btn btn-danger">Borrar</a>
+                                </td>
+                            </tr>`;
+                    });
+
+                    $('#usuariosTable tbody').html(tableBody);
+                    renderPagination(totalPages, searchCed);
+                }
+            });
+        }
+
+        function renderPagination(totalPages, searchCed = '') {
+            let paginationHtml = '';
+            for (let i = 1; i <= totalPages; i++) {
+                paginationHtml += `
+                    <li class="page-item ${i === currentPage ? 'active' : ''}">
+                        <a class="page-link" href="#">${i}</a>
+                    </li>`;
+            }
+
+            $('#pagination').html(paginationHtml);
+
+            $('#pagination .page-link').click(function (e) {
+                e.preventDefault();
+                currentPage = parseInt($(this).text());
+                loadUsuarios(currentPage, searchCed);
+            });
+        }
+
+        // Actualizar la busqueda
+        $('#searchCed').on('keyup', function () {
+            const searchCed = $(this).val();
+            currentPage = 1; // Reinicia la paginación en la primera página
+            loadUsuarios(currentPage, searchCed);
+        });
+
+        // Cargar los usuarios iniciales
+        loadUsuarios(currentPage);
+    });
+    </script>
 
 
-    <!--
 
+    <!-- -->
     <!-- Footer Start -->
     <div class="container-fluid footer py-5 wow fadeIn" data-wow-delay="0.2s">
         <div class="container py-5">

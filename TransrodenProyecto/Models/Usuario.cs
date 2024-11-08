@@ -36,6 +36,8 @@ namespace TransrodenProyecto.Models
         [Required]
         public string Telefono { get; set; }
 
+        public bool NotifCli { get; set; }
+
 
         //Enum
         [Required]

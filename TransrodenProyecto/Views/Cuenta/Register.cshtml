@@ -212,6 +212,17 @@
                                 @Html.TextBoxFor(m => m.Telefono, new { @class = "form-control" })
                                 @Html.ValidationMessageFor(m => m.Telefono)
                             </div>
+                            <!--  Nueva linea de codigo para las notificaciones  -->
+                            <div class="form-group">
+                                
+                                <div class="col-md-10">
+                                    <div class="form-check">
+                                        @Html.CheckBoxFor(model => model.NotifCli, new { @class = "form-check-input" })
+                                        @Html.Label("Desea recibir notificaciones?", new { @class = "form-check-label" })
+                                        @Html.ValidationMessageFor(model => model.NotifCli, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
 
                             <!-- Mensaje de registro completado -->
                             <div id="mensajeRegistro" style="display:none; margin-top:10px;" class="alert alert-success text-center">
@@ -224,16 +235,16 @@
                             </div>
 
                             <script>
-                            function mostrarMensaje() {
-                                var mensaje = document.getElementById("mensajeRegistro");
-                                mensaje.style.display = "block";
+                                function mostrarMensaje() {
+                                    var mensaje = document.getElementById("mensajeRegistro");
+                                    mensaje.style.display = "block";
 
-                                // Mostrar el mensaje durante 3 segundos, luego redirigir
-                                
+                                    // Mostrar el mensaje durante 3 segundos, luego redirigir
 
-                                
-                               
-                            }
+
+
+
+                                }
                             </script>
                         }
 
