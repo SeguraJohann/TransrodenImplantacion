@@ -95,6 +95,16 @@ namespace TransrodenProyecto.Controllers
                     Session["UsuarioRol"] = usuario.Rol;
                     Session["Usuario"] = $"{usuario.Nombre}";
 
+                    //Esto es por si el usuario no tiene sede
+                    if (usuario.Sede != null)
+                    {
+                        Session["Sede"] = usuario.Sede;
+                    }
+                    else
+                    {
+                        Session["Sede"] = Sede.SanJose; // Valor por defecto
+                    }
+
                     // Almacenar la sede si el usuario es Bodeguero
                     if (usuario.Rol == Rol.Bodeguero)
                     {
