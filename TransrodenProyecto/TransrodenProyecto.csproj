@@ -471,6 +471,17 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Content Include="Views\Shared\_ClienteNav.cshtml" />
+    <Content Include="Views\Shared\_AdminNav.cshtml" />
+    <Content Include="Views\Shared\_TransportistaNav.cshtml" />
+    <Content Include="Views\Shared\_FooterCliente.cshtml" />
+    <Content Include="Views\Shared\_FooterAdmin.cshtml" />
+    <Content Include="Views\Shared\_FooterTransportista.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Views\Base\" />
+    <Folder Include="Views\PaquetesEnvios\" />
     <Folder Include="Views\View\" />
   </ItemGroup>
   <ItemGroup>
