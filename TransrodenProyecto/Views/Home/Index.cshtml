@@ -96,7 +96,7 @@
 
                     <div class="navbar-nav mx-0 mx-lg-auto">
                         <!-- <a href="index.html" class="nav-item nav-link active">Inicio</a> -->
-                        <a href="@Url.Action("Index", "Home")" class="nav-item nav-link active">
+                        <a href="@Url.Action("Index", "Home")" class="nav-item nav-link">
                             <span class="d-block"><i class="fas fa-home"></i></span>
                             Inicio
                         </a>
@@ -107,7 +107,7 @@
                         </a>
                         <!-- <a href="about.html" class="nav-item nav-link">Sucursales</a> -->
 
-                        <a href="@Url.Action("Tracking", "Home")" class="nav-item nav-link">
+                        <a href="@Url.Action("Rastreo", "HistorialPaquete")" class="nav-item nav-link">
                             <span class="d-block"><i class="fas fa-truck"></i></span>
                             Rastreo
                         </a>
@@ -127,22 +127,12 @@
                             <span class="d-block"><i class="fas fa-info-circle"></i></span>
                             Nosotros
                         </a>
+                        <!-- <a href="blog.html" class="nav-item nav-link">Nosotros</a> -->
 
-
-                        @if (Session["Usuario"] != null)
-                        {
-                            <a href="@Url.Action("Logout", "Cuenta")" class="nav-item nav-link">
-                                <span class="d-block"><i class="fas fa-sign-out-alt"></i></span>
-                                @Session["Usuario"]
-                            </a>
-                        }
-                        else
-                        {
-                            <a href="@Url.Action("Login", "Cuenta")" class="nav-item nav-link">
-                                <span class="d-block"><i class="fas fa-user"></i></span>
-                                Cuenta
-                            </a>
-                        }
+                        <a href="@Url.Action("Login","Cuenta")" class="nav-item nav-link active" id="contact">
+                            <span class="d-block"><i class="fas fa-user"></i></span>
+                            Cuenta
+                        </a>
 
                     </div>
                 </div>

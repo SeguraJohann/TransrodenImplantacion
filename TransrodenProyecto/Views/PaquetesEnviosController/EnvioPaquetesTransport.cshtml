@@ -193,13 +193,12 @@
                                 @Html.AntiForgeryToken()
                                 @Html.Hidden("idPaquete", paquete.Id_Paquete)
 
-                                <select name="nuevoEstado" class="form-control">
-                                    <option value="">Estado</option>
-                                    <option value="BodegaSJ">BodegaSJ</option>
-                                    <option value="BodegaPZ">BodegaPZ</option>
-                                    <option value="EnTransito">EnTransito</option>
-                                    <option value="Entregado">Entregado</option>
-                                </select>
+                            <select name="nuevoEstado" class="form-control">
+                                <option value="">Estado</option>
+                                <option value="EnTransito">En Transito</option>
+                                <option value="Entregado">Entregado</option>
+                                <option value="NoEntregado">No Entregado</option>
+                            </select>
 
                                 <button type="submit" class="btn btn-danger mt-2">Actualizar</button>
                             }

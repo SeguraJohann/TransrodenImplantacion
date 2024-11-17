@@ -1,15 +1,20 @@
-﻿@model TransrodenProyecto.Models.Usuario
+﻿@using TransrodenProyecto.Models
+@model TransrodenProyecto.ViewModels.HistorialPaqueteViewModel
 
 @{
     Layout = null;
 }
+
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
-    <title>LifeSure - Life Insurance Website Template</title>
+    <title>Transroden Express SA</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -33,6 +38,57 @@
 
     <!-- Template Stylesheet -->
     <link href="~/Content/assets/css/style.css" rel="stylesheet">
+
+
+    <style>
+        .table-details td, .table-details th {
+            border: none;
+        }
+
+        .timeline {
+            list-style: none;
+            padding: 0;
+            position: relative;
+        }
+
+            .timeline::before {
+                content: '';
+                background: #d4d9df;
+                display: inline-block;
+                position: absolute;
+                left: 29px;
+                width: 2px;
+                height: 100%;
+                z-index: 400;
+            }
+
+        .timeline-item {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+            .timeline-item::before {
+                content: '';
+                background: white;
+                border: 3px solid #6c757d;
+                display: inline-block;
+                position: absolute;
+                border-radius: 50%;
+                left: 20px;
+                width: 20px;
+                height: 20px;
+                z-index: 401;
+            }
+
+            .timeline-item .badge {
+                margin-left: 50px;
+            }
+
+            .timeline-item p {
+                margin-left: 100px; /* Ajusta este valor para mover el texto más a la derecha */
+            }
+    </style>
+
 </head>
 
 <body>
@@ -98,18 +154,18 @@
 
                     <div class="navbar-nav mx-0 mx-lg-auto">
                         <!-- <a href="index.html" class="nav-item nav-link active">Inicio</a> -->
-                        <a href="@Url.Action("Index", "Prueba")" class="nav-item nav-link">
+                        <a href="@Url.Action("Index", "Home")" class="nav-item nav-link">
                             <span class="d-block"><i class="fas fa-home"></i></span>
                             Inicio
                         </a>
 
-                        <a href="@Url.Action("", "")" class="nav-item nav-link">
+                        <a href="@Url.Action("Sucursales", "Home")" class="nav-item nav-link">
                             <span class="d-block"><i class="fas fa-map-marker-alt"></i></span>
                             Sucursales
                         </a>
                         <!-- <a href="about.html" class="nav-item nav-link">Sucursales</a> -->
 
-                        <a href="@Url.Action("Tracking", "Modulo4")" class="nav-item nav-link">
+                        <a href="@Url.Action("Rastreo", "HistorialPaquete")" class="nav-item nav-link">
                             <span class="d-block"><i class="fas fa-truck"></i></span>
                             Rastreo
                         </a>
@@ -121,29 +177,21 @@
                                 <span class="dropdown-toggle">Servicios</span>
                             </a>
                             <div class="dropdown-menu">
-                                <a href="feature.html" class="dropdown-item">Our Features</a>
-                                <a href="team.html" class="dropdown-item">Our team</a>
-                                <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                                <a href="FAQ.html" class="dropdown-item">FAQs</a>
-                                <a href="404.html" class="dropdown-item">404 Page</a>
+                                <a href="@Url.Action("FacturasUsuario", "Facturacions")" class="dropdown-item">Mis Facturas</a>
                             </div>
                         </div>
 
-                        <a href="blog.html" class="nav-item nav-link">
+                        <a href="@Url.Action("Nosotros","Home")" class="nav-item nav-link">
                             <span class="d-block"><i class="fas fa-info-circle"></i></span>
                             Nosotros
                         </a>
                         <!-- <a href="blog.html" class="nav-item nav-link">Nosotros</a> -->
 
-                        <a href="@Url.Action("Login","Modulo1")" class="nav-item nav-link active" id="contact">
+                        <a href="@Url.Action("Login","Cuenta")" class="nav-item nav-link active" id="contact">
                             <span class="d-block"><i class="fas fa-user"></i></span>
                             Cuenta
                         </a>
-                        <!-- <a href="contact.html" class="nav-item nav-link" id="contact">Cuenta</a> -->
-                        <div class="nav-btn px-1">
-                            <button class="btn-search btn btn-primary btn-md-square rounded-circle flex-shrink-0" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fas fa-search"></i></button>
-                            <!--<a href="#" class="btn btn-primary rounded-pill py-2 px-4 ms-3 flex-shrink-0"> Get a Quote</a> -->
-                        </div>
+
                     </div>
                 </div>
                 <div class="d-none d-xl-flex flex-shrink-0 ps-4">
@@ -162,105 +210,104 @@
         </div>
     </div>
     <!-- Navbar -->
-    <!-- Registro Clientes Interfaz -->
-    <div class="container-fluid bg-light py-5">
-        <div class="container py-5">
-            <div class="row g-5 align-items-center">
-                <div class="col-xl-6 wow fadeInLeft" data-wow-delay="0.2s">
-                    <div class="h-100">
-                        <div class="mb-5">
-                            <h1 class="display-4 mb-0 text-center" style="color: cornflowerblue">Registrarse</h1>
-                        </div>
-
-                        @using (Html.BeginForm("Register", "Cuenta", FormMethod.Post))
-                        {
-                            @Html.AntiForgeryToken()
-
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.Nombre)
-                                @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.Nombre)
-                            </div>
-
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.Apellidos)
-                                @Html.TextBoxFor(m => m.Apellidos, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.Apellidos)
-                            </div>
-
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.Cedula)
-                                @Html.TextBoxFor(m => m.Cedula, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.Cedula)
-                            </div>
-
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.Correo)
-                                @Html.TextBoxFor(m => m.Correo, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.Correo)
-                            </div>
-
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.Clave)
-                                @Html.PasswordFor(m => m.Clave, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.Clave)
-                            </div>
-
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.Telefono)
-                                @Html.TextBoxFor(m => m.Telefono, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.Telefono)
-                            </div>
-                            <!--  Nueva linea de codigo para las notificaciones  -->
-                            <div class="form-group">
-
-                                <div class="col-md-10">
-                                    <div class="form-check">
-                                        @Html.CheckBoxFor(model => model.NotifCli, new { @class = "form-check-input" })
-                                        @Html.Label("Desea recibir notificaciones?", new { @class = "form-check-label" })
-                                        @Html.ValidationMessageFor(model => model.NotifCli, "", new { @class = "text-danger" })
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Mensaje de registro completado -->
-                            <div id="mensajeRegistro" style="display:none; margin-top:10px;" class="alert alert-success text-center">
-                                Registro completado
-                            </div>
-
-                            <!-- Botón para registrarse -->
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary" onclick="mostrarMensaje()">Registrar</button>
-                            </div>
-
-                            <script>
-                                function mostrarMensaje() {
-                                    var mensaje = document.getElementById("mensajeRegistro");
-                                    mensaje.style.display = "block";
-
-                                    // Mostrar el mensaje durante 3 segundos, luego redirigir
-
-
-
-
-                                }
-                            </script>
-                        }
-
-                    </div>
-                </div>
-
-                <div class="col-xl-6 wow fadeInRight" data-wow-delay="0.4s">
-                    <img src="~/Content/assets/img/carousel-2.png" class="img-fluid w-100" alt="Registro de clientes">
-                    <div class="text-center">
-                        <h2 class="display-4 mb-0" style="color: red">Regístrese ahora</h2>
-                    </div>
-                </div>
-            </div>
+    <!-- Imagen de Banner -->
+    <div class="container-fluid bg-breadcrumb">
+        <div class="container text-center py-5" style="max-width: 900px;">
+            <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Experiencia, Servicio y Calidad!</h4>
+            <ol class="breadcrumb d-flex justify-content-center mb-0 wow fadeInDown" data-wow-delay="0.3s">
+                <li class="breadcrumb-item"><a href="index.html">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="#">Rastreo</a></li>
+            </ol>
         </div>
     </div>
-    <!-- Registro Clientes Interfaz -->
-    <!-- Footer Start -->
+
+
+
+    @{
+        var estadoDescripcion = new Dictionary<EstadoPaquete, string>
+{
+        { EstadoPaquete.SinAsignar, "Sin Asignar" },
+        { EstadoPaquete.SinAsignarSJ, "En poder de Transroden San José" },
+        { EstadoPaquete.SinAsignarPZ, "En poder de Transroden Perez Zeledón" },
+        { EstadoPaquete.Asignado, "Asignado" },
+        { EstadoPaquete.EnTransito, "El paquete se encuentra en ruta hacia la bodega de destino" },
+        { EstadoPaquete.BodegaPZ, "El paquete está en la Bodega de Transroden Perez Zeledón para el retiro o en ruta para ser entregado por un mensajero. Recuerde presentar su identificación." },
+        { EstadoPaquete.BodegaSJ, "El paquete está en la Bodega de Transroden San José para el retiro o en ruta para ser entregado por un mensajero. Recuerde presentar su identificación." },
+        { EstadoPaquete.Domicilio, "El paquete se encuentra en ruta para ser entregado domicilio" },
+        { EstadoPaquete.Entregado, "El paquete ha sido entregado" },
+        { EstadoPaquete.NoEntregado, "El paquete no pudo ser entregado, por favor contactanos para coordinar su reenvio o ve a la sucursal de tu conveniencia." },
+        { EstadoPaquete.Reenvio, "El paquete esta siendo preparado para su reenvio" }
+    };
+    }
+
+
+    <div class="container mt-5">
+        <h2 class="text-center">Rastreo de paquete</h2>
+        <br>
+
+        <form method="get" action="@Url.Action("Rastreo")">
+            <div class="form-group">
+                <label for="numeroRastreo">Ingresa el Número de Rastreo:</label>
+                <br>
+                <br>
+                <input type="text" name="numeroRastreo" id="numeroRastreo" class="form-control" placeholder="número de rastreo" />
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </form>
+
+        <br />
+        <br>
+        @{
+            if (Model.Paquete != null)
+            {
+
+                <div>
+                    <p><strong>Número de Rastreo:</strong> @Model.Paquete.NumeroRastreo</p>
+                    <p><strong>Nombre Emisor:</strong> @Model.Paquete.NombreEmisor</p>
+                    <p><strong>Nombre Receptor:</strong> @Model.Paquete.NombreReceptor</p>
+                    <p><strong>Dirección:</strong> @Model.Paquete.Direccion</p>
+
+                </div>
+                <br />
+
+                <h3>Historial de Rastreo</h3>
+                <br>
+
+                if (Model.Historial != null && Model.Historial.Any())
+                {
+
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Historial)
+                            {
+                                <tr>
+                                    <td>@item.Fecha</td>
+                                    <td>@estadoDescripcion[item.Estado]</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p>No se encontraron registros de rastreo para este paquete.</p>
+                }
+            }
+        }
+
+    </div>
+
+
+
+
     <div class="container-fluid footer py-5 wow fadeIn" data-wow-delay="0.2s">
         <div class="container py-5">
             <div class="row g-5">
@@ -285,7 +332,7 @@
                                 <div class="footer-item">
                                     <h4 class="text-white mb-4">Acceso Rapido</h4>
                                     <a href="#" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Inicio </a>
-                                    <a href="#" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Sucursales </a>
+                                    <a href="#" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Sucursal </a>
                                     <a href="#" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Rastreo </a>
                                     <a href="#" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Servicios </a>
                                     <a href="#" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Nosotros </a>
@@ -359,7 +406,7 @@
                                                 <i class="fas fa-map-marker-alt fa-2x"></i>
                                             </div>
                                             <div>
-                                                <h4 class="text-white">Address</h4>
+                                                <h4 class="text-white">Direccion</h4>
                                                 <p class=" text-white mb-0">San Isidro - Perez Zeledon, Barrio Mexico - San Jose</p>
                                             </div>
                                         </div>
@@ -397,8 +444,8 @@
                         <h4 class="text-white mb-4">Novedades!!</h4>
                         <p class="text-white mb-3">Dolor amet sit justo amet elitr clita ipsum elitr est.Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                         <div class="position-relative rounded-pill mb-4">
-                            <input class="form-control rounded-pill w-100 py-3 ps-4 pe-5" type="text" placeholder="Enter your email">
-                            <button type="button" class="btn btn-primary rounded-pill position-absolute top-0 end-0 py-2 mt-2 me-2">SignUp</button>
+                            <input class="form-control rounded-pill w-100 py-3 ps-4 pe-5" type="text" placeholder="escribe tu correo">
+                            <button type="button" class="btn btn-primary rounded-pill position-absolute top-0 end-0 py-2 mt-2 me-2">Login</button>
                         </div>
                         <div class="d-flex flex-shrink-0">
                             <div class="footer-btn">
@@ -452,8 +499,50 @@
     <script src="~/Content/assets/lib/owlcarousel/owl.carousel.min.js"></script>
 
 
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
     <!-- Template Javascript -->
     <script src="~/Content/assets/js/main.js"></script>
+
+    <script>
+// Tiempo de inactividad en milisegundos (1 minuto)
+var idleTime = 0;
+var idleLimit = 300; // 1 minuto en segundos
+
+// Incrementar el tiempo de inactividad cada segundo
+var idleInterval = setInterval(timerIncrement, 1000); // 1 segundo
+
+// Función para incrementar el tiempo de inactividad
+function timerIncrement() {
+    idleTime++;
+    if (idleTime >= idleLimit) {
+        // Redirigir al logout
+        window.location.href = '@Url.Action("Logout", "Cuenta")';
+    }
+}
+
+// Función para reiniciar el tiempo de inactividad
+function resetIdleTime() {
+    idleTime = 0;
+}
+
+// Eventos que reinician el contador de inactividad, pero excluyendo inputs
+window.onload = resetIdleTime;
+document.onmousemove = resetIdleTime;
+document.onkeypress = resetIdleTime;
+document.onscroll = resetIdleTime;
+document.onclick = resetIdleTime;
+
+// Añadir eventos a todos los inputs
+const inputs = document.querySelectorAll('input, textarea');
+inputs.forEach(input => {
+    input.onfocus = resetIdleTime; // Reinicia el contador cuando se enfoca un campo de entrada
+});
+    </script>
+
 </body>
 
 </html>
