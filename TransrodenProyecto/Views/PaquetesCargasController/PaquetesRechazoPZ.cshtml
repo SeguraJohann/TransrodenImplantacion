@@ -5,6 +5,7 @@
     Layout = null;
 }
 
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -66,6 +67,18 @@
                             <a class="btn p-0 text-primary me-3" href="#"><i class="fab fa-twitter"></i></a>
                             <a class="btn p-0 text-primary me-3" href="#"><i class="fab fa-instagram"></i></a>
                         </div>
+                        <!--
+                        <div class="dropdown ms-3">
+                            <a href="#" class="dropdown-toggle text-dark" data-bs-toggle="dropdown"><small><i class="fas fa-globe-europe text-primary me-2"></i> English</small></a>
+                            <div class="dropdown-menu rounded">
+                                <a href="#" class="dropdown-item">English</a>
+                                <a href="#" class="dropdown-item">Bangla</a>
+                                <a href="#" class="dropdown-item">French</a>
+                                <a href="#" class="dropdown-item">Spanish</a>
+                                <a href="#" class="dropdown-item">Arabic</a>
+                            </div>
+                        </div>
+                        -->
                     </div>
                 </div>
             </div>
@@ -176,78 +189,84 @@
         </div>
     </div>
     <!-- Navbar -->
-    <!-- Menu -->
-    <div class="container-fluid blog py-5">
-        <div class="container py-5">
-            <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
-                <h4 class="text-primary">Transroden Express SA</h4>
-                <h1 class="display-4 mb-4">Bodega Perez Zeledón</h1>
-                <p class="mb-0">
-                    Aqui puedes ver 2 secciones, una donde se puede visualizar todos los paquetes almacenados en la bodega de Perez Zeledon y otra donde puedes ver los paquetes pendientes de que sean reclamados.
-                </p>
-            </div>
-            <div class="row g-4 justify-content-center">
-                <div class="col-md-6 col-lg-4 col-xl-3 wow fadeInUp" data-wow-delay="0.2s">
-                    <div class="blog-item">
-                        <div class="blog-img">
-                            <img src="~/Content/assets/img/carga.jpg" class="img-fluid rounded-top w-100" alt="">
-                            <div class="blog-categiry py-2 px-4">
-                                <span>Paquetes(Todos)</span>
-                            </div>
-                        </div>
-                        <div class="blog-content p-4">
-                            <a href="#" class="h4 d-inline-block mb-3">Todos los Paquetes</a>
-                            <p class="mb-3">Aqui muestra todos los paquetes que se encuentran en la Bodega de Perez Zeledon</p>
-                            <div>
-                                <button onclick="location.href='@Url.Action("PaquetesBodegaPZ", "PaquetesCargasController")'" type="submit" class="btn btn-primary w-100">Consultar</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <div class="container mt-5">
+        <h3 class="text-center">Paquetes no entregados(Domicilio) en Bodega Perez Zeledon</h3>
+        <br>
 
-                <div class="col-md-6 col-lg-4 col-xl-3 wow fadeInUp" data-wow-delay="0.2s">
-                    <div class="blog-item">
-                        <div class="blog-img">
-                            <img src="~/Content/assets/img/historialimagen.jpg" class="img-fluid rounded-top w-100" alt="">
-                            <div class="blog-categiry py-2 px-4">
-                                <span>Paquetes(Recoger)</span>
-                            </div>
-                        </div>
-                        <div class="blog-content p-4">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Numero de Rastreo</th>
+                    <th>Emisor</th>
+                    <th>Receptor</th>
+                    <th>Cedula Receptor</th>
+                    <th>Domicilio</th>
+                    <th>Pago</th>
+                    <th>Estado</th>
+                    <th>Entregar</th>
+                    <th>Accion</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var paquete in Model.Paquetes)
+                {
+                    <tr>
+                        <td>@paquete.NumeroRastreo</td>
+                        <td>@paquete.NombreEmisor</td>
+                        <td>@paquete.NombreReceptor</td>
+                        <td>@paquete.CedulaReceptor</td>
+                        <td>
+                            @if (paquete.Domicilio)
+                            {
+                                <i class="fas fa-check"></i>
+                            }
+                            else
+                            {
+                                <i class="far fa-times-circle"></i>
+                            }
+                        </td>
+                        <td>
+                            @if (@paquete.Pago)
+                            {
+                                <i class="fas fa-check"></i>
+                            }
+                            else
+                            {
+                                <i class="far fa-times-circle"></i>
+                            }
+                        </td>
+                        <td>@paquete.Estado.ToString()</td>
+                        <td>
+                            @using (Html.BeginForm("ActualizarEstadoPaquete", "PaquetesCargasController", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("idPaquete", paquete.Id_Paquete)
 
-                            <a href="#" class="h4 d-inline-block mb-3">Paquetes para reclamar</a>
-                            <p class="mb-3">Aqui se puede ver los paquete para entrega domicilio, asi como asignar los paquetes a una carga</p>
-                            <div>
-                                <button onclick="location.href='@Url.Action("PaquetesReclamoPZ", "PaquetesCargasController")'" type="submit" class="btn btn-primary w-100">Consultar</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                <select name="nuevoEstado" class="form-control">
+                                    <option value="">Estado</option>
+                                    <option value="Entregado">Entregado</option>
+                                </select>
 
-                <div class="col-md-6 col-lg-4 col-xl-3 wow fadeInUp" data-wow-delay="0.2s">
-                    <div class="blog-item">
-                        <div class="blog-img">
-                            <img src="~/Content/assets/img/historialimagen.jpg" class="img-fluid rounded-top w-100" alt="">
-                            <div class="blog-categiry py-2 px-4">
-                                <span>Domicilio(No entregados)</span>
-                            </div>
-                        </div>
-                        <div class="blog-content p-4">
+                                <button type="submit" class="btn btn-success mt-2">Actualizar</button>
+                            }
+                        </td>
+                        <td>
+                            @using (Html.BeginForm("ReenvioPZ", "PaquetesEnviosController", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("idPaquete", paquete.Id_Paquete)
+                                @Html.Hidden("idEnvio", paquete.Envio.Id_Envio)
+                                <button type="submit" class="btn btn-danger">Reenvio</button>
+                            }
+                        </td>
 
-                            <a href="#" class="h4 d-inline-block mb-3">Paquetes rechazados</a>
-                            <p class="mb-3">Aqui se puede ver los paquetes domicilio que no pudieron ser entregados</p>
-                            <div>
-                                <button onclick="location.href='@Url.Action("PaquetesRechazoPZ", "PaquetesCargasController")'" type="submit" class="btn btn-primary w-100">Consultar</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
-        </div>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
-    <!-- Menu -->
+
+
     <!-- Footer Start -->
     <div class="container-fluid footer py-5 wow fadeIn" data-wow-delay="0.2s">
         <div class="container py-5">

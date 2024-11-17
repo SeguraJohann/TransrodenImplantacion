@@ -34,8 +34,10 @@ namespace TransrodenProyecto.Controllers
         {
             try
             {
-                // Obtener los usuarios con el rol de Cliente
-                var usuarios = db.Usuarios.Where(u => u.Rol == Rol.Cliente).ToList();
+                // Obtener los usuarios con el rol de Cliente y las notificaciones activas
+
+                var usuarios = db.Usuarios.Where(u => u.Rol == Rol.Cliente && u.NotifCli).ToList();
+
 
                 if (usuarios.Count == 0)
                 {

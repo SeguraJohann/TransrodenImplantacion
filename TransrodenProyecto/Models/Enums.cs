@@ -22,7 +22,9 @@ namespace TransrodenProyecto.Models
         BodegaPZ = 5,
         BodegaSJ = 6,
         Domicilio = 7,
-        Entregado = 8
+        Entregado = 8,
+        NoEntregado = 9,
+        Reenvio = 10,
     }
 
     //Para poder quitar un paquete de una carga y ponerlo en su estado original
@@ -40,8 +42,9 @@ namespace TransrodenProyecto.Models
         EnTransito = 1,
         BodegaPZ = 2,
         BodegaSJ = 3,
-        Entregado = 4,
-        Averia = 5
+        Recibido = 4,
+        Entregado = 5,
+        Averia = 6
     }
 
 
@@ -75,5 +78,6 @@ namespace TransrodenProyecto.Models
         SanJose = 0,
         PerezZeledon = 1
     }
+
 
 }

@@ -92,10 +92,11 @@ namespace TransrodenProyecto.Controllers
         {
             var viewModel = new PaqueteCargaViewModel
             {
-                //PAQUETES QUE VIENEN SINASIGNAR, PAQUETES ASIGNADOS Y PAQUETES DE ORIGEN PZ
-                Paquetes = db.Paquetes.Where(p => p.Estado == EstadoPaquete.SinAsignarSJ && p.Origen == OrigenPaquete.SanJose ||
+                //PAQUETES QUE VIENEN SINASIGNAR, PAQUETES ASIGNADOS Y PAQUETES DE ORIGEN PZ, PAQUETES QUE NO FUERON ENTREGADOS
+                Paquetes = db.Paquetes.Where(p => p.Estado == EstadoPaquete.SinAsignarSJ && p.Origen == OrigenPaquete.SanJose || 
                 p.Estado == EstadoPaquete.BodegaSJ && p.Origen == OrigenPaquete.SanJose ||
-                p.Estado == EstadoPaquete.BodegaSJ && p.Origen == OrigenPaquete.PerezZeledon).ToList(),
+                p.Estado == EstadoPaquete.BodegaSJ && p.Origen == OrigenPaquete.PerezZeledon && p.Carga.Estado == EstadoCarga.Recibido ||
+                p.Estado == EstadoPaquete.NoEntregado && p.Origen == OrigenPaquete.PerezZeledon && p.Carga.Estado == EstadoCarga.Recibido && p.Envio.Estado == EstadoEnvio.Entregado).ToList(),
 
             };
 
@@ -110,7 +111,7 @@ namespace TransrodenProyecto.Controllers
             var viewModel = new PaqueteCargaViewModel
             {
                 //PAQUETES ORIGEN PZ SIN DOMICILIO
-                Paquetes = db.Paquetes.Where(p => p.Estado == EstadoPaquete.BodegaSJ && p.Origen == OrigenPaquete.PerezZeledon && p.Domicilio == false).ToList(),
+                Paquetes = db.Paquetes.Where(p => p.Estado == EstadoPaquete.BodegaSJ && p.Origen == OrigenPaquete.PerezZeledon && p.Domicilio == false && p.Carga.Estado == EstadoCarga.Recibido).ToList(),
             };
 
             return View(viewModel);
@@ -128,7 +129,8 @@ namespace TransrodenProyecto.Controllers
                 //PAQUETES QUE VIENEN SINASIGNAR, PAQUETES ASIGNADOS Y PAQUETES DE ORIGEN SJ
                 Paquetes = db.Paquetes.Where(p => p.Estado == EstadoPaquete.SinAsignarPZ && p.Origen == OrigenPaquete.PerezZeledon ||
                 p.Estado == EstadoPaquete.BodegaPZ && p.Origen == OrigenPaquete.PerezZeledon ||
-                p.Estado == EstadoPaquete.BodegaPZ && p.Origen == OrigenPaquete.SanJose).ToList(),
+                p.Estado == EstadoPaquete.BodegaPZ && p.Origen == OrigenPaquete.SanJose && p.Carga.Estado == EstadoCarga.Recibido ||
+                p.Estado == EstadoPaquete.NoEntregado && p.Origen == OrigenPaquete.SanJose && p.Carga.Estado == EstadoCarga.Recibido && p.Envio.Estado == EstadoEnvio.Entregado).ToList(),
 
             };
 
@@ -144,11 +146,42 @@ namespace TransrodenProyecto.Controllers
             var viewModel = new PaqueteCargaViewModel
             {
                 //PAQUETES ORIGEN PZ SIN DOMICILIO
-                Paquetes = db.Paquetes.Where(p => p.Estado == EstadoPaquete.BodegaPZ && p.Origen == OrigenPaquete.SanJose && p.Domicilio == false).ToList(),
+                Paquetes = db.Paquetes.Where(p => p.Estado == EstadoPaquete.BodegaPZ && p.Origen == OrigenPaquete.SanJose && p.Domicilio == false && p.Carga.Estado == EstadoCarga.Recibido).ToList(),
             };
 
             return View(viewModel);
         }
+
+
+
+        public ActionResult PaquetesRechazoSJ()
+        {
+            var viewModel = new PaqueteCargaViewModel
+            {
+                //PAQUETES QUE VIENEN SINASIGNAR, PAQUETES ASIGNADOS Y PAQUETES DE ORIGEN SJ
+                Paquetes = db.Paquetes.Where(p => 
+                p.Estado == EstadoPaquete.NoEntregado && p.Origen == OrigenPaquete.PerezZeledon && p.Carga.Estado == EstadoCarga.Recibido && p.Envio.Estado == EstadoEnvio.Entregado).ToList(),
+
+            };
+
+            return View(viewModel);
+        }
+
+
+
+        public ActionResult PaquetesRechazoPZ()
+        {
+            var viewModel = new PaqueteCargaViewModel
+            {
+                //PAQUETES QUE VIENEN SINASIGNAR, PAQUETES ASIGNADOS Y PAQUETES DE ORIGEN SJ
+                Paquetes = db.Paquetes.Include(p => p.Envio).Where(p => 
+                p.Estado == EstadoPaquete.NoEntregado && p.Origen == OrigenPaquete.SanJose && p.Carga.Estado == EstadoCarga.Recibido && p.Envio.Estado == EstadoEnvio.Entregado).ToList(),
+
+            };
+
+            return View(viewModel);
+        }
+
 
 
 
@@ -288,6 +321,7 @@ namespace TransrodenProyecto.Controllers
 
 
 
+
         // Muestra los paquetes que estan asignados a la carga pero para las vistas de asignacion
         public ActionResult CargaPaquetes(int idCarga)
         {
@@ -338,6 +372,7 @@ namespace TransrodenProyecto.Controllers
         }
 
 
+        // Vista para Transportistas donde solo se requiera ver el paquete nada mas
 
         public ActionResult CargaPaquetesViewTransp(int idCarga)
         {
@@ -413,6 +448,18 @@ namespace TransrodenProyecto.Controllers
                     {
                         paquete.Estado = EstadoPaquete.Entregado;
                     }
+
+
+                    var nuevoRastreo = new Historial
+                    {
+                        Id_Paquete = paquete.Id_Paquete,
+                        Estado = paquete.Estado,
+                        NumeroRastreo = paquete.NumeroRastreo, 
+                        Fecha = DateTime.Now
+                    };
+
+                    db.Historiales.Add(nuevoRastreo);
+
                 }
 
                 db.SaveChanges();
@@ -473,6 +520,17 @@ namespace TransrodenProyecto.Controllers
                     {
                         paquete.Estado = EstadoPaquete.Entregado;
                     }
+
+                    var nuevoRastreo = new Historial
+                    {
+                        Id_Paquete = paquete.Id_Paquete,
+                        Estado = paquete.Estado,
+                        NumeroRastreo = paquete.NumeroRastreo,
+                        Fecha = DateTime.Now
+                    };
+
+                    db.Historiales.Add(nuevoRastreo);
+
                 }
 
                 db.SaveChanges();
@@ -484,6 +542,11 @@ namespace TransrodenProyecto.Controllers
 
             return RedirectToAction("AsignarPaquetePZCarga");
         }
+
+
+
+
+
 
 
         //Cambia el estado solo de la carga, esto es para las cargas que vienen de PZ
@@ -513,7 +576,7 @@ namespace TransrodenProyecto.Controllers
             {
                 carga.Estado = estadoResult;
 
-                if (carga.Estado == EstadoCarga.Entregado)
+                if (carga.Estado == EstadoCarga.Recibido)
                 {
                     carga.fecha_entrega = DateTime.Now;
                 }
@@ -555,7 +618,7 @@ namespace TransrodenProyecto.Controllers
             {
                 carga.Estado = estadoResult;
 
-                if (carga.Estado == EstadoCarga.Entregado)
+                if (carga.Estado == EstadoCarga.Recibido)
                 {
                     carga.fecha_entrega = DateTime.Now;
                 }
@@ -569,10 +632,11 @@ namespace TransrodenProyecto.Controllers
 
             return RedirectToAction("AsignarPaquetePZCarga");
         }
+ 
 
 
 
-
+        // SOlO PARA TRANSPORTISTA Y SOLO PARA REPORTE DE AVERIA // NO AFECTA PAQUETES Y NO CAMBIA EL ESTADO EN HISTORIAL
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EstadoCargaTransp(int idCarga, string nuevoEstado)
@@ -656,6 +720,17 @@ namespace TransrodenProyecto.Controllers
                     {
                         paquete.Estado = EstadoPaquete.Entregado;
                     }
+
+                    var nuevoRastreo = new Historial
+                    {
+                        Id_Paquete = paquete.Id_Paquete,
+                        Estado = paquete.Estado,
+                        NumeroRastreo = paquete.NumeroRastreo,
+                        Fecha = DateTime.Now
+                    };
+
+                    db.Historiales.Add(nuevoRastreo);
+
                 }
 
                 db.SaveChanges();
@@ -667,6 +742,11 @@ namespace TransrodenProyecto.Controllers
 
             return RedirectToAction("VistaCargaTransito");
         }
+
+
+
+
+
 
 
 
@@ -696,13 +776,28 @@ namespace TransrodenProyecto.Controllers
                 paquete.fecha_entrega = DateTime.Now;
             }
 
+
+            var nuevoRastreo = new Historial
+            {
+                Id_Paquete = paquete.Id_Paquete,
+                Estado = paquete.Estado,
+                NumeroRastreo = paquete.NumeroRastreo,
+                Fecha = DateTime.Now
+            };
+
+            db.Historiales.Add(nuevoRastreo);
+
+
             db.SaveChanges();
+
+
+            
 
 
             TempData["Success"] = "El estado del paquete se ha actualizado correctamente.";
             //return RedirectToAction("PaquetesBodegaSJ");
             //Redirige a la vista desde donde fue accionado el metodo
-            return Redirect(Request.UrlReferrer.ToString());
+            return Redirect(Request.UrlReferrer.ToString()); // ---------------------------------------------- < CAMBIAR > ----------------------------
         }
 
 

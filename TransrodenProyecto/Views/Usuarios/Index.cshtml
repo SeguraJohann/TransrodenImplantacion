@@ -51,42 +51,74 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Nombre)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Apellidos)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Cedula)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Correo)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Telefono)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Rol)
-                </td>
-                <td>
-                    @(item.Sede.ToString())
-                </td>
-                <td>
-                    @Html.ActionLink("Editar", "Edit", new { id = item.Id_Usuario }, new { @class = "btn btn-success" }) |
-                    @Html.ActionLink("Detalles", "Details", new { id = item.Id_Usuario }, new { @class = "btn btn-primary" }) |
-                    @Html.ActionLink("Borrar", "Delete", new { id = item.Id_Usuario }, new { @class = "btn btn-danger" })
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nombre)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Apellidos)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Cedula)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Correo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Telefono)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Rol)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NotifCli)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Sede)
+                </th>
+                <th></th>
             </tr>
         }
         </thead>
         <tbody></tbody>
     </table>
 
-    <nav>
-        <ul class="pagination" id="pagination"></ul>
-    </nav>
-</div>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Apellidos)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cedula)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Correo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Telefono)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Rol)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NotifCli)
+                    </td>
+                    <td>
+                        @(item.Sede.ToString())
+                    </td>
+                    <td>
+                        @Html.ActionLink("Editar", "Edit", new { id = item.Id_Usuario }, new { @class = "btn btn-success" }) |
+                        @Html.ActionLink("Detalles", "Details", new { id = item.Id_Usuario }, new { @class = "btn btn-primary" }) |
+                        @Html.ActionLink("Borrar", "Delete", new { id = item.Id_Usuario }, new { @class = "btn btn-danger" })
+                    </td>
+                </tr>
+            }
+            
+            <tbody></tbody>
+        </table>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>

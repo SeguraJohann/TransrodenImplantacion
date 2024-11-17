@@ -1,6 +1,13 @@
-﻿@{
+﻿@using TransrodenProyecto.Models
+@model TransrodenProyecto.ViewModels.HistorialPaqueteViewModel
+
+@{
     Layout = null;
 }
+
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -31,6 +38,57 @@
 
     <!-- Template Stylesheet -->
     <link href="~/Content/assets/css/style.css" rel="stylesheet">
+
+
+    <style>
+        .table-details td, .table-details th {
+            border: none;
+        }
+
+        .timeline {
+            list-style: none;
+            padding: 0;
+            position: relative;
+        }
+
+            .timeline::before {
+                content: '';
+                background: #d4d9df;
+                display: inline-block;
+                position: absolute;
+                left: 29px;
+                width: 2px;
+                height: 100%;
+                z-index: 400;
+            }
+
+        .timeline-item {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+            .timeline-item::before {
+                content: '';
+                background: white;
+                border: 3px solid #6c757d;
+                display: inline-block;
+                position: absolute;
+                border-radius: 50%;
+                left: 20px;
+                width: 20px;
+                height: 20px;
+                z-index: 401;
+            }
+
+            .timeline-item .badge {
+                margin-left: 50px;
+            }
+
+            .timeline-item p {
+                margin-left: 100px; /* Ajusta este valor para mover el texto más a la derecha */
+            }
+    </style>
+
 </head>
 
 <body>
@@ -152,217 +210,104 @@
         </div>
     </div>
     <!-- Navbar -->
+    <!-- Imagen de Banner -->
+    <div class="container-fluid bg-breadcrumb">
+        <div class="container text-center py-5" style="max-width: 900px;">
+            <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Experiencia, Servicio y Calidad!</h4>
+            <ol class="breadcrumb d-flex justify-content-center mb-0 wow fadeInDown" data-wow-delay="0.3s">
+                <li class="breadcrumb-item"><a href="index.html">Inicio</a></li>
+                <li class="breadcrumb-item"><a href="#">Rastreo</a></li>
+            </ol>
+        </div>
+    </div>
+
+
+
+    @{
+        var estadoDescripcion = new Dictionary<EstadoPaquete, string>
+{
+        { EstadoPaquete.SinAsignar, "Sin Asignar" },
+        { EstadoPaquete.SinAsignarSJ, "En poder de Transroden San José" },
+        { EstadoPaquete.SinAsignarPZ, "En poder de Transroden Perez Zeledón" },
+        { EstadoPaquete.Asignado, "Asignado" },
+        { EstadoPaquete.EnTransito, "El paquete se encuentra en ruta hacia la bodega de destino" },
+        { EstadoPaquete.BodegaPZ, "El paquete está en la Bodega de Transroden Perez Zeledón para el retiro o en ruta para ser entregado por un mensajero. Recuerde presentar su identificación." },
+        { EstadoPaquete.BodegaSJ, "El paquete está en la Bodega de Transroden San José para el retiro o en ruta para ser entregado por un mensajero. Recuerde presentar su identificación." },
+        { EstadoPaquete.Domicilio, "El paquete se encuentra en ruta para ser entregado domicilio" },
+        { EstadoPaquete.Entregado, "El paquete ha sido entregado" },
+        { EstadoPaquete.NoEntregado, "El paquete no pudo ser entregado, por favor contactanos para coordinar su reenvio o ve a la sucursal de tu conveniencia." },
+        { EstadoPaquete.Reenvio, "El paquete esta siendo preparado para su reenvio" }
+    };
+    }
+
 
     <div class="container mt-5">
+        <h2 class="text-center">Rastreo de paquete</h2>
+        <br>
 
-        @if (Session["Usuario"] != null)
-        {
-            <H2 class="navbar-text">Bienvenido, @Session["Usuario"]!</H2>
+        <form method="get" action="@Url.Action("Rastreo")">
+            <div class="form-group">
+                <label for="numeroRastreo">Ingresa el Número de Rastreo:</label>
+                <br>
+                <br>
+                <input type="text" name="numeroRastreo" id="numeroRastreo" class="form-control" placeholder="número de rastreo" />
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </form>
+
+        <br />
+        <br>
+        @{
+            if (Model.Paquete != null)
+            {
+
+                <div>
+                    <p><strong>Número de Rastreo:</strong> @Model.Paquete.NumeroRastreo</p>
+                    <p><strong>Nombre Emisor:</strong> @Model.Paquete.NombreEmisor</p>
+                    <p><strong>Nombre Receptor:</strong> @Model.Paquete.NombreReceptor</p>
+                    <p><strong>Dirección:</strong> @Model.Paquete.Direccion</p>
+
+                </div>
+                <br />
+
+                <h3>Historial de Rastreo</h3>
+                <br>
+
+                if (Model.Historial != null && Model.Historial.Any())
+                {
+
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Historial)
+                            {
+                                <tr>
+                                    <td>@item.Fecha</td>
+                                    <td>@estadoDescripcion[item.Estado]</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p>No se encontraron registros de rastreo para este paquete.</p>
+                }
+            }
         }
+
     </div>
 
 
-    <!-- Carousel Start -->
-    <div class="header-carousel owl-carousel">
-        <div class="header-carousel-item bg-primary">
-            <div class="carousel-caption">
-                <div class="container">
-                    <div class="row g-4 align-items-center">
-                        <div class="col-lg-7 animated fadeInLeft">
-                            <div class="text-sm-center text-md-start">
-                                <h3 class="text-white text-uppercase fw-bold mb-4">Transroden Express SA</h3>
-                                <h1 class="display-1 text-white mb-4">30 años de experiencia brindando el mejor servicio!</h1>
-                                <p class="mb-5 fs-5">
-                                    Le agradece a nuestros clientes la fidelidad y la confianza a nuestra empresa
-                                </p>
-                                <div class="d-flex justify-content-center justify-content-md-start flex-shrink-0 mb-4">
-                                    <!-- <a class="btn btn-light rounded-pill py-3 px-4 px-md-5 me-2" href="#"><i class="fas fa-play-circle me-2"></i> Watch Video</a> -->
-                                    <a class="btn btn-dark rounded-pill py-3 px-4 px-md-5 ms-2" href="#">Learn More</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-5 animated fadeInRight">
-                            <div class="calrousel-img" style="object-fit: cover;">
-                                <img src="~/Content/assets/img/camion.jpg" class="img-fluid w-100" alt="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="header-carousel-item bg-primary">
-            <div class="carousel-caption">
-                <div class="container">
-                    <div class="row gy-4 gy-lg-0 gx-0 gx-lg-5 align-items-center">
-                        <div class="col-lg-5 animated fadeInLeft">
-                            <div class="calrousel-img" style="object-fit: cover;">
-                                <img src="~/Content/assets/img/entrega.jpg" class="img-fluid w-100" alt="">
-                            </div>
-                        </div>
-                        <div class="col-lg-7 animated fadeInRight">
-                            <div class="text-sm-center text-md-end">
-                                <h3 class="text-white text-uppercase fw-bold mb-4">Transroden Express SA</h3>
-                                <h1 class="display-1 text-white mb-4">Calidad Experiencia y Servicio</h1>
-                                <p class="mb-5 fs-5">
-                                    Trasporte de encomiendas San José - Pérez Zeledón - Buenos Aires - San Vito
-                                </p>
-                                <div class="d-flex justify-content-center justify-content-md-end flex-shrink-0 mb-4">
-                                    <!--<a class="btn btn-light rounded-pill py-3 px-4 px-md-5 me-2" href="#"><i class="fas fa-play-circle me-2"></i> Watch Video</a> -->
-                                    <a class="btn btn-dark rounded-pill py-3 px-4 px-md-5 ms-2" href="#">Learn More</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Carousel End -->
-    <!-- Service Start -->
-    <div class="container-fluid service py-5">
-        <div class="container py-5">
-            <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
-                <h4 class="text-primary">Nuestros Servicios</h4>
-                <h1 class="display-4 mb-4">Proveemos del mejor servicio de encomiendas</h1>
-                <p class="mb-0">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tenetur adipisci facilis cupiditate recusandae aperiam temporibus corporis itaque quis facere, numquam, ad culpa deserunt sint dolorem autem obcaecati, ipsam mollitia hic.
-                </p>
-            </div>
-            <div class="row g-4 justify-content-center">
-                <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.2s">
-                    <div class="service-item">
-                        <div class="service-img">
-                            <img src="~/Content/assets/img/envioencomienda.png" class="img-fluid rounded-top w-100" alt="">
-                            <div class="service-icon p-3">
-                                <i class="fa fa-truck fa-2x"></i>
-                            </div>
-                        </div>
-                        <div class="service-content p-4">
-                            <div class="service-content-inner">
-                                <a href="#" class="d-inline-block h4 mb-4">Envio de encomiendas</a>
-                                <p class="mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis, eum!</p>
-                                <a class="btn btn-primary rounded-pill py-2 px-4" href="#">Conocer mas</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.4s">
-                    <div class="service-item">
-                        <div class="service-img">
-                            <img src="~/Content/assets/img/domicilio.jpg" class="img-fluid rounded-top w-100" alt="">
-                            <div class="service-icon p-3">
-                                <i class="fa fa-people-carry fa-2x"></i>
-                            </div>
-                        </div>
-                        <div class="service-content p-4">
-                            <div class="service-content-inner">
-                                <a href="#" class="d-inline-block h4 mb-4">Servicio a domicilio</a>
-                                <p class="mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis, eum!</p>
-                                <a class="btn btn-primary rounded-pill py-2 px-4" href="#">Conocer Mas</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.6s">
-                    <div class="service-item">
-                        <div class="service-img">
-                            <img src="~/Content/assets/img/pyme.jpg" class="img-fluid rounded-top w-100" alt="">
-                            <div class="service-icon p-3">
-                                <i class="fa fa-home fa-2x"></i>
-                            </div>
-                        </div>
-                        <div class="service-content p-4">
-                            <div class="service-content-inner">
-                                <a href="#" class="d-inline-block h4 mb-4">Pymes</a>
-                                <p class="mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis, eum!</p>
-                                <a class="btn btn-primary rounded-pill py-2 px-4" href="#">Conocer Mas</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-6 col-xl-3 wow fadeInUp" data-wow-delay="0.8s">
-                    <div class="service-item">
-                        <div class="service-img">
-                            <img src="~/Content/assets/img/corporativo.png" class="img-fluid rounded-top w-100" alt="">
-                            <div class="service-icon p-3">
-                                <i class="fa fa-industry fa-2x"></i>
-                            </div>
-                        </div>
-                        <div class="service-content p-4">
-                            <div class="service-content-inner">
-                                <a href="#" class="d-inline-block h4 mb-4">Servicios Corporativos</a>
-                                <p class="mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis, eum!</p>
-                                <a class="btn btn-primary rounded-pill py-2 px-4" href="#">Conocer Mas</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--
-                <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.2s">
-                    <a class="btn btn-primary rounded-pill py-3 px-5" href="#">More Services</a>
-                </div> -->
-            </div>
-        </div>
-    </div>
-    <!-- Service End -->
-    <!-- FAQs Start -->
-    <div class="container-fluid faq-section bg-light py-5">
-        <div class="container py-5">
-            <div class="row g-5 align-items-center">
-                <div class="col-xl-6 wow fadeInLeft" data-wow-delay="0.2s">
-                    <div class="h-100">
-                        <div class="mb-5">
-                            <h4 class="text-primary">Some Important FAQ's</h4>
-                            <h1 class="display-4 mb-0">Preguntas frecuentes</h1>
-                        </div>
-                        <div class="accordion" id="accordionExample">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingOne">
-                                    <button class="accordion-button border-0" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                        P: Que dias se realizan envios?
-                                    </button>
-                                </h2>
-                                <div id="collapseOne" class="accordion-collapse collapse show active" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                                    <div class="accordion-body rounded">
-                                        R: Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the overall value proposition. Organically grow the holistic world view of disruptive innovation via workplace diversity and empowerment.
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingTwo">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                        P: Hacia donde realizan envios?
-                                    </button>
-                                </h2>
-                                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                                    <div class="accordion-body">
-                                        R: Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the overall value proposition. Organically grow the holistic world view of disruptive innovation via workplace diversity and empowerment.
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingThree">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                        P: Cual es el horario de atencion?
-                                    </button>
-                                </h2>
-                                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                                    <div class="accordion-body">
-                                        R: Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the overall value proposition. Organically grow the holistic world view of disruptive innovation via workplace diversity and empowerment.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-6 wow fadeInRight" data-wow-delay="0.4s">
-                    <img src="~/Content/assets/img/preguntas.jpg" class="img-fluid w-100" alt="">
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Footer Start -->
+
     <div class="container-fluid footer py-5 wow fadeIn" data-wow-delay="0.2s">
         <div class="container py-5">
             <div class="row g-5">
@@ -499,7 +444,7 @@
                         <h4 class="text-white mb-4">Novedades!!</h4>
                         <p class="text-white mb-3">Dolor amet sit justo amet elitr clita ipsum elitr est.Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                         <div class="position-relative rounded-pill mb-4">
-                            <input class="form-control rounded-pill w-100 py-3 ps-4 pe-5" type="text" placeholder="Ingresa tu correo">
+                            <input class="form-control rounded-pill w-100 py-3 ps-4 pe-5" type="text" placeholder="escribe tu correo">
                             <button type="button" class="btn btn-primary rounded-pill position-absolute top-0 end-0 py-2 mt-2 me-2">Login</button>
                         </div>
                         <div class="d-flex flex-shrink-0">
@@ -554,13 +499,18 @@
     <script src="~/Content/assets/lib/owlcarousel/owl.carousel.min.js"></script>
 
 
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
     <!-- Template Javascript -->
     <script src="~/Content/assets/js/main.js"></script>
 
     <script>
 // Tiempo de inactividad en milisegundos (1 minuto)
 var idleTime = 0;
-var idleLimit = 60; // 1 minuto en segundos
+var idleLimit = 300; // 1 minuto en segundos
 
 // Incrementar el tiempo de inactividad cada segundo
 var idleInterval = setInterval(timerIncrement, 1000); // 1 segundo
@@ -592,10 +542,6 @@ inputs.forEach(input => {
     input.onfocus = resetIdleTime; // Reinicia el contador cuando se enfoca un campo de entrada
 });
     </script>
-
-
-
-
 
 </body>
 
