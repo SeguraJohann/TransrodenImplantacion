@@ -459,7 +459,7 @@ namespace TransrodenProyecto.Controllers
 
 
 
-
+        /*
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ActualizarEstadoPaquete(int idPaquete, string nuevoEstado)
@@ -508,7 +508,60 @@ namespace TransrodenProyecto.Controllers
             //return RedirectToAction("PaquetesBodegaSJ");
             //Redirige a la vista desde donde fue accionado el metodo
             return Redirect(Request.UrlReferrer.ToString());
+        }*/
+
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ActualizarEstadoPaquete(int idPaquete, string nuevoEstado, string cedulaReceptor = null)
+        {
+            if (string.IsNullOrEmpty(nuevoEstado))
+            {
+                TempData["Error"] = "Seleccione un estado válido.";
+                return Redirect(Request.UrlReferrer.ToString());
+            }
+
+            var paquete = db.Paquetes.Find(idPaquete);
+            if (paquete == null)
+            {
+                TempData["Error"] = "Paquete no encontrado.";
+                return Redirect(Request.UrlReferrer.ToString());
+            }
+
+            var estadoEnum = (EstadoPaquete)Enum.Parse(typeof(EstadoPaquete), nuevoEstado);
+
+            if (estadoEnum == EstadoPaquete.Entregado)
+            {
+                if (string.IsNullOrEmpty(cedulaReceptor) || !cedulaReceptor.Equals(paquete.CedulaReceptor, StringComparison.OrdinalIgnoreCase))
+                {
+                    TempData["Error"] = "La cédula ingresada no coincide con la registrada para este paquete.";
+                    return Redirect(Request.UrlReferrer.ToString());
+                }
+
+                paquete.fecha_entrega = DateTime.Now;
+            }
+
+            paquete.Estado = estadoEnum;
+
+            var nuevoRastreo = new Historial
+            {
+                Id_Paquete = paquete.Id_Paquete,
+                Estado = paquete.Estado,
+                NumeroRastreo = paquete.NumeroRastreo,
+                Fecha = DateTime.Now
+            };
+
+            db.Historiales.Add(nuevoRastreo);
+            db.SaveChanges();
+
+            TempData["Success"] = "El estado del paquete se ha actualizado correctamente.";
+            return Redirect(Request.UrlReferrer.ToString());
         }
+
+
+
 
 
 
