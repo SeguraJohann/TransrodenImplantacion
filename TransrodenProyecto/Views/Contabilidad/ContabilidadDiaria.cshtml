@@ -1,0 +1,52 @@
+﻿
+@using TransrodenProyecto.Models
+@model IEnumerable<TransrodenProyecto.Models.Facturacion>
+
+@{
+    ViewBag.Title = "Contabilidad Diaria";
+}
+
+<h2>Buscar Facturas Diariamente</h2>
+
+<!-- Formulario para seleccionar la fecha -->
+@using (Html.BeginForm("ContabilidadDiaria", "ContabilidadController", FormMethod.Get))
+{
+    <label for="fecha">Seleccione una fecha:</label>
+    <input type="date" name="fecha" id="fecha" />
+    <input type="submit" value="Buscar" />
+}
+
+<h3>Resultados:</h3>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID de Factura</th>
+            <th>Precio</th>
+            <th>IVA</th>
+            <th>Cantidad</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+</table>
+
+    @if (Model != null && Model.Any())
+    {
+    <table class="table table-bordered">
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id_Facturacion</td>
+                    <td>@item.Precio</td>
+                    <td>@item.Iva</td>
+                    <td>@item.Cantidad</td>
+                    <td>@item.Total</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No se encontraron registros para la fecha seleccionada.</p>
+}
