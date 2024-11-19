@@ -1,46 +1,48 @@
-﻿
-@using TransrodenProyecto.Models
-@model IEnumerable<TransrodenProyecto.Models.Facturacion>
-
-@{
+﻿@{
+    Layout = null;
     ViewBag.Title = "Contabilidad Diaria";
 }
 
-<h2>Buscar Facturas Diariamente</h2>
+@using TransrodenProyecto.Models
+@model IEnumerable<TransrodenProyecto.Models.Facturacion>
+
+<h2>Contabilidad Diaria</h2>
 
 <!-- Formulario para seleccionar la fecha -->
-@using (Html.BeginForm("ContabilidadDiaria", "ContabilidadController", FormMethod.Get))
+<form asp-action="ContabilidadDiaria" method="get">
+    <div class="form-group">
+        <label for="fechaDia">Seleccionar Fecha:</label>
+        <input type="date" id="fechaDia" name="fechaDia"
+               value="@ViewBag.FechaDia.ToString("yyyy-MM-dd")"
+               class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Consultar</button>
+</form>
+
+@if (Model != null && Model.Any())
 {
-    <label for="fecha">Seleccione una fecha:</label>
-    <input type="date" name="fecha" id="fecha" />
-    <input type="submit" value="Buscar" />
-}
+    <h3>Resultados para la fecha: @ViewBag.FechaDia.ToShortDateString()</h3>
+    <p>Total Diario: @ViewBag.TotalDiario.ToString("C")</p>
 
-<h3>Resultados:</h3>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>ID de Factura</th>
-            <th>Precio</th>
-            <th>IVA</th>
-            <th>Cantidad</th>
-            <th>Total</th>
-        </tr>
-    </thead>
-</table>
-
-    @if (Model != null && Model.Any())
-    {
     <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Id Facturación</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Total</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var factura in Model)
             {
                 <tr>
-                    <td>@item.Id_Facturacion</td>
-                    <td>@item.Precio</td>
-                    <td>@item.Iva</td>
-                    <td>@item.Cantidad</td>
-                    <td>@item.Total</td>
+                    <td>@factura.Id_Facturacion</td>
+                    <td>@factura.Cantidad</td>
+                    <td>@factura.Precio</td>
+                    <td>@factura.Total.ToString()</td>
+                    <td>@factura.Fecha.ToShortDateString()</td>
                 </tr>
             }
         </tbody>
@@ -48,5 +50,11 @@
 }
 else
 {
-    <p>No se encontraron registros para la fecha seleccionada.</p>
+    <p>No se encontraron facturas para la fecha seleccionada.</p>
 }
+
+
+<div class="alert alert-info" role="alert">
+    <strong>Total de todas las facturas del día:</strong>
+    @ViewBag.TotalDiario.ToString()
+</div>

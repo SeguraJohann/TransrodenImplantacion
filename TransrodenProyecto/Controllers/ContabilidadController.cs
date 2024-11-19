@@ -27,24 +27,32 @@ namespace TransrodenProyecto.Controllers
 
         private ApplicationDbContext db = new ApplicationDbContext();
         // GET: Contabilidad
-        public ActionResult ContabilidadDiaria(DateTime? fecha)
+        public ActionResult ContabilidadDiaria(DateTime? fechaDia)
         {
-            IEnumerable<Facturacion> facturaciones;
+            // Si no se proporciona una fecha, usar la fecha actual
+            if (!fechaDia.HasValue)
+            {
+                fechaDia = DateTime.Now.Date;
+            }
 
-            if (fecha.HasValue) 
-            {
-                // Filtrar las facturaciones según la fecha seleccionada
-                facturaciones = db.Facturaciones
-                    .Where(f => f.Fecha.Date == fecha.Value.Date)
-                    .ToList();
-            }
-            else
-            {
-                // Si no se selecciona fecha, mostrar todas las facturaciones
-                facturaciones = db.Facturaciones.ToList();
-            }
-            ViewBag.HayDatos = facturaciones.Any();
-            return View();
+            // Definir el rango para el día seleccionado
+            var fechaInicio = fechaDia.Value.Date;
+            var fechaFin = fechaInicio.AddDays(1);
+
+            // Consulta dentro del rango
+            var facturaciones = db.Facturaciones
+                .Where(f => f.Fecha >= fechaInicio && f.Fecha < fechaFin)
+                .ToList();
+
+            // Calcular el total diario
+            double totalDiario = facturaciones.Sum(f => (double)f.Total);
+
+            // Pasar datos a la vista
+            ViewBag.FechaDia = fechaDia.Value;
+            ViewBag.TotalDiario = totalDiario;
+
+            // Pasar la lista de facturas a la vista
+            return View(facturaciones);
         }
 
         public ActionResult ContabilidadSemanal(DateTime? fechaInicio)
