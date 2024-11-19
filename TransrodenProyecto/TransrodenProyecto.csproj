@@ -468,6 +468,7 @@
     <Content Include="Views\HistorialPaquete\Rastreo.cshtml" />
     <Content Include="Views\PaquetesCargasController\PaquetesRechazoSJ.cshtml" />
     <Content Include="Views\PaquetesCargasController\PaquetesRechazoPZ.cshtml" />
+    <Content Include="Views\Shared\_BodegueroNav.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_ClienteNav.cshtml" />
