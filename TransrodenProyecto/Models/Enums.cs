@@ -7,9 +7,13 @@ namespace TransrodenProyecto.Models
 {
     public enum TipoPaquete
     {
-        CajaPequeña = 0,
-        CajaMediana = 1,
-        CajaGrande = 2
+        Bodega = 0,
+        SanVito = 1,
+        Farmacia = 2,
+        Repuestos = 3,
+        Ruta = 4,
+        PalmarNorte = 5
+
     }
 
     public enum EstadoPaquete
@@ -68,6 +72,12 @@ namespace TransrodenProyecto.Models
         Bodeguero = 1,
         Transportista = 2,
         Cliente = 3
+    }
+
+    public enum TipoCliente
+    {
+        PersonaFisica = 0,
+        Empresa = 1
     }
 
     public enum Sede

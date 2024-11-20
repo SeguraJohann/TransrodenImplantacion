@@ -1,0 +1,21 @@
+﻿@model TransrodenProyecto.Models.Facturacion
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factura @Model.Id_Facturacion</title>
+</head>
+<body>
+    <h1>Factura N° @Model.Id_Facturacion</h1>
+    <p><strong>Emisor:</strong> @Model.NombreEmisor</p>
+    <p><strong>Cédula Emisor:</strong> @Model.CedulaEmisor</p>
+    <p><strong>Total:</strong> @Model.Total</p>
+    <p><strong>Fecha:</strong> @Model.Fecha</p>
+
+    <!-- Aquí puedes agregar más detalles de la factura -->
+    <!-- Agregar un botón para imprimir -->
+    <button onclick="window.print()">Imprimir</button>
+</body>
+</html>

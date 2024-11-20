@@ -461,6 +461,7 @@
     <Content Include="Views\Paquetes\DetailsTransp.cshtml" />
     <Content Include="Views\Marketing\Marketing.cshtml" />
     <Content Include="Views\Marketing\CorreoEnviado.cshtml" />
+    <Content Include="Views\Facturacions\ImpFact.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

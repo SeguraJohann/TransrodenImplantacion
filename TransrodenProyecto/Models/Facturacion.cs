@@ -32,20 +32,19 @@ namespace TransrodenProyecto.Models
         [Required]
         public string CedulaEmisor { get; set; }
 
-        [Required]
-        public string Cantidad { get; set; }
+        //  [Required]
+        //  public string Cantidad { get; set; }
 
+
+        [Required]
+        public decimal Total { get; set; }
 
         [Required]
         public decimal Precio { get; set; }
 
 
         [Required]
-        public double Iva { get; set; }
-
-
-        [Required]
-        public double Total { get; set; }
+        public decimal Iva { get; set; }
 
 
         [Required]

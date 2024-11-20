@@ -66,18 +66,7 @@
                             <a class="btn p-0 text-primary me-3" href="#"><i class="fab fa-twitter"></i></a>
                             <a class="btn p-0 text-primary me-3" href="#"><i class="fab fa-instagram"></i></a>
                         </div>
-                        <!--
-                        <div class="dropdown ms-3">
-                            <a href="#" class="dropdown-toggle text-dark" data-bs-toggle="dropdown"><small><i class="fas fa-globe-europe text-primary me-2"></i> English</small></a>
-                            <div class="dropdown-menu rounded">
-                                <a href="#" class="dropdown-item">English</a>
-                                <a href="#" class="dropdown-item">Bangla</a>
-                                <a href="#" class="dropdown-item">French</a>
-                                <a href="#" class="dropdown-item">Spanish</a>
-                                <a href="#" class="dropdown-item">Arabic</a>
-                            </div>
-                        </div>
-                        -->
+    
                     </div>
                 </div>
             </div>
@@ -223,6 +212,14 @@
                 </dd>
 
                 <dt>
+                    @Html.DisplayNameFor(model => model.Cliente)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Cliente)
+                </dd>
+
+                <dt>
                     @Html.DisplayNameFor(model => model.Tipo)
                 </dt>
 
@@ -286,13 +283,13 @@
                     @Html.DisplayFor(model => model.TelefonoDomicilio)
                 </dd>
 
-                <dt>
-                    @Html.DisplayNameFor(model => model.Cantidad)
-                </dt>
+                @*<dt>
+            @Html.DisplayNameFor(model => model.Cantidad)
+        </dt>
 
-                <dd>
-                    @Html.DisplayFor(model => model.Cantidad)
-                </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Cantidad)
+        </dd>*@
 
                 <dt>
                     @Html.DisplayNameFor(model => model.Pago)
