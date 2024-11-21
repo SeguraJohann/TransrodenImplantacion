@@ -119,11 +119,11 @@
                             string urlCargas;
                             if (sedeUsuario == Sede.SanJose)
                             {
-                                urlCargas = Url.Action("DomicilioSJCarga", "PaquetesEnviosController");
+                                urlCargas = Url.Action("DashboardSJ", "PaquetesCargasController");
                             }
                             else if (sedeUsuario == Sede.PerezZeledon)
                             {
-                                urlCargas = Url.Action("DomicilioPZCarga", "PaquetesEnviosController");
+                                urlCargas = Url.Action("DashBoardPZ", "PaquetesCargasController");
                             }
                             else
                             {
@@ -131,7 +131,7 @@
                             }
 
                             // Enlace a Cargas
-                            <a href="@urlCargas" class="nav-item nav-link">Envios</a>
+                            <a href="@urlCargas" class="nav-item nav-link">Tracking</a>
                         }
                         else
                         {
@@ -161,7 +161,7 @@
 
 
 
-                        <a href="@Url.Action("Marketing","Modulo6")" class="nav-item nav-link" id="contact">
+                        <a href="@Url.Action("Marketing","Marketing")" class="nav-item nav-link" id="contact">
                             Mercadeo
                         </a>
 
@@ -188,8 +188,15 @@
         </div>
     </div>
     <!-- Navbar -->
+    <h1 class="text-center">Envios Domicilios San Jose</h1>
 
 
+    <br>
+    <div class="d-flex justify-content-center ">
+        <a href="@Url.Action("VistaCargaTransito", "PaquetesCargasController")" class="btn btn-primary">
+            <i class="fa fa-truck"></i> Ver cargas en Transito
+        </a>
+    </div>
 
     <div class="container mt-5">
         @if (Session["Usuario"] != null)

@@ -189,7 +189,7 @@
                             }
                         </td>
                         <td>
-                            <a href="@Url.Action("Details", "Paquetes", new { id = paquete.Id_Paquete })" class="btn btn-primary">
+                            <a href="@Url.Action("DetailsTransp", "Paquetes", new { id = paquete.Id_Paquete })" class="btn btn-primary">
                                 Ver
                             </a>
                         </td>
@@ -218,22 +218,22 @@
                                 <option value="NoEntregado">No Entregado</option>
                             </select>
                         </td>
-                    
-                    -->
-                    <td>
-                        <form method="post" action="@Url.Action("ActualizarEstadoPaquete", "PaquetesEnviosController")" id="form-estado-@paquete.Id_Paquete">
-                            @Html.AntiForgeryToken()
-                            @Html.Hidden("idPaquete", paquete.Id_Paquete)
 
-                            <select name="nuevoEstado" class="form-control" onchange="handleEstadoChange(this, @paquete.Id_Paquete, '@paquete.CedulaReceptor')">
-                                <option value="">Estado</option>
-                                <option value="Domicilio">En Transito</option>
-                                <option value="Entregado">Entregado</option>
-                                <option value="NoEntregado">No Entregado</option>
-                            </select>
-                        </form>
-                    </td>
-                  </tr>
+                    -->
+                        <td>
+                            <form method="post" action="@Url.Action("ActualizarEstadoPaquete", "PaquetesEnviosController")" id="form-estado-@paquete.Id_Paquete">
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("idPaquete", paquete.Id_Paquete)
+
+                                <select name="nuevoEstado" class="form-control" onchange="handleEstadoChange(this, @paquete.Id_Paquete, '@paquete.CedulaReceptor')">
+                                    <option value="">Estado</option>
+                                    <option value="Domicilio">En Transito</option>
+                                    <option value="Entregado">Entregado</option>
+                                    <option value="NoEntregado">No Entregado</option>
+                                </select>
+                            </form>
+                        </td>
+                    </tr>
 
 
                 }
@@ -276,14 +276,13 @@
         <script>
             function handleEstadoChange(select, idPaquete, cedulaReceptor) {
                 if (select.value === "Entregado") {
-                    // Mostrar modal para confirmar la cédula
                     const modal = new bootstrap.Modal(document.getElementById('cedulaModal'));
                     document.getElementById('modalIdPaquete').value = idPaquete;
                     document.getElementById('modalEstado').value = select.value;
-                    document.getElementById('modalCedula').value = ''; // Resetear cédula
+                    document.getElementById('modalCedula').value = '';
                     modal.show();
                 } else if (select.value) {
-                    // Enviar el formulario automáticamente para otros estados
+                    // Esto envia el estado automaticamente, no se hace validacion de cedula
                     document.getElementById(`form-estado-${idPaquete}`).submit();
                 }
             }
@@ -291,36 +290,11 @@
 
 
 
-        @if (Session["Usuario"] != null)
-        {
-            // Obtener la sede del usuario desde la sesión
-            var sedeUsuario = Session["Sede"] != null ? (Sede)Session["Sede"] : Sede.SanJose; // Valor por defecto
 
-            // Determinar la URL según la sede
-            string urlEnvios;
-            if (sedeUsuario == Sede.SanJose)
-            {
-                urlEnvios = Url.Action("DomicilioSJCarga", "PaquetesEnviosController");
-            }
-            else if (sedeUsuario == Sede.PerezZeledon)
-            {
-                urlEnvios = Url.Action("DomicilioPZCarga", "PaquetesEnviosController");
-            }
-            else
-            {
-                urlEnvios = "#"; // En caso de que la sede no sea válida, puedes redirigir a una página de error o similar.
-            }
+        <a href="@Url.Action("EnviosTransportista", "PaquetesEnviosController")" class="btn btn-success">
+            Regresar
+        </a>
 
-            // Enlace a Cargas
-            <a href="@urlEnvios" class="btn btn-success">Regresar</a>
-        }
-        else
-        {
-            <a href="@Url.Action("Login", "Cuenta")" class="btn btn-danger">
-                <span class="d-block"><i class="fas fa-user"></i></span>
-                Login
-            </a>
-        }
 
     </div>
     <br>

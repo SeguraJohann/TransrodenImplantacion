@@ -198,8 +198,8 @@
 
     <div class="container mt-5">
 
-        <h2>Crear Carga</h2>
-
+        <h2 class="text-center">Crear Carga</h2>
+        <br>
         @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()
@@ -215,6 +215,7 @@
                         @Html.ValidationMessageFor(model => model.Id_Usuario, "", new { @class = "text-danger" })
                     </div>
                 </div>
+                <br>
 
                 <div class="form-group">
                     @Html.LabelFor(model => model.Descripcion, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -223,6 +224,7 @@
                         @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
                     </div>
                 </div>
+                <br>
                 <br>
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
@@ -233,7 +235,7 @@
         }
         <br>
     </div>
-
+    
 
 
 

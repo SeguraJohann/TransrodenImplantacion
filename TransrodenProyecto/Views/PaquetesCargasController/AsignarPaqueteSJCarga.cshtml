@@ -189,6 +189,9 @@
     </div>
     <!-- Navbar -->
 
+
+    <h1 class="text-center">Cargas San Jose</h1>
+
     <br>
     <div class="d-flex justify-content-center ">
         <a href="@Url.Action("VistaCargaTransito", "PaquetesCargasController")" class="btn btn-primary">
@@ -196,11 +199,11 @@
         </a>
     </div>
 
-
+    <br>
 
 
     <div class="container mt-5">
-        
+
 
         <div class="row">
             <!-- Lista de paquetes-->
@@ -289,7 +292,7 @@
                                 </td>
                                 <td>
                                     <a href="@Url.Action("Edit", "Cargas", new { id = carga.Id_Carga })" class="btn btn-primary">
-                                        Editar 
+                                        Editar
                                     </a>
                                     <a href="@Url.Action("Delete", "Cargas", new { id = carga.Id_Carga })" class="btn btn-danger">
                                         Borrar

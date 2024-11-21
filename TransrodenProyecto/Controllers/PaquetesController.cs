@@ -76,7 +76,7 @@ namespace TransrodenProyecto.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Paquete paquete = db.Paquetes.Find(id);
+            Paquete paquete = db.Paquetes.Include(p => p.Envio).FirstOrDefault(p => p.Id_Paquete == id);
             if (paquete == null)
             {
                 return HttpNotFound();
