@@ -20,6 +20,9 @@ namespace TransrodenProyecto.Models
 
         //Enum
         [Required]
+        public TipoCliente Cliente { get; set; }
+        //Enum
+        [Required]
         public TipoPaquete Tipo { get; set; }
 
 
@@ -44,7 +47,7 @@ namespace TransrodenProyecto.Models
 
 
         //Para Facturacion
-        [Required]
+      
         public string CedulaEmisor { get; set; }
 
 
@@ -52,7 +55,7 @@ namespace TransrodenProyecto.Models
         public string NombreReceptor { get; set; }
 
 
-        // Para confirmacion de entrega 
+        // Para confirmacion de entrega
         [Required]
         public string CedulaReceptor { get; set; }
 
@@ -65,8 +68,8 @@ namespace TransrodenProyecto.Models
 
         public string TelefonoDomicilio { get; set; }
 
-        [Required]
-        public string Cantidad { get; set; }
+       // [Required]
+      // public string Cantidad { get; set; }
 
         [Required]
         public bool Pago { get; set; }
