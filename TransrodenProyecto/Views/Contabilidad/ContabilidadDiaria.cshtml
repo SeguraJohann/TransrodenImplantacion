@@ -2,59 +2,475 @@
     Layout = null;
     ViewBag.Title = "Contabilidad Diaria";
 }
-
 @using TransrodenProyecto.Models
 @model IEnumerable<TransrodenProyecto.Models.Facturacion>
 
-<h2>Contabilidad Diaria</h2>
+<!DOCTYPE html>
+<html lang="en">
 
-<!-- Formulario para seleccionar la fecha -->
-<form asp-action="ContabilidadDiaria" method="get">
-    <div class="form-group">
-        <label for="fechaDia">Seleccionar Fecha:</label>
-        <input type="date" id="fechaDia" name="fechaDia"
-               value="@ViewBag.FechaDia.ToString("yyyy-MM-dd")"
-               class="form-control" required />
+<head>
+    <meta charset="utf-8">
+    <title>LifeSure - Life Insurance Website Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Icon Font Stylesheet -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link rel="stylesheet" href="~/Content/assets/lib/animate/animate.min.css" />
+    <link href="~/Content/assets/lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+    <link href="~/Content/assets/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="~/Content/assets/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="~/Content/assets/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Spinner Start -->
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
     </div>
-    <button type="submit" class="btn btn-primary">Consultar</button>
-</form>
+    <!-- Spinner End -->
+    <!-- Topbar -->
+    <div class="container-fluid topbar px-0 px-lg-4 bg-light py-2 d-none d-lg-block">
+        <div class="container">
+            <div class="row gx-0 align-items-center">
+                <div class="col-lg-8 text-center text-lg-start mb-lg-0">
+                    <div class="d-flex flex-wrap">
+                        <div class="border-end border-primary pe-3">
+                            <a href="#" class="text-muted small"><i class="fas fa-house-user text-primary me-2"></i>ESTE ES EL MODULO DE ADMINISTRACION</a>
+                        </div>
+                        <div class="ps-3">
+                            <a href="mailto:example@gmail.com" class="text-muted small"></i> <!-- Aqui puede ir el nombre del usuario--></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-center text-lg-end">
+                    <div class="d-flex justify-content-end">
+                        <div class="d-flex border-end border-primary pe-3">
+                            <a class="btn p-0 text-primary me-3" href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a class="btn p-0 text-primary me-3" href="#"><i class="fab fa-twitter"></i></a>
+                            <a class="btn p-0 text-primary me-3" href="#"><i class="fab fa-instagram"></i></a>
+                        </div>
+                        <!--
+                        <div class="dropdown ms-3">
+                            <a href="#" class="dropdown-toggle text-dark" data-bs-toggle="dropdown"><small><i class="fas fa-globe-europe text-primary me-2"></i> English</small></a>
+                            <div class="dropdown-menu rounded">
+                                <a href="#" class="dropdown-item">English</a>
+                                <a href="#" class="dropdown-item">Bangla</a>
+                                <a href="#" class="dropdown-item">French</a>
+                                <a href="#" class="dropdown-item">Spanish</a>
+                                <a href="#" class="dropdown-item">Arabic</a>
+                            </div>
+                        </div>
+                        -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Topbar -->
+    <!-- Navbar -->
+    <div class="container-fluid nav-bar px-0 px-lg-0 py-lg-0" id="maincontainer">
+        <div class="container" id="containertop">
+            <nav class="navbar navbar-expand-lg navbar-light">
 
-@if (Model != null && Model.Any())
-{
-    <h3>Resultados para la fecha: @ViewBag.FechaDia.ToShortDateString()</h3>
-    <p>Total Diario: @ViewBag.TotalDiario.ToString("C")</p>
+                <img src="~/Content/assets/img/Logo.png" alt="Logo" width="230" height="150">
 
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Id Facturación</th>
-                <th>Cantidad</th>
-                <th>Precio</th>
-                <th>Total</th>
-                <th>Fecha</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var factura in Model)
-            {
-                <tr>
-                    <td>@factura.Id_Facturacion</td>
-                    <td>@factura.Cantidad</td>
-                    <td>@factura.Precio</td>
-                    <td>@factura.Total.ToString()</td>
-                    <td>@factura.Fecha.ToShortDateString()</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>No se encontraron facturas para la fecha seleccionada.</p>
-}
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                    <span class="fa fa-bars"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+
+                    <div class="navbar-nav mx-0 mx-lg-auto">
+
+                        <a href="@Url.Action("IndexAdmin", "Admin")" class="nav-item nav-link active">
+                            Inicio
+                        </a>
+
+                        <a href="@Url.Action("Index","Usuarios")" class="nav-item nav-link">
+                            Usuarios
+                        </a>
+
+                        <a href="@Url.Action("Index","Paquetes")" class="nav-item nav-link">
+                            Paqueteria
+                        </a>
+
+                        @if (Session["Usuario"] != null)
+                        {
+                            // Obtener la sede del usuario desde la sesión
+                            var sedeUsuario = Session["Sede"] != null ? (Sede)Session["Sede"] : Sede.SanJose; // Valor por defecto
+
+                            // Determinar la URL según la sede
+                            string urlCargas;
+                            if (sedeUsuario == Sede.SanJose)
+                            {
+                                urlCargas = Url.Action("DashboardSJ", "PaquetesCargasController");
+                            }
+                            else if (sedeUsuario == Sede.PerezZeledon)
+                            {
+                                urlCargas = Url.Action("DashBoardPZ", "PaquetesCargasController");
+                            }
+                            else
+                            {
+                                urlCargas = "#"; // En caso de que la sede no sea válida, puedes redirigir a una página de error o similar.
+                            }
+
+                            // Enlace a Cargas
+                            <a href="@urlCargas" class="nav-item nav-link">Tracking</a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Login", "Cuenta")" class="nav-item nav-link">
+                                <span class="d-block"><i class="fas fa-user"></i></span>
+                                Cuenta
+                            </a>
+                        }
+
+                        <a href="@Url.Action("Index","Facturacions")" class="nav-item nav-link">
+                            Facturacion
+                        </a>
 
 
-<div class="alert alert-info" role="alert">
-    <strong>Total de todas las facturas del día:</strong>
-    @ViewBag.TotalDiario.ToString()
-</div>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link" data-bs-toggle="dropdown">
+                                <span class="dropdown-toggle">Contabilidad</span>
+                            </a>
+                            <div class="dropdown-menu">
+                                <a href="@Url.Action("ContaAdminAnual", "Modulo5")" class="dropdown-item">Consulta Diaria</a>
+                                <a href="@Url.Action("ContaAdminSemanal", "Modulo5")" class="dropdown-item">Consulta Semanal</a>
+                                <a href="@Url.Action("ContaAdminMensual", "Modulo5")" class="dropdown-item">Consulta Mensual</a>
+                                <a href="@Url.Action("ContaAdminAnual", "Modulo5")" class="dropdown-item">Consulta Anual</a>
+                            </div>
+                        </div>
+
+
+
+
+                        <a href="@Url.Action("Marketing","Marketing")" class="nav-item nav-link" id="contact">
+                            Mercadeo
+                        </a>
+
+
+
+                        @if (Session["Usuario"] != null)
+                        {
+                            <a href="@Url.Action("Logout", "Cuenta")" class="nav-item nav-link">
+                                <span class="d-block"><i class="fas fa-sign-out-alt"></i></span>
+                                @Session["Usuario"]
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Login", "Cuenta")" class="nav-item nav-link">
+                                <span class="d-block"><i class="fas fa-user"></i></span>
+                                Cuenta
+                            </a>
+                        }
+
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <!-- Navbar -->
+    <!-- Barra de Busqueda  -->
+    <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content rounded-0">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Search by keyword</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex align-items-center bg-primary">
+                    <div class="input-group w-75 mx-auto d-flex">
+                        <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
+                        <span id="search-icon-1" class="btn bg-light border nput-group-text p-3"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Contabilidad -->
+    <!-- Contenido Principal -->
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card shadow-lg">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4">Contabilidad Diaria</h2>
+
+                        <!-- Formulario de búsqueda -->
+                        <form asp-action="ContabilidadDiaria" method="get" class="mb-4">
+                            <div class="row align-items-end">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label for="fechaDia" class="form-label">Seleccionar Fecha:</label>
+                                        <input type="date" id="fechaDia" name="fechaDia"
+                                               value="@ViewBag.FechaDia.ToString("yyyy-MM-dd")"
+                                               class="form-control shadow-sm" required />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="fas fa-search me-2"></i>Consultar
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                        @if (Model != null && Model.Any())
+                        {
+                            <div class="alert alert-info shadow-sm">
+                                <div class="row align-items-center">
+                                    <div class="col-md-6">
+                                        <h5 class="mb-0">Fecha: @ViewBag.FechaDia.ToShortDateString()</h5>
+                                    </div>
+                                    <div class="col-md-6 text-md-end">
+                                        <h5 class="mb-0">Total del día: @ViewBag.TotalDiario.ToString("C")</h5>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive mt-4">
+                                <table class="table table-hover table-bordered">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th class="text-center">ID</th>
+                                            <th class="text-center">Cantidad</th>
+                                            <th class="text-center">Precio Unitario</th>
+                                            <th class="text-center">Total</th>
+                                            <th class="text-center">Fecha</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var factura in Model)
+                                        {
+                                            <tr>
+                                                <td class="text-center">@factura.Id_Facturacion</td>
+                                                <td class="text-center">@factura.Cantidad</td>
+                                                <td class="text-end">@factura.Precio.ToString("C")</td>
+                                                <td class="text-end">@factura.Total.ToString("C")</td>
+                                                <td class="text-center">@factura.Fecha.ToShortDateString()</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="alert alert-success mt-4 shadow-sm">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <strong>Total de todas las facturas del día:</strong>
+                                    <span class="h5 mb-0">@ViewBag.TotalDiario.ToString("C")</span>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-warning shadow-sm">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                No se encontraron facturas para la fecha seleccionada.
+                            </div>
+                        }
+
+                        <!--  Generación de PDF   -->
+                        <!-- 1. Botón (colócalo donde desees dentro de tu container mt-5) -->
+                        <div class="text-center mt-3">
+                            <button onclick="generatePDF()" class="btn btn-primary">
+                                <i class="fas fa-file-pdf me-2"></i>Descargar PDF
+                            </button>
+                        </div>
+
+                        <!-- 2. Scripts necesarios para el PDF -->
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+                        <!-- 3. Función para generar el PDF -->
+                        <script>
+                            function generatePDF() {
+                                const { jsPDF } = window.jspdf;
+                                const container = document.querySelector('.container.mt-5');
+
+                                if (!container) {
+                                    alert('No se encontró el contenedor especificado');
+                                    return;
+                                }
+
+                                // Mostrar indicador de carga
+                                const spinner = document.getElementById('spinner');
+                                spinner.classList.add('show');
+
+                                html2canvas(container, {
+                                    scale: 2, // Mejor calidad
+                                    logging: false,
+                                    useCORS: true,
+                                    allowTaint: true
+                                }).then(canvas => {
+                                    spinner.classList.remove('show');
+
+                                    const imgData = canvas.toDataURL('image/png');
+                                    const pdf = new jsPDF('p', 'mm', 'a4');
+
+                                    const imgProps = pdf.getImageProperties(imgData);
+                                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                                    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+                                    try {
+                                        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                                        pdf.save('contabilidad-diaria.pdf');
+                                    } catch (error) {
+                                        console.error('Error al generar el PDF:', error);
+                                        alert('Hubo un error al generar el PDF. Por favor, intente nuevamente.');
+                                    }
+                                }).catch(error => {
+                                    spinner.classList.remove('show');
+                                    console.error('Error al capturar el contenido:', error);
+                                    alert('Hubo un error al capturar el contenido. Por favor, intente nuevamente.');
+                                });
+                            }
+                        </script>
+
+                        <!--  Generación de PDF   -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Fin Contenido Principal -->
+    <!-- FIN de Contabilidad -->
+    <!-- Footer Start -->
+    <div class="container-fluid footer py-5 wow fadeIn" data-wow-delay="0.2s">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-xl-9">
+                    <div class="mb-5">
+                        <div class="row g-4">
+                            <div class="col-md-6 col-lg-6 col-xl-5">
+                                <div class="footer-item">
+                                    <a href="index.html" class="p-0">
+                                        <h3 class="text-white"><i class="fas fa-truck-loading me-3"></i> Transroden Express SA</h3>
+                                        <!-- <img src="~/Content/assets/img/logo.png" alt="Logo"> -->
+                                    </a>
+                                    <p class="text-white mb-4">Dolor amet sit justo amet elitr clita ipsum elitr est.Lorem ipsum dolor sit amet, consectetur adipiscing...</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-6 col-xl-3">
+                                <div class="footer-item">
+                                    <h4 class="text-white mb-4">Acceso Rapido</h4>
+                                    <a href="#" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Inicio </a>
+                                    <a href="#" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Administracion </a>
+                                    <a href="#" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Clientes </a>
+                                    <a href="#" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Inventario </a>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-6 col-xl-3">
+                                <div class="footer-item">
+                                    <h4 class="mb-4" style="color: rgb(192, 27, 28);">Acceso Rápido</h4>
+                                    <a href="#" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Tracking </a>
+                                    <a href="#" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Contabilidad </a>
+                                    <a href="#" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Mercadeo </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--
+                    <div class="pt-5" style="border-top: 1px solid rgba(255, 255, 255, 0.08);">
+                        <div class="row g-0">
+                            <div class="col-12">
+                                <div class="row g-4">
+                                    <div class="col-lg-6 col-xl-4">
+                                        <div class="d-flex">
+                                            <div class="btn-xl-square bg-primary text-white rounded p-4 me-4">
+                                                <i class="fas fa-map-marker-alt fa-2x"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="text-white">Address</h4>
+                                                <p class=" text-white mb-0">San Isidro - Perez Zeledon, Barrio Mexico - San Jose</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-xl-4">
+                                        <div class="d-flex">
+                                            <div class="btn-xl-square bg-primary text-white rounded p-4 me-4">
+                                                <i class="fas fa-envelope fa-2x"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="text-white">Correo</h4>
+                                                <p class="text-white mb-0">transroden@gmail.com</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-xl-4">
+                                        <div class="d-flex">
+                                            <div class="btn-xl-square bg-primary text-white rounded p-4 me-4">
+                                                <i class="fa fa-phone-alt fa-2x"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="text-white">Telefono</h4>
+                                                <p class=" text-white mb-0">+506 0000 0000</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
+    <!-- Copyright Start -->
+    <div class="container-fluid copyright py-4">
+        <div class="container">
+            <div class="row g-4 align-items-center">
+                <div class="col-md-6 text-center text-md-end mb-md-0">
+                    <span class="text-body"><a href="#" class="border-bottom text-white"><i class="fas fa-copyright text-light me-2"></i>transroden.com</a>, Todos los derechos reservados 2024.</span>
+                </div>
+                <div class="col-md-6 text-center text-md-start text-body">
+                    <!--/*** This template is free as long as you keep the below author’s credit link/attribution link/backlink. ***/-->
+                    <!--/*** If you'd like to use the template without the below author’s credit link/attribution link/backlink, ***/-->
+                    <!--/*** you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". ***/-->
+                    <!-- Designed By <a class="border-bottom text-white" href="https://htmlcodex.com">HTML Codex</a> Distributed By <a class="border-bottom text-white" href="https://themewagon.com">ThemeWagon</a>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Copyright End -->
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-primary btn-lg-square rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Content/assets/lib/wow/wow.min.js"></script>
+    <script src="~/Content/assets/lib/easing/easing.min.js"></script>
+    <script src="~/Content/assets/lib/waypoints/waypoints.min.js"></script>
+    <script src="~/Content/assets/lib/counterup/counterup.min.js"></script>
+    <script src="~/Content/assets/lib/lightbox/js/lightbox.min.js"></script>
+    <script src="~/Content/assets/lib/owlcarousel/owl.carousel.min.js"></script>
+
+
+    <!-- Template Javascript -->
+    <script src="~/Content/assets/js/main.js"></script>
+</body>
+
+</html>
+

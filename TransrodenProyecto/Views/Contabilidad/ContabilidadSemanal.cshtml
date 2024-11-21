@@ -233,24 +233,34 @@
             <tbody>
                 @for (int i = 0; i < diasDeLaSemana.Length; i++)
                 {
-                    var dia = (DayOfWeek)(i + 1); // Ajuste para empezar desde lunes (1) hasta domingo (0)
+                    var dia = (DayOfWeek)(i + 1);
                     <tr>
                         <td>@diasDeLaSemana[i]</td>
-
-                        @if (ContabilidadDiaria != null && ContabilidadDiaria.ContainsKey(dia))
+                        @if (ViewBag.ContabilidadDiaria != null && ViewBag.ContabilidadDiaria.ContainsKey(dia))
                         {
-                            foreach (var facturacion in ContabilidadDiaria[dia])
+                            var facturacionesDia = ViewBag.ContabilidadDiaria[dia];
+                            int cantidadDiaria = 0;
+                            double totalDiario = 0;
+
+                            // Calcular sumas usando foreach
+                            foreach (var factura in facturacionesDia)
                             {
-                                <td>@facturacion.Cantidad </td>
-                                <td>@facturacion.Total</td>
+                                int cantidad;
+                                if (int.TryParse(factura.Cantidad, out cantidad))
+                                {
+                                    cantidadDiaria += cantidad;
+                                }
+                                totalDiario += factura.Total;
                             }
+
+                            <td>@cantidadDiaria</td>
+                            <td>@totalDiario.ToString("C")</td>
                         }
                         else
                         {
                             <td>No hubieron Pedidos</td>
                             <td>No hubieron Ganancias</td>
                         }
-
                     </tr>
                 }
             </tbody>

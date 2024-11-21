@@ -228,10 +228,8 @@
                     <option value="@i" @(i == mes ? "selected" : "")>@System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i)</option>
                 }
             </select>
-
             <label for="año">Seleccione el año:</label>
             <input type="number" id="año" name="año" value="@año" min="2000" max="@DateTime.Now.Year" />
-
             <button type="submit" class="btn btn-primary">Mostrar Facturación</button>
         </form>
 
@@ -248,27 +246,37 @@
                 {
                     <tr>
                         <td>@i</td>
-
                         @if (contabilidadDiaria != null && contabilidadDiaria.ContainsKey(i))
                         {
-                            foreach (var facturacion in contabilidadDiaria[i])
+                            var facturacionesDia = contabilidadDiaria[i];
+                            int cantidadDiaria = 0;
+                            double totalDiario = 0;
+
+                            // Calcular sumas usando foreach
+                            foreach (var factura in facturacionesDia)
                             {
-                                <td>@facturacion.Cantidad</td>
-                                <td>@facturacion.Total</td>
+                                int cantidad;
+                                if (int.TryParse(factura.Cantidad, out cantidad))
+                                {
+                                    cantidadDiaria += cantidad;
+                                }
+                                totalDiario += factura.Total;
                             }
+
+                            <td>@cantidadDiaria</td>
+                            <td>@totalDiario.ToString("C")</td>
                         }
                         else
                         {
                             <td>No Hubieron Pedidos</td>
                             <td>No Hubieron Ganancias</td>
                         }
-
                     </tr>
                 }
             </tbody>
         </table>
 
-        <h3>Total Mensual: @totalMensual.ToString()</h3>
+        <h3>Total Mensual: @totalMensual.ToString("C")</h3>
 
 
 

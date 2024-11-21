@@ -211,56 +211,62 @@
     <!-- Contabilidad -->
 
     <div class="container mt-5">
-        
 
-            <h2>Facturación por Año</h2>
 
-            <!-- Formulario para seleccionar el año -->
-            <form method="get" action="@Url.Action("ContabilidadAnual")">
-                <label for="año">Seleccione el año:</label>
-                <input type="number" id="año" name="año" value="@yearCont" min="2000" max="@DateTime.Now.Year" />
+        <h2>Facturación por Año</h2>
 
-                <button type="submit" class="btn btn-primary">Mostrar Facturación</button>
-            </form>
+        <form method="get" action="@Url.Action("ContabilidadAnual")">
+            <label for="año">Seleccione el año:</label>
+            <input type="number" id="año" name="yearCont" value="@yearCont" min="2000" max="@DateTime.Now.Year" />
+            <button type="submit" class="btn btn-primary">Mostrar Facturación</button>
+        </form>
 
-            <table class="table table-bordered">
-                <thead>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Mes</th>
+                    <th>Cantidad</th>
+                    <th>Total de ganancias</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 1; i <= 12; i++)
+                {
                     <tr>
-                        <th>Mes</th>
-                        <th>Cantidad</th>
-                        <th>Total de ganancias</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (int i = 1; i <= 12; i++)
-                    {
-                        <tr>
-                            <td>@System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i)</td>
+                        <td>@System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i)</td>
+                        @if (contabilidadMensual != null && contabilidadMensual.ContainsKey(i))
+                        {
+                            var facturacionesMes = contabilidadMensual[i];
+                            int cantidadMensual = 0;
+                            double totalMensual = 0;
 
-                            @if (contabilidadMensual != null && contabilidadMensual.ContainsKey(i))
+                            // Calcular sumas usando foreach
+                            foreach (var factura in facturacionesMes)
                             {
-                                foreach (var facturacion in contabilidadMensual[i])
+                                int cantidad;
+                                if (int.TryParse(factura.Cantidad, out cantidad))
                                 {
-                                    <td> @facturacion.Cantidad</td>
-                                    <td> @facturacion.Total</td>
+                                    cantidadMensual += cantidad;
                                 }
-                            }
-                            else
-                            {
-
-                                <td>No Hubieron Pedidos</td>
-                                <td>No Hubieron Ganancias</td>
+                                totalMensual += factura.Total;
                             }
 
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                            <td>@cantidadMensual</td>
+                            <td>@totalMensual.ToString("C")</td>
+                        }
+                        else
+                        {
+                            <td>No Hubieron Pedidos</td>
+                            <td>No Hubieron Ganancias</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
 
+        <h3>Total Anual: @totalAnual.ToString("C")</h3>
 
-            <h3>Total Anual: @totalAnual.ToString()</h3>
-
-     </div>
+    </div>
 
 
             <!-- FIN de Contabilidad -->
