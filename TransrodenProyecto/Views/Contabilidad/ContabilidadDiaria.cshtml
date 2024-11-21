@@ -251,7 +251,7 @@
                                     <thead class="table-light">
                                         <tr>
                                             <th class="text-center">ID</th>
-                                            <th class="text-center">Cantidad</th>
+                                            <!--<th class="text-center">Cantidad</th>-->
                                             <th class="text-center">Precio Unitario</th>
                                             <th class="text-center">Total</th>
                                             <th class="text-center">Fecha</th>
@@ -262,7 +262,7 @@
                                         {
                                             <tr>
                                                 <td class="text-center">@factura.Id_Facturacion</td>
-                                                <td class="text-center">@factura.Cantidad</td>
+                                                
                                                 <td class="text-end">@factura.Precio.ToString("C")</td>
                                                 <td class="text-end">@factura.Total.ToString("C")</td>
                                                 <td class="text-center">@factura.Fecha.ToShortDateString()</td>

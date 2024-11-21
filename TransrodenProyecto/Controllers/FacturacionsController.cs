@@ -70,7 +70,7 @@ namespace TransrodenProyecto.Controllers
                 NombreEmisor = paquete.NombreEmisor,
                 CedulaEmisor = paquete.CedulaEmisor,
                 Id_Usuario = usuario?.Id_Usuario, // Si el usuario existe, se asigna; si no, queda null
-            //  Cantidad = paquete.Cantidad,
+                Cantidad = "1",
                 Total = 0,
                 Precio = 0,
                 Iva = 0,
@@ -88,41 +88,36 @@ namespace TransrodenProyecto.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Asegurarse de que el total sea decimal
-                decimal total = Convert.ToDecimal(model.Total);
-                decimal precio = total / 1.13m;
-                decimal iva = precio * 0.13m;
 
-                // Validar que los valores calculados coinciden con los valores introducidos
-                if (Math.Abs((precio + iva) - total) < 0.01m)
+                // Para validar que el calculo es correcto
+                var precio = model.Precio;
+                var iva = precio * 0.13m;
+                var total = precio + iva;
+
+                // Crear la factura
+                var nuevaFactura = new Facturacion
                 {
-                    // Crear la factura
-                    var nuevaFactura = new Facturacion
-                    {
-                        Id_Paquete = model.Id_Paquete,
-                        Id_Usuario = model.Id_Usuario,
-                        NombreEmisor = model.NombreEmisor,
-                        CedulaEmisor = model.CedulaEmisor,
-                        Total = total,
-                        Precio = precio,
-                        Iva = iva,
-                        Fecha = model.Fecha
-                    };
+                    Id_Paquete = model.Id_Paquete,
+                    Id_Usuario = model.Id_Usuario,
+                    NombreEmisor = model.NombreEmisor,
+                    CedulaEmisor = model.CedulaEmisor,
+                    Cantidad = "1",
+                    Precio = model.Precio,
+                    Iva = model.Iva,
+                    Total = model.Total,
+                    Fecha = model.Fecha
+                };
 
-                    // Guarda la factura
-                    db.Facturaciones.Add(nuevaFactura);
-                    await db.SaveChangesAsync();
+                // Guarda la factura
+                db.Facturaciones.Add(nuevaFactura);
+                await db.SaveChangesAsync();
 
-                    return RedirectToAction("DetalleFacturacion", new { id = nuevaFactura.Id_Facturacion });
-                }
-                else
-                {
-                    ModelState.AddModelError("", "El cálculo del precio y el IVA no coincide con el total.");
-                }
+                return RedirectToAction("DetalleFacturacion", new { id = nuevaFactura.Id_Facturacion });
             }
 
             return View(model);
         }
+
 
 
 
@@ -215,7 +210,7 @@ namespace TransrodenProyecto.Controllers
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id_Facturacion,Id_Paquete,Id_Usuario,NombreEmisor,CedulaEmisor,Total,Precio,Iva,Fecha")] Facturacion facturacion)
+        public ActionResult Create([Bind(Include = "Id_Facturacion,Id_Paquete,Id_Usuario,NombreEmisor,CedulaEmisor,Cantidad,Total,Precio,Iva,Fecha")] Facturacion facturacion)
         {
             if (ModelState.IsValid)
             {
@@ -254,7 +249,7 @@ namespace TransrodenProyecto.Controllers
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id_Facturacion,Id_Paquete,Id_Usuario,NombreEmisor,CedulaEmisor,Total,Precio,Iva,Fecha")] Facturacion facturacion)
+        public ActionResult Edit([Bind(Include = "Id_Facturacion,Id_Paquete,Id_Usuario,NombreEmisor,CedulaEmisor,Cantidad,Total,Precio,Iva,Fecha")] Facturacion facturacion)
         {
             if (ModelState.IsValid)
             {

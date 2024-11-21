@@ -135,7 +135,7 @@ namespace TransrodenProyecto.Controllers
                     Domicilio = model.Domicilio,
                     Direccion = model.Direccion,
                     TelefonoDomicilio = model.TelefonoDomicilio,
-                   // Cantidad = model.Cantidad,
+                    Cantidad = "1",
                     Pago = model.Pago,
                     Descripcion = model.Descripcion,
                     fecha_recibo = System.DateTime.Now
@@ -222,7 +222,7 @@ namespace TransrodenProyecto.Controllers
         // POST: Paquetes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id_Paquete,NumeroRastreo,Cliente,Tipo,Origen,NombreEmisor,CedulaEmisor,NombreReceptor,CedulaReceptor,Domicilio,Direccion,TelefonoDomicilio,Pago,Descripcion,Id_Carga,Id_Envio,fecha_recibo,fecha_entrega,Estado")] Paquete paquete)
+        public async Task<ActionResult> Edit([Bind(Include = "Id_Paquete,NumeroRastreo,Cliente,Tipo,Origen,NombreEmisor,CedulaEmisor,NombreReceptor,CedulaReceptor,Domicilio,Direccion,TelefonoDomicilio,Cantidad,Pago,Descripcion,Id_Carga,Id_Envio,fecha_recibo,fecha_entrega,Estado")] Paquete paquete)
         {
             if (ModelState.IsValid)
             {
@@ -242,7 +242,7 @@ namespace TransrodenProyecto.Controllers
                     paqueteExistente.Domicilio = paquete.Domicilio;
                     paqueteExistente.Direccion = paquete.Direccion;
                     paqueteExistente.TelefonoDomicilio = paquete.TelefonoDomicilio;
-                   // paqueteExistente.Cantidad = paquete.Cantidad;
+                    paqueteExistente.Cantidad = paquete.Cantidad;
                     paqueteExistente.Pago = paquete.Pago;
                     paqueteExistente.Descripcion = paquete.Descripcion;
                     paqueteExistente.fecha_recibo = paquete.fecha_recibo;

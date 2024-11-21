@@ -29,22 +29,22 @@ namespace TransrodenProyecto.Models
 
 
         //Se utilizara para validar si el emisor tiene una cuenta en transroden y asi asociar el usuario con la factura (en caso de no tener cuenta, simplemente no se asocia a nada y se guarda la cedula)
-        [Required]
+        //[Required]
         public string CedulaEmisor { get; set; }
 
         //  [Required]
-        //  public string Cantidad { get; set; }
+          public string Cantidad { get; set; }
 
 
         [Required]
-        public decimal Total { get; set; }
+        public double Total { get; set; }
 
         [Required]
         public decimal Precio { get; set; }
 
 
         [Required]
-        public decimal Iva { get; set; }
+        public double Iva { get; set; }
 
 
         [Required]

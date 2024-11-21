@@ -69,7 +69,7 @@ namespace TransrodenProyecto.Models
         public string TelefonoDomicilio { get; set; }
 
        // [Required]
-      // public string Cantidad { get; set; }
+       public string Cantidad { get; set; }
 
         [Required]
         public bool Pago { get; set; }
