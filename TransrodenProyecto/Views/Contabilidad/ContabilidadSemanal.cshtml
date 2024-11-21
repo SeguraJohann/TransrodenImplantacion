@@ -211,66 +211,153 @@
     </div>
     <!-- Contabilidad -->
     <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card shadow-lg">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4">Facturación por Semana</h2>
 
+                        <!-- Formulario de búsqueda -->
+                        <form method="get" action="@Url.Action("ContabilidadSemanal")" class="mb-4">
+                            <div class="row align-items-end">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label for="fechaInicio" class="form-label">Seleccione la fecha de inicio de la semana:</label>
+                                        <input type="date" id="fechaInicio" name="fechaInicio"
+                                               value="@fechaInicio.ToString("yyyy-MM-dd")"
+                                               class="form-control shadow-sm" required />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="fas fa-search me-2"></i>Mostrar Facturación
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
 
-        <h2>Facturación por Semana</h2>
+                        <!-- Alerta con la información de la semana -->
+                        <div class="alert alert-info shadow-sm">
+                            <div class="row align-items-center">
+                                <div class="col-md-6">
+                                    <h5 class="mb-0">Semana del: @fechaInicio.ToShortDateString()</h5>
+                                </div>
+                                <div class="col-md-6 text-md-end">
+                                    <h5 class="mb-0">Total semanal: @totalSemanal.ToString("C")</h5>
+                                </div>
+                            </div>
+                        </div>
 
-        <!-- Formulario para seleccionar la semana -->
-        <form method="get" action="@Url.Action("ContabilidadSemanal")">
-            <label for="fechaInicio">Seleccione la fecha de inicio de la semana:</label>
-            <input type="date" id="fechaInicio" name="fechaInicio" value="@fechaInicio.ToString("yyyy-MM-dd")" />
-            <button type="submit" class="btn btn-primary">Mostrar Facturación</button>
-        </form>
+                        <!-- Tabla de datos -->
+                        <div class="table-responsive mt-4">
+                            <table class="table table-hover table-bordered">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="text-center">Día</th>
+                                        <th class="text-center">Cantidad</th>
+                                        <th class="text-center">Total de ganancias</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < diasDeLaSemana.Length; i++)
+                                    {
+                                        var dia = (DayOfWeek)(i + 1);
+                                        <tr>
+                                            <td class="text-center">@diasDeLaSemana[i]</td>
+                                            @if (ViewBag.ContabilidadDiaria != null && ViewBag.ContabilidadDiaria.ContainsKey(dia))
+                                            {
+                                                var facturacionesDia = ViewBag.ContabilidadDiaria[dia];
+                                                int cantidadDiaria = 0;
+                                                double totalDiario = 0;
+                                                foreach (var factura in facturacionesDia)
+                                                {
+                                                    int cantidad;
+                                                    if (int.TryParse(factura.Cantidad, out cantidad))
+                                                    {
+                                                        cantidadDiaria += cantidad;
+                                                    }
+                                                    totalDiario += factura.Total;
+                                                }
+                                                <td class="text-center">@cantidadDiaria</td>
+                                                <td class="text-end">@totalDiario.ToString("C")</td>
+                                            }
+                                            else
+                                            {
+                                                <td class="text-center text-muted">No hubieron Pedidos</td>
+                                                <td class="text-end text-muted">No hubieron Ganancias</td>
+                                            }
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
 
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Día</th>
-                    <th>Cantidad</th>
-                    <th>Total de ganancias</th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (int i = 0; i < diasDeLaSemana.Length; i++)
-                {
-                    var dia = (DayOfWeek)(i + 1);
-                    <tr>
-                        <td>@diasDeLaSemana[i]</td>
-                        @if (ViewBag.ContabilidadDiaria != null && ViewBag.ContabilidadDiaria.ContainsKey(dia))
-                        {
-                            var facturacionesDia = ViewBag.ContabilidadDiaria[dia];
-                            int cantidadDiaria = 0;
-                            double totalDiario = 0;
+                        <!-- Total semanal en alerta -->
+                        <div class="alert alert-success mt-4 shadow-sm">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <strong>Total de la semana:</strong>
+                                <span class="h5 mb-0">@totalSemanal.ToString("C")</span>
+                            </div>
+                        </div>
 
-                            // Calcular sumas usando foreach
-                            foreach (var factura in facturacionesDia)
-                            {
-                                int cantidad;
-                                if (int.TryParse(factura.Cantidad, out cantidad))
-                                {
-                                    cantidadDiaria += cantidad;
-                                }
-                                totalDiario += factura.Total;
-                            }
-
-                            <td>@cantidadDiaria</td>
-                            <td>@totalDiario.ToString("C")</td>
-                        }
-                        else
-                        {
-                            <td>No hubieron Pedidos</td>
-                            <td>No hubieron Ganancias</td>
-                        }
-                    </tr>
-                }
-            </tbody>
-        </table>
-
-        <h3>Total Semanal: @totalSemanal.ToString()</h3>
-
-
-
+                        <!-- Botón de PDF -->
+                        <div class="text-center mt-3">
+                            <button onclick="generatePDF()" class="btn btn-primary">
+                                <i class="fas fa-file-pdf me-2"></i>Descargar PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <!-- Scripts para PDF (igual que en la vista diaria) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <script>
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const container = document.querySelector('.container.mt-5');
+
+            if (!container) {
+                alert('No se encontró el contenedor especificado');
+                return;
+            }
+
+            const spinner = document.getElementById('spinner');
+            spinner.classList.add('show');
+
+            html2canvas(container, {
+                scale: 2,
+                logging: false,
+                useCORS: true,
+                allowTaint: true
+            }).then(canvas => {
+                spinner.classList.remove('show');
+
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+
+                const imgProps = pdf.getImageProperties(imgData);
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+                try {
+                    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                    pdf.save('contabilidad-semanal.pdf');
+                } catch (error) {
+                    console.error('Error al generar el PDF:', error);
+                    alert('Hubo un error al generar el PDF. Por favor, intente nuevamente.');
+                }
+            }).catch(error => {
+                spinner.classList.remove('show');
+                console.error('Error al capturar el contenido:', error);
+                alert('Hubo un error al capturar el contenido. Por favor, intente nuevamente.');
+            });
+        }
+    </script>
     <!-- FIN de Contabilidad -->
     <!-- Footer Start -->
     <div class="container-fluid footer py-5 wow fadeIn" data-wow-delay="0.2s">
