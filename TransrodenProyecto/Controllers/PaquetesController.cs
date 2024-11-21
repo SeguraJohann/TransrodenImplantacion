@@ -76,7 +76,7 @@ namespace TransrodenProyecto.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Paquete paquete = db.Paquetes.Find(id);
+            Paquete paquete = db.Paquetes.Include(p => p.Envio).FirstOrDefault(p => p.Id_Paquete == id);
             if (paquete == null)
             {
                 return HttpNotFound();
@@ -142,6 +142,22 @@ namespace TransrodenProyecto.Controllers
 
                 db.Paquetes.Add(nuevoPaquete);
                 await db.SaveChangesAsync();
+
+
+
+                // Guardar estado en historial
+
+                var nuevoRastreo = new Historial
+                {
+                    Id_Paquete = nuevoPaquete.Id_Paquete,
+                    Estado = nuevoPaquete.Estado,
+                    NumeroRastreo = nuevoPaquete.NumeroRastreo, 
+                    Fecha = DateTime.Now
+                };
+
+                db.Historiales.Add(nuevoRastreo);
+                await db.SaveChangesAsync();
+
 
                 // Redirije a Facturación
                 return RedirectToAction("GenerarFactura", "Facturacions", new { idPaquete = nuevoPaquete.Id_Paquete });

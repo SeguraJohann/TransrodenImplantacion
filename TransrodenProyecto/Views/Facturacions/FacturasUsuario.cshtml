@@ -1,4 +1,5 @@
-﻿@model IEnumerable<TransrodenProyecto.Models.Facturacion>
+﻿@using TransrodenProyecto.Models
+@model IEnumerable<TransrodenProyecto.Models.Facturacion>
 
 @{
     Layout = null;
@@ -87,84 +88,49 @@
     <div class="container-fluid nav-bar px-0 px-lg-0 py-lg-0" id="maincontainer">
         <div class="container" id="containertop">
             <nav class="navbar navbar-expand-lg navbar-light">
-
+                <!-- <a href="#" class="navbar-brand p-0"> -->
+                <!--<h1 class="text-primary mb-0"><i class="fab fa-slack me-2"></i> LifeSure</h1> -->
                 <img src="~/Content/assets/img/Logo.png" alt="Logo" width="230" height="150">
-
+                <!-- </a> -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                     <span class="fa fa-bars"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
 
                     <div class="navbar-nav mx-0 mx-lg-auto">
-
-                        <a href="@Url.Action("IndexAdmin", "Admin")" class="nav-item nav-link active">
+                        <!-- <a href="index.html" class="nav-item nav-link active">Inicio</a> -->
+                        <a href="@Url.Action("Index", "Home")" class="nav-item nav-link">
+                            <span class="d-block"><i class="fas fa-home"></i></span>
                             Inicio
                         </a>
 
-                        <a href="@Url.Action("Index","Usuarios")" class="nav-item nav-link">
-                            Usuarios
+                        <a href="@Url.Action("Sucursales", "Home")" class="nav-item nav-link">
+                            <span class="d-block"><i class="fas fa-map-marker-alt"></i></span>
+                            Sucursales
+                        </a>
+                        <!-- <a href="about.html" class="nav-item nav-link">Sucursales</a> -->
+
+                        <a href="@Url.Action("Rastreo", "HistorialPaquete")" class="nav-item nav-link">
+                            <span class="d-block"><i class="fas fa-truck"></i></span>
+                            Rastreo
                         </a>
 
-                        <a href="@Url.Action("Index","Paquetes")" class="nav-item nav-link">
-                            Paqueteria
-                        </a>
-
-                        @if (Session["Usuario"] != null)
-                        {
-                            // Obtener la sede del usuario desde la sesión
-                            var sedeUsuario = Session["Sede"] != null ? (Sede)Session["Sede"] : Sede.SanJose; // Valor por defecto
-
-                            // Determinar la URL según la sede
-                            string urlCargas;
-                            if (sedeUsuario == Sede.SanJose)
-                            {
-                                urlCargas = Url.Action("DashboardSJ", "PaquetesCargasController");
-                            }
-                            else if (sedeUsuario == Sede.PerezZeledon)
-                            {
-                                urlCargas = Url.Action("DashBoardPZ", "PaquetesCargasController");
-                            }
-                            else
-                            {
-                                urlCargas = "#"; // En caso de que la sede no sea válida, puedes redirigir a una página de error o similar.
-                            }
-
-                            // Enlace a Cargas
-                            <a href="@urlCargas" class="nav-item nav-link">Tracking</a>
-                        }
-                        else
-                        {
-                            <a href="@Url.Action("Login", "Cuenta")" class="nav-item nav-link">
-                                <span class="d-block"><i class="fas fa-user"></i></span>
-                                Cuenta
-                            </a>
-                        }
-
-                        <a href="@Url.Action("Index","Facturacions")" class="nav-item nav-link">
-                            Facturacion
-                        </a>
-
+                        <!-- <a href="service.html" class="nav-item nav-link">Rastreo</a> -->
 
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link" data-bs-toggle="dropdown">
-                                <span class="dropdown-toggle">Contabilidad</span>
+                                <span class="dropdown-toggle">Servicios</span>
                             </a>
                             <div class="dropdown-menu">
-                                <a href="@Url.Action("ContaAdminAnual", "Modulo5")" class="dropdown-item">Consulta Diaria</a>
-                                <a href="@Url.Action("ContaAdminSemanal", "Modulo5")" class="dropdown-item">Consulta Semanal</a>
-                                <a href="@Url.Action("ContaAdminMensual", "Modulo5")" class="dropdown-item">Consulta Mensual</a>
-                                <a href="@Url.Action("ContaAdminAnual", "Modulo5")" class="dropdown-item">Consulta Anual</a>
+                                <a href="@Url.Action("FacturasUsuario", "Facturacions")" class="dropdown-item">Mis Facturas</a>
                             </div>
                         </div>
 
-
-
-
-                        <a href="@Url.Action("Marketing","Modulo6")" class="nav-item nav-link" id="contact">
-                            Mercadeo
+                        <a href="@Url.Action("Nosotros","Home")" class="nav-item nav-link">
+                            <span class="d-block"><i class="fas fa-info-circle"></i></span>
+                            Nosotros
                         </a>
-
-
+                        <!-- <a href="blog.html" class="nav-item nav-link">Nosotros</a> -->
 
                         @if (Session["Usuario"] != null)
                         {
@@ -181,6 +147,18 @@
                             </a>
                         }
 
+                    </div>
+                </div>
+                <div class="d-none d-xl-flex flex-shrink-0 ps-4">
+                    <a href="#" class="btn btn-light btn-lg-square rounded-circle position-relative wow tada" data-wow-delay=".9s">
+                        <i class="fa fa-phone-alt fa-2x"></i>
+                        <div class="position-absolute" style="top: 7px; right: 12px;">
+                            <span><i class="fa fa-comment-dots text-secondary"></i></span>
+                        </div>
+                    </a>
+                    <div class="d-flex flex-column ms-3">
+                        <span>Centro de Atencion</span>
+                        <a href="tel:+ 0123 456 7890"><span class="text-dark">Tel: +506 0000 0000</span></a>
                     </div>
                 </div>
             </nav>

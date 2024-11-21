@@ -34,6 +34,12 @@
 
     <!-- Template Stylesheet -->
     <link href="~/Content/assets/css/style.css" rel="stylesheet">
+
+
+    <!-- Bootrap, ventanas de dialogo 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+        -->
 </head>
 
 <body>
@@ -183,62 +189,112 @@
                             }
                         </td>
                         <td>
-                            <a href="@Url.Action("Details", "Paquetes", new { id = paquete.Id_Paquete })" class="btn btn-primary">
+                            <a href="@Url.Action("DetailsTransp", "Paquetes", new { id = paquete.Id_Paquete })" class="btn btn-primary">
                                 Ver
                             </a>
                         </td>
+                        <!--
+                    <td>
+                        @using (Html.BeginForm("ActualizarEstadoPaquete", "PaquetesEnviosController", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("idPaquete", paquete.Id_Paquete)
+
+                            <select name="nuevoEstado" class="form-control">
+                                <option value="">Estado</option>
+                                <option value="EnTransito">En Transito</option>
+                                <option value="Entregado">Entregado</option>
+                                <option value="NoEntregado">No Entregado</option>
+                            </select>
+
+                            <button type="submit" class="btn btn-danger mt-2">Actualizar</button>
+                        }
+                    </td>
                         <td>
-                            @using (Html.BeginForm("ActualizarEstadoPaquete", "PaquetesEnviosController", FormMethod.Post))
-                            {
+                            <select name="nuevoEstado" class="form-control" onchange="handleEstadoChange(this, @paquete.Id_Paquete, '@paquete.CedulaReceptor')">
+                                <option value="">Estado</option>
+                                <option value="Domicilio">En Transito</option>
+                                <option value="Entregado">Entregado</option>
+                                <option value="NoEntregado">No Entregado</option>
+                            </select>
+                        </td>
+
+                    -->
+                        <td>
+                            <form method="post" action="@Url.Action("ActualizarEstadoPaquete", "PaquetesEnviosController")" id="form-estado-@paquete.Id_Paquete">
                                 @Html.AntiForgeryToken()
                                 @Html.Hidden("idPaquete", paquete.Id_Paquete)
 
-                                <select name="nuevoEstado" class="form-control">
+                                <select name="nuevoEstado" class="form-control" onchange="handleEstadoChange(this, @paquete.Id_Paquete, '@paquete.CedulaReceptor')">
                                     <option value="">Estado</option>
-                                    <option value="BodegaSJ">BodegaSJ</option>
-                                    <option value="BodegaPZ">BodegaPZ</option>
-                                    <option value="EnTransito">EnTransito</option>
+                                    <option value="Domicilio">En Transito</option>
                                     <option value="Entregado">Entregado</option>
+                                    <option value="NoEntregado">No Entregado</option>
                                 </select>
-
-                                <button type="submit" class="btn btn-danger mt-2">Actualizar</button>
-                            }
+                            </form>
                         </td>
                     </tr>
+
+
                 }
             </tbody>
         </table>
 
-        @if (Session["Usuario"] != null)
-        {
-            // Obtener la sede del usuario desde la sesión
-            var sedeUsuario = Session["Sede"] != null ? (Sede)Session["Sede"] : Sede.SanJose; // Valor por defecto
 
-            // Determinar la URL según la sede
-            string urlEnvios;
-            if (sedeUsuario == Sede.SanJose)
-            {
-                urlEnvios = Url.Action("DomicilioSJCarga", "PaquetesEnviosController");
-            }
-            else if (sedeUsuario == Sede.PerezZeledon)
-            {
-                urlEnvios = Url.Action("DomicilioPZCarga", "PaquetesEnviosController");
-            }
-            else
-            {
-                urlEnvios = "#"; // En caso de que la sede no sea válida, puedes redirigir a una página de error o similar.
-            }
 
-            // Enlace a Cargas
-            <a href="@urlEnvios" class="btn btn-success">Regresar</a>
-        }
-        else
-        {
-            <a href="@Url.Action("Login", "Cuenta")" class="btn btn-danger">
-                <span class="d-block"><i class="fas fa-user"></i></span>
-                Login
-            </a>
-        }
+        <!-- Modal para ingresar la cédula -->
+        <div class="modal fade" id="cedulaModal" tabindex="-1" aria-labelledby="cedulaModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="modalForm" method="post" action="@Url.Action("ActualizarEstadoPaquete", "PaquetesEnviosController")">
+                        @Html.AntiForgeryToken()
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="cedulaModalLabel">Confirmar Entrega</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" id="modalIdPaquete" name="idPaquete" />
+                            <input type="hidden" id="modalEstado" name="nuevoEstado" />
+                            <div class="mb-3">
+                                <label for="modalCedula" class="form-label">Ingrese la Cédula del Receptor</label>
+                                <input type="text" class="form-control" id="modalCedula" name="cedulaReceptor" required />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Confirmar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <!--Para validar la cedula-->
+        <script>
+            function handleEstadoChange(select, idPaquete, cedulaReceptor) {
+                if (select.value === "Entregado") {
+                    const modal = new bootstrap.Modal(document.getElementById('cedulaModal'));
+                    document.getElementById('modalIdPaquete').value = idPaquete;
+                    document.getElementById('modalEstado').value = select.value;
+                    document.getElementById('modalCedula').value = '';
+                    modal.show();
+                } else if (select.value) {
+                    // Esto envia el estado automaticamente, no se hace validacion de cedula
+                    document.getElementById(`form-estado-${idPaquete}`).submit();
+                }
+            }
+        </script>
+
+
+
+
+        <a href="@Url.Action("EnviosTransportista", "PaquetesEnviosController")" class="btn btn-success">
+            Regresar
+        </a>
+
 
     </div>
     <br>
@@ -320,6 +376,9 @@
 
     <!-- Template Javascript -->
     <script src="~/Content/assets/js/main.js"></script>
+
+
+
 </body>
 
 </html>

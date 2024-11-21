@@ -20,13 +20,17 @@ namespace TransrodenProyecto.Models
         public Paquete Paquete { get; set; }
 
 
+        [StringLength(50)]
+        public string NumeroRastreo { get; set; } = string.Empty;
+
+
         //Enum
-        [Required]
-        public int Estado { get; set; }
+        public EstadoPaquete Estado { get; set; }
 
 
         [Required]
         public DateTime Fecha { get; set; }
+
 
     }
 }

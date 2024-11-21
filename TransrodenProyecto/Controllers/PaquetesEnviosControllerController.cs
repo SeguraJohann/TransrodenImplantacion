@@ -17,7 +17,8 @@ namespace TransrodenProyecto.Controllers
         {
             var viewModel = new PaqueteEnvioViewModel
             {
-                Paquetes = db.Paquetes.Where(p => p.Origen == OrigenPaquete.PerezZeledon && p.Estado == EstadoPaquete.BodegaSJ && p.Domicilio == true).ToList(),
+                Paquetes = db.Paquetes.Where(p => p.Origen == OrigenPaquete.PerezZeledon && p.Estado == EstadoPaquete.BodegaSJ && p.Domicilio == true && p.Carga.Estado == EstadoCarga.Recibido
+                || p.Origen == OrigenPaquete.PerezZeledon && p.Estado == EstadoPaquete.Reenvio && p.Domicilio == true && p.Carga.Estado == EstadoCarga.Recibido).ToList(),
                 Envios = db.Envios.Include(c => c.Usuario).Where(c => c.Estado == EstadoEnvio.BodegaSJ).ToList()
 
             };
@@ -30,7 +31,8 @@ namespace TransrodenProyecto.Controllers
         {
             var viewModel = new PaqueteEnvioViewModel
             {
-                Paquetes = db.Paquetes.Where(p => p.Origen == OrigenPaquete.SanJose && p.Estado == EstadoPaquete.BodegaPZ && p.Domicilio == true).ToList(),
+                Paquetes = db.Paquetes.Where(p => p.Origen == OrigenPaquete.SanJose && p.Estado == EstadoPaquete.BodegaPZ && p.Domicilio == true && p.Carga.Estado == EstadoCarga.Recibido
+                || p.Origen == OrigenPaquete.SanJose && p.Estado == EstadoPaquete.Reenvio && p.Domicilio == true && p.Carga.Estado == EstadoCarga.Recibido).ToList(),
                 Envios = db.Envios.Include(c => c.Usuario).Where(c => c.Estado == EstadoEnvio.BodegaPZ).ToList()
 
             };
@@ -48,6 +50,9 @@ namespace TransrodenProyecto.Controllers
             return View(viewModel);
         }
 
+
+
+        //No se necesita historial
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AsignarPaqueteAEnvioSJ(List<PaqueteEnvioAsignacionViewModel> paqueteEnvioAsignaciones)
@@ -71,7 +76,7 @@ namespace TransrodenProyecto.Controllers
                     }
 
                     // Obtenie el paquete que se va asignar
-                    var paquete = db.Paquetes.FirstOrDefault(p => p.Id_Paquete == asignacion.IdPaquete && p.Estado == EstadoPaquete.BodegaSJ);
+                    var paquete = db.Paquetes.FirstOrDefault(p => p.Id_Paquete == asignacion.IdPaquete && p.Estado == EstadoPaquete.BodegaSJ || p.Id_Paquete == asignacion.IdPaquete && p.Estado == EstadoPaquete.Reenvio);
                     if (paquete == null)
                     {
                         continue;
@@ -90,6 +95,9 @@ namespace TransrodenProyecto.Controllers
             return RedirectToAction("DomicilioSJCarga");
         }
 
+
+
+        //No se necesita historial
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AsignarPaqueteAEnvioPZ(List<PaqueteEnvioAsignacionViewModel> paqueteEnvioAsignaciones)
@@ -113,7 +121,7 @@ namespace TransrodenProyecto.Controllers
                     }
 
                     // Obtenie el paquete que se va asignar
-                    var paquete = db.Paquetes.FirstOrDefault(p => p.Id_Paquete == asignacion.IdPaquete && p.Estado == EstadoPaquete.BodegaPZ);
+                    var paquete = db.Paquetes.FirstOrDefault(p => p.Id_Paquete == asignacion.IdPaquete && p.Estado == EstadoPaquete.BodegaPZ || p.Id_Paquete == asignacion.IdPaquete && p.Estado == EstadoPaquete.Reenvio);
                     if (paquete == null)
                     {
                         continue;
@@ -231,12 +239,23 @@ namespace TransrodenProyecto.Controllers
                     }
                     else if (envio.Estado == EstadoEnvio.EnTransito)
                     {
-                        paquete.Estado = EstadoPaquete.EnTransito;
+                        paquete.Estado = EstadoPaquete.Domicilio; // Enum de transito domicilio para la vista de rastreo
                     }
                     else if (envio.Estado == EstadoEnvio.Entregado)
                     {
                         paquete.Estado = EstadoPaquete.Entregado;
                     }
+
+                    var nuevoRastreo = new Historial
+                    {
+                        Id_Paquete = paquete.Id_Paquete,
+                        Estado = paquete.Estado,
+                        NumeroRastreo = paquete.NumeroRastreo,
+                        Fecha = DateTime.Now
+                    };
+
+                    db.Historiales.Add(nuevoRastreo);
+
                 }
 
                 db.SaveChanges();
@@ -288,12 +307,23 @@ namespace TransrodenProyecto.Controllers
                     }
                     else if (envio.Estado == EstadoEnvio.EnTransito)
                     {
-                        paquete.Estado = EstadoPaquete.EnTransito;
+                        paquete.Estado = EstadoPaquete.Domicilio;
                     }
                     else if (envio.Estado == EstadoEnvio.Entregado)
                     {
                         paquete.Estado = EstadoPaquete.Entregado;
                     }
+
+                    var nuevoRastreo = new Historial
+                    {
+                        Id_Paquete = paquete.Id_Paquete,
+                        Estado = paquete.Estado,
+                        NumeroRastreo = paquete.NumeroRastreo,
+                        Fecha = DateTime.Now
+                    };
+
+                    db.Historiales.Add(nuevoRastreo);
+
                 }
 
                 db.SaveChanges();
@@ -305,6 +335,9 @@ namespace TransrodenProyecto.Controllers
 
             return RedirectToAction("DomicilioPZCarga");
         }
+
+
+        // No esta en funcion de momento
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -351,6 +384,17 @@ namespace TransrodenProyecto.Controllers
                     {
                         paquete.Estado = EstadoPaquete.Entregado;
                     }
+
+                    var nuevoRastreo = new Historial
+                    {
+                        Id_Paquete = paquete.Id_Paquete,
+                        Estado = paquete.Estado,
+                        NumeroRastreo = paquete.NumeroRastreo,
+                        Fecha = DateTime.Now
+                    };
+
+                    db.Historiales.Add(nuevoRastreo);
+
                 }
 
                 db.SaveChanges();
@@ -362,14 +406,13 @@ namespace TransrodenProyecto.Controllers
 
             return RedirectToAction("VistaCargaTransito");
         }
+       
+        
         // GET: PaquetesEnviosController
         public ActionResult Index()
         {
             return View();
         }
-
-
-
 
 
 
@@ -391,7 +434,7 @@ namespace TransrodenProyecto.Controllers
             }
 
             // Se valida que el envio no tenga paquetes y si los tiene que estos esten Entregados
-            if (envio.Paquetes == null || !envio.Paquetes.Any() || envio.Paquetes.All(p => p.Estado == EstadoPaquete.Entregado))
+            if (envio.Paquetes == null || !envio.Paquetes.Any() || envio.Paquetes.All(p => p.Estado == EstadoPaquete.Entregado) || envio.Paquetes.All(p => p.Estado == EstadoPaquete.NoEntregado))
             {
 
                 if (Enum.TryParse<EstadoEnvio>(nuevoEstado, out var estadoResult))
@@ -416,7 +459,7 @@ namespace TransrodenProyecto.Controllers
 
 
 
-
+        /*
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ActualizarEstadoPaquete(int idPaquete, string nuevoEstado)
@@ -437,19 +480,200 @@ namespace TransrodenProyecto.Controllers
 
             paquete.Estado = (EstadoPaquete)Enum.Parse(typeof(EstadoPaquete), nuevoEstado);
 
+
+
+
             if (paquete.Estado == EstadoPaquete.Entregado)
             {
                 paquete.fecha_entrega = DateTime.Now;
             }
 
+
+            var nuevoRastreo = new Historial
+            {
+                Id_Paquete = paquete.Id_Paquete,
+                Estado = paquete.Estado,
+                NumeroRastreo = paquete.NumeroRastreo,
+                Fecha = DateTime.Now
+            };
+
+            db.Historiales.Add(nuevoRastreo);
+
+
             db.SaveChanges();
+
 
 
             TempData["Success"] = "El estado del paquete se ha actualizado correctamente.";
             //return RedirectToAction("PaquetesBodegaSJ");
             //Redirige a la vista desde donde fue accionado el metodo
             return Redirect(Request.UrlReferrer.ToString());
+        }*/
+
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ActualizarEstadoPaquete(int idPaquete, string nuevoEstado, string cedulaReceptor = null)
+        {
+            if (string.IsNullOrEmpty(nuevoEstado))
+            {
+                TempData["Error"] = "Seleccione un estado válido.";
+                return Redirect(Request.UrlReferrer.ToString());
+            }
+
+            var paquete = db.Paquetes.Find(idPaquete);
+            if (paquete == null)
+            {
+                TempData["Error"] = "Paquete no encontrado.";
+                return Redirect(Request.UrlReferrer.ToString());
+            }
+
+            var estadoEnum = (EstadoPaquete)Enum.Parse(typeof(EstadoPaquete), nuevoEstado);
+
+            if (estadoEnum == EstadoPaquete.Entregado)
+            {
+                if (string.IsNullOrEmpty(cedulaReceptor) || !cedulaReceptor.Equals(paquete.CedulaReceptor, StringComparison.OrdinalIgnoreCase))
+                {
+                    TempData["Error"] = "La cédula ingresada no coincide con la registrada para este paquete.";
+                    return Redirect(Request.UrlReferrer.ToString());
+                }
+
+                paquete.fecha_entrega = DateTime.Now;
+            }
+
+            paquete.Estado = estadoEnum;
+
+            var nuevoRastreo = new Historial
+            {
+                Id_Paquete = paquete.Id_Paquete,
+                Estado = paquete.Estado,
+                NumeroRastreo = paquete.NumeroRastreo,
+                Fecha = DateTime.Now
+            };
+
+            db.Historiales.Add(nuevoRastreo);
+            db.SaveChanges();
+
+            TempData["Success"] = "El estado del paquete se ha actualizado correctamente.";
+            return Redirect(Request.UrlReferrer.ToString());
         }
+
+
+
+
+
+
+
+        // Paquete rechazado que necesita ser reenviado
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ReenvioPZ(int idPaquete, int idEnvio)
+        {
+
+            //Se busca primero el paquete
+            var paquete = db.Paquetes.FirstOrDefault(p => p.Id_Paquete == idPaquete && p.Id_Envio == idEnvio);
+            var envio = db.Envios.FirstOrDefault(c => c.Id_Envio.Equals(idEnvio));
+
+
+            if (paquete == null)
+            {
+                return HttpNotFound("El paquete no fue encontrado o no pertenece a la carga especificada.");
+            }
+
+
+            // Aqui vuelve a pasar a nulo (estado original del campo)
+            paquete.Id_Envio = null;
+
+
+            // Poner el estado original del paquete
+            if (paquete.Origen == OrigenPaquete.SanJose)
+            {
+                paquete.Estado = EstadoPaquete.Reenvio;
+            }
+            else if (paquete.Origen == OrigenPaquete.PerezZeledon)
+            {
+                paquete.Estado = EstadoPaquete.Reenvio;
+            }
+            else
+            {
+                paquete.Estado = EstadoPaquete.SinAsignar;
+            }
+
+            //Se guarda en el historial
+            var nuevoRastreo = new Historial
+            {
+                Id_Paquete = paquete.Id_Paquete,
+                Estado = paquete.Estado,
+                NumeroRastreo = paquete.NumeroRastreo,
+                Fecha = DateTime.Now
+            };
+
+            db.Historiales.Add(nuevoRastreo);
+
+
+            db.SaveChanges();
+
+            return RedirectToAction("PaquetesRechazoPZ", "PaquetesCargasController");
+        }
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ReenvioSJ(int idPaquete, int idEnvio)
+        {
+
+            //Se busca primero el paquete
+            var paquete = db.Paquetes.FirstOrDefault(p => p.Id_Paquete == idPaquete && p.Id_Envio == idEnvio);
+            var envio = db.Envios.FirstOrDefault(c => c.Id_Envio.Equals(idEnvio));
+
+
+            if (paquete == null)
+            {
+                return HttpNotFound("El paquete no fue encontrado o no pertenece a la carga especificada.");
+            }
+
+
+            // Aqui vuelve a pasar a nulo (estado original del campo)
+            paquete.Id_Envio = null;
+
+
+            // Poner el estado original del paquete
+            if (paquete.Origen == OrigenPaquete.SanJose)
+            {
+                paquete.Estado = EstadoPaquete.Reenvio;
+            }
+            else if (paquete.Origen == OrigenPaquete.PerezZeledon)
+            {
+                paquete.Estado = EstadoPaquete.Reenvio;
+            }
+            else
+            {
+                paquete.Estado = EstadoPaquete.SinAsignar;
+            }
+
+            //Se guarda en el historial
+            var nuevoRastreo = new Historial
+            {
+                Id_Paquete = paquete.Id_Paquete,
+                Estado = paquete.Estado,
+                NumeroRastreo = paquete.NumeroRastreo,
+                Fecha = DateTime.Now
+            };
+
+            db.Historiales.Add(nuevoRastreo);
+
+
+            db.SaveChanges();
+
+            return RedirectToAction("PaquetesRechazoSJ", "PaquetesCargasController");
+        }
+
+
+
 
 
 

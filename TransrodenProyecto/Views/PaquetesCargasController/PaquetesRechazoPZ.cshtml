@@ -5,6 +5,7 @@
     Layout = null;
 }
 
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -188,136 +189,82 @@
         </div>
     </div>
     <!-- Navbar -->
-
-    @{
-        var sedeUser = Session["Sede"] != null ? (Sede)Session["Sede"] : Sede.SanJose;
-    }
-
-
-<div class="container mt-5">
-    <h1 class="text-center">Cargas y Envios Domicilio en Transito</h1>
-    <br>
-    <br/>
-
-    <h2>Cargas en Transito!!</h2>
-    <br>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id Carga</th>
-                <th>Origen</th>
-                <th>Transportista</th>
-                <th>Estado</th>
-                <th>Paquetes Asignados</th>
-                <th>Ver Paquetes</th>
-                <th>Cambiar Estado</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var carga in Model.Cargas)
-            {
-                <tr>
-                    <td>@carga.Id_Carga</td>
-                    <td>@carga.Origen</td>
-                    <td>@carga.Usuario.Nombre</td>
-                    <td>@carga.Estado.ToString()</td>
-                    <td>@carga.NumeroPaquetes</td>
-                    <td>
-                        <a href="@Url.Action("CargaPaquetesView", "PaquetesCargasController", new { idCarga = carga.Id_Carga })" class="btn btn-success">
-                            Ver Paquetes
-                        </a>
-                    </td>
-                    <td>
-                        @using (Html.BeginForm("ActualizarEstadoCargaGlobal", "PaquetesCargasController", FormMethod.Post))
-                        {
-                            @Html.AntiForgeryToken()
-                            @Html.Hidden("idCarga", carga.Id_Carga)
-
-                            <select name="nuevoEstado" class="form-control">
-                                <option value="">Estado</option>
-                                <option value="BodegaSJ">BodegaSJ</option>
-                                <option value="BodegaPZ">BodegaPZ</option>
-                                <option value="EnTransito">EnTransito</option>
-                            </select>
-
-                            <button type="submit" class="btn btn-primary mt-2">Actualizar</button>
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    <br>
-</div>
-
-
-    <br>
-
-    <!-- Aqui van los envios en transito -->
     <div class="container mt-5">
-
-        
-        <h2>Envios Domicilio en Transito!!</h2>
+        <h3 class="text-center">Paquetes no entregados(Domicilio) en Bodega Perez Zeledon</h3>
         <br>
 
         <table class="table">
             <thead>
                 <tr>
-                    <th>Id Envio</th>
-                    <th>Transportista</th>
+                    <th>Numero de Rastreo</th>
+                    <th>Emisor</th>
+                    <th>Receptor</th>
+                    <th>Cedula Receptor</th>
+                    <th>Domicilio</th>
+                    <th>Pago</th>
                     <th>Estado</th>
-                    <th>Paquetes Asignados</th>
-                    <th>Ver Paquetes</th>
-                    <!--<th>Cambiar Estado</th>-->
+                    <th>Entregar</th>
+                    <th>Accion</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var envio in Model.Envios)
+                @foreach (var paquete in Model.Paquetes)
                 {
                     <tr>
-                        <td>@envio.Id_Envio</td>
-                        <td>@envio.Usuario.Nombre</td>
-                        <td>@envio.Estado.ToString()</td>
-                        <td>@envio.NumeroPaquetes</td>
+                        <td>@paquete.NumeroRastreo</td>
+                        <td>@paquete.NombreEmisor</td>
+                        <td>@paquete.NombreReceptor</td>
+                        <td>@paquete.CedulaReceptor</td>
                         <td>
-                            <a href="@Url.Action("EnvioPaquetes", "PaquetesEnviosController", new { idEnvio = envio.Id_Envio })" class="btn btn-success">
-                                Ver Paquetes
-                            </a>
+                            @if (paquete.Domicilio)
+                            {
+                                <i class="fas fa-check"></i>
+                            }
+                            else
+                            {
+                                <i class="far fa-times-circle"></i>
+                            }
                         </td>
-                        <!--
-                     <td>
-                        @using (Html.BeginForm("ActualizarEstadoEnvioGlobal", "PaquetesEnviosController", FormMethod.Post))
-                        {
-                            @Html.AntiForgeryToken()
-                            @Html.Hidden("idEnvio", envio.Id_Envio)
+                        <td>
+                            @if (@paquete.Pago)
+                            {
+                                <i class="fas fa-check"></i>
+                            }
+                            else
+                            {
+                                <i class="far fa-times-circle"></i>
+                            }
+                        </td>
+                        <td>@paquete.Estado.ToString()</td>
+                        <td>
+                            @using (Html.BeginForm("ActualizarEstadoPaquete", "PaquetesCargasController", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("idPaquete", paquete.Id_Paquete)
 
-                            <select name="nuevoEstado" class="form-control">
-                                <option value="">Estado</option>
-                                <option value="BodegaSJ">BodegaSJ</option>
-                                <option value="BodegaPZ">BodegaPZ</option>
-                                <option value="EnTransito">EnTransito</option>
-                                <option value="Entregado">Entregado</option>
-                            </select>
+                                <select name="nuevoEstado" class="form-control">
+                                    <option value="">Estado</option>
+                                    <option value="Entregado">Entregado</option>
+                                </select>
 
-                            <button type="submit" class="btn btn-primary mt-2">Actualizar</button>
-                        }
-                    </td>
-                    -->
+                                <button type="submit" class="btn btn-success mt-2">Actualizar</button>
+                            }
+                        </td>
+                        <td>
+                            @using (Html.BeginForm("ReenvioPZ", "PaquetesEnviosController", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("idPaquete", paquete.Id_Paquete)
+                                @Html.Hidden("idEnvio", paquete.Envio.Id_Envio)
+                                <button type="submit" class="btn btn-danger">Reenvio</button>
+                            }
+                        </td>
+
                     </tr>
-
                 }
-                </tbody>
-            </table>
-
-        </div>
-
-
-    <br>
-    <br>
-
-
-
+            </tbody>
+        </table>
+    </div>
 
 
     <!-- Footer Start -->

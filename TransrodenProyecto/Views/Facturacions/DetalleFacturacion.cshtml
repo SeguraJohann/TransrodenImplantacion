@@ -307,7 +307,11 @@
 
         </div>
 
-        <a href="@Url.Action("Index", "Facturacions")" class="btn btn-primary">Volver a la lista de facturaciones</a>
+
+        <p>
+            @Html.ActionLink("Ir a Paquetes", "Index", "Paquetes", null, new { @class = "btn btn-primary" }) |
+            @Html.ActionLink("Ir a Facturas", "Index", "Facturacions", null, new { @class = "btn btn-danger" })
+        </p>
 
     </div>
     <br>
