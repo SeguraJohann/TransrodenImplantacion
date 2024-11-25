@@ -859,7 +859,7 @@ namespace TransrodenProyecto.Controllers
             if (usuarioRol == Rol.Transportista)
             {
                 //MUESTRA LAS CARGAS QUE SON PERTENECIENTES AL TRANSPORTISTA Y TENGAN ESTADO ENTRANSITO, BODEGASJ, BODEGAPZ
-                cargas = db.Cargas.Include(c => c.Usuario).Where(c => c.Id_Usuario == usuarioId && c.Estado == EstadoCarga.Entregado).ToList();
+                cargas = db.Cargas.Include(c => c.Usuario).Where(c => c.Id_Usuario == usuarioId && c.Estado == EstadoCarga.Entregado && c.Id_Usuario == usuarioId || c.Estado == EstadoCarga.Recibido).ToList();
             }
 
             var viewModel = new PaqueteCargaViewModel

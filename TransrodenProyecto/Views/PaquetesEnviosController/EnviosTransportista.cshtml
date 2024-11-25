@@ -170,7 +170,7 @@
                         <td>@envio.Estado.ToString()</td>
                         <td>@envio.NumeroPaquetes</td>
                         <td>
-                            <a href="@Url.Action("EnvioPaquetesTransport", "PaquetesEnviosController", new { idEnvio = envio.Id_Envio })" class="btn btn-success">
+                            <a href="@Url.Action("EnvioPaquetesTransport", "PaquetesEnviosController", new { idEnvio = envio.Id_Envio })" class="btn btn-primary">
                                 Ver
                             </a>
                         </td>
@@ -193,9 +193,14 @@
                 }
             </tbody>
         </table>
+
+        <br>
+        <a href="@Url.Action("AsignTransportista", "Admin")" class="btn btn-success">
+            Regresar
+        </a>
     </div>
     <br>
-    <br>
+
 
 
 

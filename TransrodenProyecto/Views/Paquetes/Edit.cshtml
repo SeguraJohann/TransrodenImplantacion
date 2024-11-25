@@ -67,18 +67,7 @@
                             <a class="btn p-0 text-primary me-3" href="#"><i class="fab fa-twitter"></i></a>
                             <a class="btn p-0 text-primary me-3" href="#"><i class="fab fa-instagram"></i></a>
                         </div>
-                        <!--
-                        <div class="dropdown ms-3">
-                            <a href="#" class="dropdown-toggle text-dark" data-bs-toggle="dropdown"><small><i class="fas fa-globe-europe text-primary me-2"></i> English</small></a>
-                            <div class="dropdown-menu rounded">
-                                <a href="#" class="dropdown-item">English</a>
-                                <a href="#" class="dropdown-item">Bangla</a>
-                                <a href="#" class="dropdown-item">French</a>
-                                <a href="#" class="dropdown-item">Spanish</a>
-                                <a href="#" class="dropdown-item">Arabic</a>
-                            </div>
-                        </div>
-                        -->
+
                     </div>
                 </div>
             </div>
@@ -152,10 +141,10 @@
                                 <span class="dropdown-toggle">Contabilidad</span>
                             </a>
                             <div class="dropdown-menu">
-                                <a href="@Url.Action("ContaAdminAnual", "Modulo5")" class="dropdown-item">Consulta Diaria</a>
-                                <a href="@Url.Action("ContaAdminSemanal", "Modulo5")" class="dropdown-item">Consulta Semanal</a>
-                                <a href="@Url.Action("ContaAdminMensual", "Modulo5")" class="dropdown-item">Consulta Mensual</a>
-                                <a href="@Url.Action("ContaAdminAnual", "Modulo5")" class="dropdown-item">Consulta Anual</a>
+                                <a href="@Url.Action("ContabilidadDiaria", "Contabilidad")" class="dropdown-item">Consulta Diaria</a>
+                                <a href="@Url.Action("ContabilidadSemanal", "Contabilidad")" class="dropdown-item">Consulta Semanal</a>
+                                <a href="@Url.Action("ContabilidadMensual", "Contabilidad")" class="dropdown-item">Consulta Mensual</a>
+                                <a href="@Url.Action("ContabilidadAnual", "Contabilidad")" class="dropdown-item">Consulta Anual</a>
                             </div>
                         </div>
 
@@ -219,6 +208,15 @@
 
                 <!-- Comboboxes -->
                 <!-- Tipo del Paquete -->
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Cliente, "Tipo de Cliente", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EnumDropDownListFor(model => model.Cliente, new { @class = "form-control", id = "tipoCliente" })
+                        @Html.ValidationMessageFor(model => model.Cliente, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
                 <div class="form-group">
                     @Html.LabelFor(model => model.Tipo, "Tipo del Paquete", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
@@ -256,7 +254,7 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" id="cedulaEmisor-group" style="display: none;">
                     @Html.LabelFor(model => model.CedulaEmisor, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         @Html.EditorFor(model => model.CedulaEmisor, new { htmlAttributes = new { @class = "form-control" } })
@@ -306,13 +304,13 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Cantidad, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Cantidad, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Cantidad, "", new { @class = "text-danger" })
-                    </div>
-                </div>
+                @*<div class="form-group">
+                        @Html.LabelFor(model => model.Cantidad, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Cantidad, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Cantidad, "", new { @class = "text-danger" })
+                        </div>
+                    </div>*@
 
                 <div class="form-group">
                     @Html.LabelFor(model => model.Pago, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -422,49 +420,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!--
-                    <div class="pt-5" style="border-top: 1px solid rgba(255, 255, 255, 0.08);">
-                        <div class="row g-0">
-                            <div class="col-12">
-                                <div class="row g-4">
-                                    <div class="col-lg-6 col-xl-4">
-                                        <div class="d-flex">
-                                            <div class="btn-xl-square bg-primary text-white rounded p-4 me-4">
-                                                <i class="fas fa-map-marker-alt fa-2x"></i>
-                                            </div>
-                                            <div>
-                                                <h4 class="text-white">Address</h4>
-                                                <p class=" text-white mb-0">San Isidro - Perez Zeledon, Barrio Mexico - San Jose</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 col-xl-4">
-                                        <div class="d-flex">
-                                            <div class="btn-xl-square bg-primary text-white rounded p-4 me-4">
-                                                <i class="fas fa-envelope fa-2x"></i>
-                                            </div>
-                                            <div>
-                                                <h4 class="text-white">Correo</h4>
-                                                <p class="text-white mb-0">transroden@gmail.com</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 col-xl-4">
-                                        <div class="d-flex">
-                                            <div class="btn-xl-square bg-primary text-white rounded p-4 me-4">
-                                                <i class="fa fa-phone-alt fa-2x"></i>
-                                            </div>
-                                            <div>
-                                                <h4 class="text-white">Telefono</h4>
-                                                <p class=" text-white mb-0">+506 0000 0000</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
             </div>
         </div>
@@ -504,6 +459,45 @@
 
     <!-- Template Javascript -->
     <script src="~/Content/assets/js/main.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            function toggleDireccion() {
+                if ($('#pago-checkbox').is(':checked')) {
+                    $('#direccion-group').show();
+                    $('#telefono-group').show();
+                } else {
+                    $('#direccion-group').hide();
+                    $('#telefono-group').hide();
+                }
+            }
+
+            toggleDireccion();
+
+            $('#pago-checkbox').change(function () {
+                toggleDireccion();
+            });
+
+            function toggleCedulaFields() {
+                var selectedValue = $("#tipoCliente").val();
+                if (selectedValue == 1) {
+                    $("#cedulaEmisor-group").hide();
+                    $("#cedulaReceptor-group").hide();
+                } else {
+                    $("#cedulaEmisor-group").show();
+                    $("#cedulaReceptor-group").show();
+                }
+            }
+
+            // Ejecutar la función al cargar la página para establecer el estado inicial
+            toggleCedulaFields();
+
+            // Ejecutar la función cada vez que se cambie el valor del dropdown
+            $("#tipoCliente").change(function () {
+                toggleCedulaFields();
+            });
+        });
+    </script>
 </body>
 
 </html>

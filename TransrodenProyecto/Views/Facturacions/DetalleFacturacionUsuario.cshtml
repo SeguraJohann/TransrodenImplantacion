@@ -115,7 +115,7 @@
                         </a>
                         <!-- <a href="about.html" class="nav-item nav-link">Sucursales</a> -->
 
-                        <a href="@Url.Action("Tracking", "Home")" class="nav-item nav-link">
+                        <a href="@Url.Action("Rastreo", "HistorialPaquete")" class="nav-item nav-link">
                             <span class="d-block"><i class="fas fa-truck"></i></span>
                             Rastreo
                         </a>
@@ -123,7 +123,7 @@
                         <!-- <a href="service.html" class="nav-item nav-link">Rastreo</a> -->
 
                         <div class="nav-item dropdown">
-                            <a href="#" class="nav-item active" data-bs-toggle="dropdown">
+                            <a href="#" class="nav-link" data-bs-toggle="dropdown">
                                 <span class="dropdown-toggle">Servicios</span>
                             </a>
                             <div class="dropdown-menu">
@@ -175,7 +175,7 @@
     <div class="container mt-5">
 
 
-        <h2>Detalles de la Facturación</h2>
+        <h2 class="text-center">Detalles de la Facturación</h2>
 
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -213,8 +213,8 @@
                     <dt>Rastreo N°:</dt>
                     <dd>@Model.Paquete.NumeroRastreo</dd>
 
-                    <dt>Cantidad:</dt>
-                    <dd>@Model.Paquete.Cantidad</dd>
+                    @*<dt>Cantidad:</dt>
+                    <dd>@Model.Paquete.Cantidad</dd>*@
 
                     <dt>Emisor:</dt>
                     <dd>@Model.Paquete.NombreEmisor</dd>
@@ -230,9 +230,9 @@
                 </dl>
             </div>
         </div>
+        <br>
 
-
-        <a href="@Url.Action("FacturasUsuario", "Facturacions")" class="btn btn-primary">Volver a la lista de facturaciones</a>
+        <a href="@Url.Action("FacturasUsuario", "Facturacions")" class="btn btn-primary">Volver a Mis Facturas</a>
     </div>
     <br>
 

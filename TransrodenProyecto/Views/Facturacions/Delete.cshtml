@@ -152,10 +152,10 @@
                                 <span class="dropdown-toggle">Contabilidad</span>
                             </a>
                             <div class="dropdown-menu">
-                                <a href="@Url.Action("ContaAdminAnual", "Modulo5")" class="dropdown-item">Consulta Diaria</a>
-                                <a href="@Url.Action("ContaAdminSemanal", "Modulo5")" class="dropdown-item">Consulta Semanal</a>
-                                <a href="@Url.Action("ContaAdminMensual", "Modulo5")" class="dropdown-item">Consulta Mensual</a>
-                                <a href="@Url.Action("ContaAdminAnual", "Modulo5")" class="dropdown-item">Consulta Anual</a>
+                                <a href="@Url.Action("ContabilidadDiaria", "Contabilidad")" class="dropdown-item">Consulta Diaria</a>
+                                <a href="@Url.Action("ContabilidadSemanal", "Contabilidad")" class="dropdown-item">Consulta Semanal</a>
+                                <a href="@Url.Action("ContabilidadMensual", "Contabilidad")" class="dropdown-item">Consulta Mensual</a>
+                                <a href="@Url.Action("ContabilidadAnual", "Contabilidad")" class="dropdown-item">Consulta Anual</a>
                             </div>
                         </div>
 
@@ -231,6 +231,14 @@
                 </dd>
 
                 <dt>
+                    @Html.DisplayNameFor(model => model.Total)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Total)
+                </dd>
+
+                <dt>
                     @Html.DisplayNameFor(model => model.Precio)
                 </dt>
 
@@ -244,14 +252,6 @@
 
                 <dd>
                     @Html.DisplayFor(model => model.Iva)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.Total)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.Total)
                 </dd>
 
                 <dt>

@@ -132,10 +132,20 @@
                         </a>
                         <!-- <a href="blog.html" class="nav-item nav-link">Nosotros</a> -->
 
-                        <a href="@Url.Action("Login","Cuenta")" class="nav-item nav-link active" id="contact">
-                            <span class="d-block"><i class="fas fa-user"></i></span>
-                            Cuenta
-                        </a>
+                        @if (Session["Usuario"] != null)
+                        {
+                            <a href="@Url.Action("Logout", "Cuenta")" class="nav-item nav-link">
+                                <span class="d-block"><i class="fas fa-sign-out-alt"></i></span>
+                                @Session["Usuario"]
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Login", "Cuenta")" class="nav-item nav-link">
+                                <span class="d-block"><i class="fas fa-user"></i></span>
+                                Cuenta
+                            </a>
+                        }
 
                     </div>
                 </div>
@@ -170,7 +180,7 @@
             <thead>
                 <tr>
                     <th>Paquete</th>
-                    <th>Cantidad</th>
+                    @*<th>Cantidad</th>*@
                     <th>Precio</th>
                     <th>IVA</th>
                     <th>Total</th>
@@ -183,7 +193,7 @@
                 {
                     <tr>
                         <td>@factura.Paquete.Descripcion</td>
-                        <td>@factura.Cantidad</td>
+                        @*<td>@factura.Cantidad</td>*@
                         <td>@factura.Precio</td>
                         <td>@factura.Iva</td>
                         <td>@factura.Total</td>

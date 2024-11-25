@@ -151,10 +151,10 @@
                                 <span class="dropdown-toggle">Contabilidad</span>
                             </a>
                             <div class="dropdown-menu">
-                                <a href="@Url.Action("ContaAdminAnual", "Modulo5")" class="dropdown-item">Consulta Diaria</a>
-                                <a href="@Url.Action("ContaAdminSemanal", "Modulo5")" class="dropdown-item">Consulta Semanal</a>
-                                <a href="@Url.Action("ContaAdminMensual", "Modulo5")" class="dropdown-item">Consulta Mensual</a>
-                                <a href="@Url.Action("ContaAdminAnual", "Modulo5")" class="dropdown-item">Consulta Anual</a>
+                                <a href="@Url.Action("ContabilidadDiaria", "Contabilidad")" class="dropdown-item">Consulta Diaria</a>
+                                <a href="@Url.Action("ContabilidadSemanal", "Contabilidad")" class="dropdown-item">Consulta Semanal</a>
+                                <a href="@Url.Action("ContabilidadMensual", "Contabilidad")" class="dropdown-item">Consulta Mensual</a>
+                                <a href="@Url.Action("ContabilidadAnual", "Contabilidad")" class="dropdown-item">Consulta Anual</a>
                             </div>
                         </div>
 
@@ -195,9 +195,11 @@
 
 
 <div class="container mt-5">
+    <h1 class="text-center">Cargas y Envios Domicilio en Transito</h1>
+    <br>
+    <br/>
 
-
-    <h1>Cargas En Transito!!</h1>
+    <h2>Cargas en Transito!!</h2>
     <br>
 
     <table class="table">
@@ -255,7 +257,8 @@
     <!-- Aqui van los envios en transito -->
     <div class="container mt-5">
 
-        <h3>Envios</h3>
+        
+        <h2>Envios Domicilio en Transito!!</h2>
         <br>
 
         <table class="table">
@@ -283,30 +286,31 @@
                             </a>
                         </td>
                         <!--
-                         <td>
-                            @using (Html.BeginForm("ActualizarEstadoEnvioGlobal", "PaquetesEnviosController", FormMethod.Post))
-                            {
-                                @Html.AntiForgeryToken()
-                                @Html.Hidden("idEnvio", envio.Id_Envio)
+                     <td>
+                        @using (Html.BeginForm("ActualizarEstadoEnvioGlobal", "PaquetesEnviosController", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("idEnvio", envio.Id_Envio)
 
-                                <select name="nuevoEstado" class="form-control">
-                                    <option value="">Estado</option>
-                                    <option value="BodegaSJ">BodegaSJ</option>
-                                    <option value="BodegaPZ">BodegaPZ</option>
-                                    <option value="EnTransito">EnTransito</option>
-                                    <option value="Entregado">Entregado</option>
-                                </select>
+                            <select name="nuevoEstado" class="form-control">
+                                <option value="">Estado</option>
+                                <option value="BodegaSJ">BodegaSJ</option>
+                                <option value="BodegaPZ">BodegaPZ</option>
+                                <option value="EnTransito">EnTransito</option>
+                                <option value="Entregado">Entregado</option>
+                            </select>
 
-                                <button type="submit" class="btn btn-primary mt-2">Actualizar</button>
-                            }
-                        </td>
-                        -->
+                            <button type="submit" class="btn btn-primary mt-2">Actualizar</button>
+                        }
+                    </td>
+                    -->
                     </tr>
-                }
-            </tbody>
-        </table>
 
-    </div>
+                }
+                </tbody>
+            </table>
+
+        </div>
 
 
     <br>

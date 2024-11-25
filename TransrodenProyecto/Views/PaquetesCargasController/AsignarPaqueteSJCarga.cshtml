@@ -151,10 +151,10 @@
                                 <span class="dropdown-toggle">Contabilidad</span>
                             </a>
                             <div class="dropdown-menu">
-                                <a href="@Url.Action("ContaAdminAnual", "Modulo5")" class="dropdown-item">Consulta Diaria</a>
-                                <a href="@Url.Action("ContaAdminSemanal", "Modulo5")" class="dropdown-item">Consulta Semanal</a>
-                                <a href="@Url.Action("ContaAdminMensual", "Modulo5")" class="dropdown-item">Consulta Mensual</a>
-                                <a href="@Url.Action("ContaAdminAnual", "Modulo5")" class="dropdown-item">Consulta Anual</a>
+                                <a href="@Url.Action("ContabilidadDiaria", "Contabilidad")" class="dropdown-item">Consulta Diaria</a>
+                                <a href="@Url.Action("ContabilidadSemanal", "Contabilidad")" class="dropdown-item">Consulta Semanal</a>
+                                <a href="@Url.Action("ContabilidadMensual", "Contabilidad")" class="dropdown-item">Consulta Mensual</a>
+                                <a href="@Url.Action("ContabilidadAnual", "Contabilidad")" class="dropdown-item">Consulta Anual</a>
                             </div>
                         </div>
 
@@ -189,6 +189,9 @@
     </div>
     <!-- Navbar -->
 
+
+    <h1 class="text-center">Cargas San Jose</h1>
+
     <br>
     <div class="d-flex justify-content-center ">
         <a href="@Url.Action("VistaCargaTransito", "PaquetesCargasController")" class="btn btn-primary">
@@ -196,11 +199,11 @@
         </a>
     </div>
 
-
+    <br>
 
 
     <div class="container mt-5">
-        
+
 
         <div class="row">
             <!-- Lista de paquetes-->
@@ -289,7 +292,7 @@
                                 </td>
                                 <td>
                                     <a href="@Url.Action("Edit", "Cargas", new { id = carga.Id_Carga })" class="btn btn-primary">
-                                        Editar 
+                                        Editar
                                     </a>
                                     <a href="@Url.Action("Delete", "Cargas", new { id = carga.Id_Carga })" class="btn btn-danger">
                                         Borrar

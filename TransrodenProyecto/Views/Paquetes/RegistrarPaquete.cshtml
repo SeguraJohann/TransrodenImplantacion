@@ -66,18 +66,7 @@
                             <a class="btn p-0 text-primary me-3" href="#"><i class="fab fa-twitter"></i></a>
                             <a class="btn p-0 text-primary me-3" href="#"><i class="fab fa-instagram"></i></a>
                         </div>
-                        <!--
-                        <div class="dropdown ms-3">
-                            <a href="#" class="dropdown-toggle text-dark" data-bs-toggle="dropdown"><small><i class="fas fa-globe-europe text-primary me-2"></i> English</small></a>
-                            <div class="dropdown-menu rounded">
-                                <a href="#" class="dropdown-item">English</a>
-                                <a href="#" class="dropdown-item">Bangla</a>
-                                <a href="#" class="dropdown-item">French</a>
-                                <a href="#" class="dropdown-item">Spanish</a>
-                                <a href="#" class="dropdown-item">Arabic</a>
-                            </div>
-                        </div>
-                        -->
+     
                     </div>
                 </div>
             </div>
@@ -151,10 +140,10 @@
                                 <span class="dropdown-toggle">Contabilidad</span>
                             </a>
                             <div class="dropdown-menu">
-                                <a href="@Url.Action("ContaAdminAnual", "Modulo5")" class="dropdown-item">Consulta Diaria</a>
-                                <a href="@Url.Action("ContaAdminSemanal", "Modulo5")" class="dropdown-item">Consulta Semanal</a>
-                                <a href="@Url.Action("ContaAdminMensual", "Modulo5")" class="dropdown-item">Consulta Mensual</a>
-                                <a href="@Url.Action("ContaAdminAnual", "Modulo5")" class="dropdown-item">Consulta Anual</a>
+                                <a href="@Url.Action("ContabilidadDiaria", "Contabilidad")" class="dropdown-item">Consulta Diaria</a>
+                                <a href="@Url.Action("ContabilidadSemanal", "Contabilidad")" class="dropdown-item">Consulta Semanal</a>
+                                <a href="@Url.Action("ContabilidadMensual", "Contabilidad")" class="dropdown-item">Consulta Mensual</a>
+                                <a href="@Url.Action("ContabilidadAnual", "Contabilidad")" class="dropdown-item">Consulta Anual</a>
                             </div>
                         </div>
 
@@ -208,10 +197,20 @@
 
             <!-- lado derecho-->
             <div class="col-md-6">
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Cliente, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EnumDropDownListFor(model => model.Cliente, "Selecciona el Tipo Cliente", new { @class = "form-control", id = "tipoCliente" })
+                        @Html.ValidationMessageFor(model => model.Cliente, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
                 <div class="form-group">
                     @Html.LabelFor(model => model.Tipo, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.EnumDropDownListFor(model => model.Tipo, "Selecciona el Tipo de Paquete", new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EnumDropDownListFor(model => model.Tipo, "Selecciona el Tipo de Paquete", new { @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.Tipo, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -244,7 +243,7 @@
                 </div>
 
 
-                <div class="form-group">
+                <div class="form-group" id="cedulaEmisor-group" style="display: none;">
                     @Html.LabelFor(model => model.CedulaEmisor, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         @Html.EditorFor(model => model.CedulaEmisor, new { htmlAttributes = new { @class = "form-control" } })
@@ -261,7 +260,7 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" id="cedulaReceptor-group" style="display: none;">
                     @Html.LabelFor(model => model.CedulaReceptor, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         @Html.EditorFor(model => model.CedulaReceptor, new { htmlAttributes = new { @class = "form-control" } })
@@ -269,13 +268,13 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Cantidad, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Cantidad, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Cantidad, "", new { @class = "text-danger" })
-                    </div>
-                </div>
+                @*<div class="form-group">
+            @Html.LabelFor(model => model.Cantidad, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Cantidad, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Cantidad, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
 
                 <div class="form-group">
                     @Html.LabelFor(model => model.Pago, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -288,7 +287,7 @@
                 </div>
                 <br>
 
-             </div> <!-- FINAL -->
+            </div> <!-- FINAL -->
 
             <!-- Lado izquierdo-->
             <div class="col-md-6">
@@ -447,6 +446,24 @@
 
             $('#pago-checkbox').change(function () {
                 toggleDireccion();
+            });
+
+            function toggleCedulaFields() {
+                var selectedValue = $("#tipoCliente").val();
+                if (selectedValue == 1) {
+                    $("#cedulaEmisor-group").hide();
+                } else {
+                    $("#cedulaEmisor-group").show();
+                    $("#cedulaReceptor-group").show();
+                }
+            }
+
+            // Ejecutar la función al cargar la página para establecer el estado inicial
+            toggleCedulaFields();
+
+            // Ejecutar la función cada vez que se cambie el valor del dropdown
+            $("#tipoCliente").change(function () {
+                toggleCedulaFields();
             });
         });
     </script>
