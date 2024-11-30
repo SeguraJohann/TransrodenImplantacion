@@ -273,7 +273,6 @@
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Content\assets\img\Thumbs.db" />
     <Content Include="Content\assets\lib\owlcarousel\LICENSE" />
     <Content Include="Content\assets\lib\waypoints\links.php" />
     <Content Include="Content\assets\scss\bootstrap.scss" />
@@ -358,6 +357,7 @@
     <Content Include="Content\assets\scss\bootstrap\scss\_type.scss" />
     <Content Include="Content\assets\scss\bootstrap\scss\_utilities.scss" />
     <Content Include="Content\assets\scss\bootstrap\scss\_variables.scss" />
+    <None Include="Properties\PublishProfiles\TransrodenServer - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -472,6 +472,7 @@
     <Content Include="Views\HistorialPaquete\Rastreo.cshtml" />
     <Content Include="Views\PaquetesCargasController\PaquetesRechazoSJ.cshtml" />
     <Content Include="Views\PaquetesCargasController\PaquetesRechazoPZ.cshtml" />
+    <Content Include="Views\Facturacions\ImprimirFactura.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
