@@ -475,6 +475,7 @@
     <Content Include="Views\PaquetesCargasController\PaquetesRechazoSJ.cshtml" />
     <Content Include="Views\PaquetesCargasController\PaquetesRechazoPZ.cshtml" />
     <Content Include="Views\Shared\_BodegueroNav.cshtml" />
+    <Content Include="Views\Shared\_FooterBodeguero.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_ClienteNav.cshtml" />
