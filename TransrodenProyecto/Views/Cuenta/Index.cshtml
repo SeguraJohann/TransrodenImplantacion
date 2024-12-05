@@ -1,0 +1,96 @@
+﻿@model TransrodenProyecto.Models.Usuario
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Mi Perfil</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="~/Content/assets/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h2 class="mb-4">Mi Perfil</h2>
+
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success">
+                        @TempData["SuccessMessage"]
+                    </div>
+                }
+
+                @using (Html.BeginForm("Index", "Cuenta", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.Id_Usuario)
+                    @Html.HiddenFor(model => model.Rol)
+                    @Html.HiddenFor(model => model.Sede)
+
+                    <div class="form-group mb-3">
+                        @Html.LabelFor(model => model.Nombre, "Nombre", new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group mb-3">
+                        @Html.LabelFor(model => model.Apellidos, "Apellidos", new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Apellidos, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Apellidos, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group mb-3">
+                        @Html.LabelFor(model => model.Cedula, "Cédula", new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Cedula, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Cedula, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group mb-3">
+                        @Html.LabelFor(model => model.Correo, "Correo", new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Correo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Correo, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group mb-3">
+                        @Html.LabelFor(model => model.Telefono, "Teléfono", new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Telefono, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group mb-3">
+                        @Html.LabelFor(model => model.Clave, "Contraseña", new { @class = "control-label" })
+                        @Html.Password("Clave", null, new
+                        {
+                            @class = "form-control",
+                            placeholder = "Dejar en blanco para mantener la contraseña actual",
+                            data_val = "false" // Esto deshabilita la validación del lado del cliente
+                        })
+                        <small class="text-muted">Dejar en blanco si no desea cambiar la contraseña</small>
+                    </div>
+
+                    <div class="form-check mb-3">
+                        @Html.CheckBoxFor(model => model.NotifCli, new { @class = "form-check-input" })
+                        @Html.LabelFor(model => model.NotifCli, "Recibir notificaciones", new { @class = "form-check-label" })
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                        @Html.ActionLink("Volver", "Index", "Home", null, new { @class = "btn btn-secondary" })
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    @Scripts.Render("~/bundles/jqueryval")
+</body>
+</html>

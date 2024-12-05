@@ -472,6 +472,7 @@
     <Content Include="Views\HistorialPaquete\Rastreo.cshtml" />
     <Content Include="Views\PaquetesCargasController\PaquetesRechazoSJ.cshtml" />
     <Content Include="Views\PaquetesCargasController\PaquetesRechazoPZ.cshtml" />
+    <Content Include="Views\Cuenta\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
