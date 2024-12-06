@@ -1,23 +1,113 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Mail;
 using System.Net;
+using System.Net.Mail;
+using System.Data.Entity;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using TransrodenProyecto.Models;
-using TransrodenProyecto.Controllers;
 using System.Threading;
 
 namespace TransrodenProyecto.Controllers
 {
     public class CuentaController : Controller
     {
-
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        // GET: Cuenta/Index
+        [HttpGet]
+        public ActionResult Index()
+        {
+            if (Session["UsuarioId"] == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            int usuarioId = (int)Session["UsuarioId"];
+            Usuario usuario = db.Usuarios.Find(usuarioId);
+
+            if (usuario == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(usuario);
+        }
+
+        // POST: Cuenta/Index
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Index([Bind(Include = "Id_Usuario,Nombre,Apellidos,Cedula,Correo,Clave,Telefono,NotifCli")] Usuario usuarioActualizado)
+        {
+            // Remover la validación de la clave
+            ModelState.Remove("Clave");
+
+            if (!ModelState.IsValid)
+            {
+                return View(usuarioActualizado);
+            }
+
+            if (Session["UsuarioId"] == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            int usuarioId = (int)Session["UsuarioId"];
+            var usuarioExistente = db.Usuarios.Find(usuarioId);
+
+            if (usuarioExistente == null)
+            {
+                return HttpNotFound();
+            }
+
+            // Si no se proporcionó una nueva clave, mantener la existente
+            if (string.IsNullOrEmpty(usuarioActualizado.Clave))
+            {
+                usuarioActualizado.Clave = usuarioExistente.Clave; // Mantener la clave existente
+            }
+            else
+            {
+                usuarioActualizado.Clave = ConvertirSha256(usuarioActualizado.Clave); // Encriptar la nueva clave
+            }
+
+            // Actualizar los demás campos si han cambiado
+            if (usuarioActualizado.Nombre != usuarioExistente.Nombre)
+                usuarioExistente.Nombre = usuarioActualizado.Nombre;
+
+            if (usuarioActualizado.Apellidos != usuarioExistente.Apellidos)
+                usuarioExistente.Apellidos = usuarioActualizado.Apellidos;
+
+            if (usuarioActualizado.Cedula != usuarioExistente.Cedula)
+                usuarioExistente.Cedula = usuarioActualizado.Cedula;
+
+            if (usuarioActualizado.Correo != usuarioExistente.Correo)
+                usuarioExistente.Correo = usuarioActualizado.Correo;
+
+            if (usuarioActualizado.Telefono != usuarioExistente.Telefono)
+                usuarioExistente.Telefono = usuarioActualizado.Telefono;
+
+            usuarioExistente.NotifCli = usuarioActualizado.NotifCli;
+
+            try
+            {
+                db.Entry(usuarioExistente).State = EntityState.Modified;
+                db.SaveChanges();
+
+                // Actualizar el nombre en la sesión
+                Session["Usuario"] = $"{usuarioExistente.Nombre}";
+
+                TempData["SuccessMessage"] = "Perfil actualizado correctamente.";
+                return RedirectToAction("Index");
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError("", "Error al actualizar el perfil. Por favor, inténtelo de nuevo.");
+                return View(usuarioActualizado);
+            }
+        }
 
         [HttpGet]
         public ActionResult Register()
@@ -25,13 +115,11 @@ namespace TransrodenProyecto.Controllers
             return View();
         }
 
-
         [HttpGet]
         public ActionResult Login()
         {
             return View();
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -39,7 +127,6 @@ namespace TransrodenProyecto.Controllers
         {
             if (ModelState.IsValid)
             {
-
                 var existingUser = db.Usuarios.FirstOrDefault(u => u.Correo == usuario.Correo);
                 if (existingUser != null)
                 {
@@ -48,10 +135,7 @@ namespace TransrodenProyecto.Controllers
                 }
 
                 usuario.Clave = ConvertirSha256(usuario.Clave);
-
-
                 usuario.Rol = Rol.Cliente;
-
 
                 db.Usuarios.Add(usuario);
                 db.SaveChanges();
@@ -63,7 +147,6 @@ namespace TransrodenProyecto.Controllers
             return View(usuario);
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Login(string correo, string clave)
@@ -72,36 +155,40 @@ namespace TransrodenProyecto.Controllers
 
             if (usuario != null)
             {
-                // Verificar si el usuario está bloqueado
                 if (usuario.LockoutEnabled && usuario.LockoutEnd.HasValue && usuario.LockoutEnd.Value > DateTime.Now)
                 {
                     ModelState.AddModelError("", "Su cuenta está bloqueada. Intente de nuevo más tarde.");
                     return View();
                 }
 
-                // Encriptar la clave ingresada
                 string ClaveEncryt = ConvertirSha256(clave);
 
-                // Verificar si la clave es correcta
                 if (usuario.Clave == ClaveEncryt)
                 {
-                    // Restablecer el contador de intentos fallidos
                     usuario.AccessFailedCount = 0;
                     usuario.LockoutEnd = null;
                     db.SaveChanges();
 
-                    // Iniciar sesión
                     Session["UsuarioId"] = usuario.Id_Usuario;
                     Session["UsuarioRol"] = usuario.Rol;
                     Session["Usuario"] = $"{usuario.Nombre}";
 
+                    //Esto es por si el usuario no tiene sede
+                    if (usuario.Sede != null)
+                    {
+                        Session["Sede"] = usuario.Sede;
+                    }
+                    else
+                    {
+                        Session["Sede"] = Sede.SanJose; // Valor por defecto
+                    }
+
                     // Almacenar la sede si el usuario es Bodeguero
                     if (usuario.Rol == Rol.Bodeguero)
                     {
-                        Session["Sede"] = usuario.Sede; // Asegúrate de que el modelo Usuario tenga la propiedad Sede
+                        Session["Sede"] = usuario.Sede;
                     }
 
-                    // Redireccionar según el rol del usuario
                     if (usuario.Rol == Rol.Administrador || usuario.Rol == Rol.Bodeguero)
                     {
                         return RedirectToAction("IndexAdmin", "Admin");
@@ -117,10 +204,8 @@ namespace TransrodenProyecto.Controllers
                 }
                 else
                 {
-                    // Incrementar el contador de intentos fallidos
                     usuario.AccessFailedCount++;
 
-                    // Si el usuario ha fallado 2 veces, bloquear la cuenta por 1 minuto
                     if (usuario.AccessFailedCount >= 2)
                     {
                         usuario.LockoutEnd = DateTime.Now.AddMinutes(1);
@@ -138,21 +223,14 @@ namespace TransrodenProyecto.Controllers
             return View();
         }
 
-
-
         public ActionResult Logout()
         {
             Session.Clear();
             return RedirectToAction("Login", "Cuenta");
         }
 
-
-
         public static string ConvertirSha256(string texto)
         {
-            //using System.Text;
-            //USAR LA REFERENCIA DE "System.Security.Cryptography"
-
             StringBuilder Sb = new StringBuilder();
             using (SHA256 hash = SHA256Managed.Create())
             {
@@ -166,6 +244,13 @@ namespace TransrodenProyecto.Controllers
             return Sb.ToString();
         }
 
-
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }

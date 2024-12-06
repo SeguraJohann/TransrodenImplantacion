@@ -439,6 +439,8 @@
     <Content Include="Views\RecuperarClave\RecuperarClave.cshtml" />
     <Content Include="Views\Facturacions\DetalleFacturacionUsuario.cshtml" />
     <Content Include="Views\RecuperarClave\CambioClave.cshtml" />
+    <Content Include="Views\Marketing\Marketing.cshtml" />
+    <Content Include="Views\Marketing\CorreoEnviado.cshtml" />
     <Content Include="Views\PaquetesCargasController\AsignarPaqueteSJCarga.cshtml" />
     <Content Include="Views\PaquetesCargasController\AsignarPaquetePZCarga.cshtml" />
     <Content Include="Views\Cargas\Create.cshtml" />
@@ -503,9 +505,22 @@
     <Content Include="Views\CalcEntregas\Index.cshtml" />
     <Content Include="Views\AdminCalculadora\AdminCalculadora.cshtml" />
     <Content Include="Views\Paquetes\RegistrarPaqueteAdmin.cshtml" />
+    <Content Include="Views\Shared\_BodegueroNav.cshtml" />
+    <Content Include="Views\Shared\_FooterBodeguero.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\_ClienteNav.cshtml" />
+    <Content Include="Views\Shared\_TransportistaNav.cshtml" />
+    <Content Include="Views\Shared\_AdminNav.cshtml" />
+    <Content Include="Views\Shared\_FooterCliente.cshtml" />
+    <Content Include="Views\Shared\_FooterAdmin.cshtml" />
+    <Content Include="Views\Shared\_FooterTransportista.cshtml" />
+    <Content Include="Views\Cuenta\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Base\" />
+    <Folder Include="Views\PaquetesEnvios\" />
     <Folder Include="Views\View\" />
   </ItemGroup>
   <ItemGroup>
