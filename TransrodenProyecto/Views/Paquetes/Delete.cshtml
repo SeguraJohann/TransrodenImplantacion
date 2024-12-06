@@ -66,7 +66,7 @@
                             <a class="btn p-0 text-primary me-3" href="#"><i class="fab fa-twitter"></i></a>
                             <a class="btn p-0 text-primary me-3" href="#"><i class="fab fa-instagram"></i></a>
                         </div>
-    
+
                     </div>
                 </div>
             </div>
@@ -179,167 +179,212 @@
     <!-- Navbar -->
 
 
+
+
     <div class="container mt-5">
-
-
+        <h2 class="text-center">Detalles del Paquete</h2>
+        <br>
         <h3>Estas seguro de eliminar este paquete?</h3>
-        <div>
-
-            <hr />
-            <dl class="dl-horizontal">
-                <dt>
-                    @Html.DisplayNameFor(model => model.Carga.Id_Carga)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.Carga.Id_Carga)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.Envio.Id_Envio)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.Envio.Id_Envio)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.NumeroRastreo)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.NumeroRastreo)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.Cliente)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.Cliente)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.Tipo)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.Tipo)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.NombreEmisor)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.NombreEmisor)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.CedulaEmisor)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.CedulaEmisor)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.NombreReceptor)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.NombreReceptor)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.CedulaReceptor)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.CedulaReceptor)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.Domicilio)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.Domicilio)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.Direccion)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.Direccion)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.TelefonoDomicilio)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.TelefonoDomicilio)
-                </dd>
-
-                @*<dt>
-            @Html.DisplayNameFor(model => model.Cantidad)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Cantidad)
-        </dd>*@
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.Pago)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.Pago)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.Descripcion)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.Descripcion)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.fecha_recibo)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.fecha_recibo)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(model => model.fecha_entrega)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(model => model.fecha_entrega)
-                </dd>
-
-            </dl>
-            <br>
-
-            @using (Html.BeginForm())
-            {
-                @Html.AntiForgeryToken()
-
-                <div class="form-actions no-color">
-                    <input type="submit" value="Delete" class="btn btn-danger" /> |
-                    @Html.ActionLink("Regresar a la lista", "Index")
-                </div>
-            }
-        </div>
         <br>
 
+        <div class="form-horizontal">
+
+
+            <div class="row">
+
+                <!-- Columna izquierda -->
+                <div class="col-md-6">
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                        </div>
+                        <div class="panel-body">
+                            <dl class="dl-horizontal">
+
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Carga.Id_Carga)
+                                </dt>
+
+                                <dd>
+                                    @Html.DisplayFor(model => model.Carga.Id_Carga)
+                                </dd>
+
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Envio.Id_Envio)
+                                </dt>
+
+                                <dd>
+                                    @Html.DisplayFor(model => model.Envio.Id_Envio)
+                                </dd>
+
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.NumeroRastreo)
+                                </dt>
+
+                                <dd>
+                                    @Html.DisplayFor(model => model.NumeroRastreo)
+                                </dd>
+
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Cliente)
+                                </dt>
+
+                                <dd>
+                                    @Html.DisplayFor(model => model.Cliente)
+                                </dd>
+
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Tipo)
+                                </dt>
+
+                                <dd>
+                                    @Html.DisplayFor(model => model.Tipo)
+                                </dd>
+
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.NombreEmisor)
+                                </dt>
+
+                                <dd>
+                                    @Html.DisplayFor(model => model.NombreEmisor)
+                                </dd>
+
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.CedulaEmisor)
+                                </dt>
+
+                                <dd>
+                                    @Html.DisplayFor(model => model.CedulaEmisor)
+                                </dd>
+
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.NombreReceptor)
+                                </dt>
+
+                                <dd>
+                                    @Html.DisplayFor(model => model.NombreReceptor)
+
+
+
+
+                            </dl>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+                <!-- Columna derecha -->
+                <div class="col-md-6">
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                        </div>
+                        <div class="panel-body">
+                            <dl class="dl-horizontal">
+
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.CedulaReceptor)
+                                </dt>
+
+                                <dd>
+                                    @Html.DisplayFor(model => model.CedulaReceptor)
+                                </dd>
+
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Domicilio)
+                                </dt>
+
+                                <dd>
+                                    @Html.DisplayFor(model => model.Domicilio)
+                                </dd>
+
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Direccion)
+                                </dt>
+
+                                <dd>
+                                    @Html.DisplayFor(model => model.Direccion)
+                                </dd>
+
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.TelefonoDomicilio)
+                                </dt>
+
+                                <dd>
+                                    @Html.DisplayFor(model => model.TelefonoDomicilio)
+                                </dd>
+
+                                @*<dt>
+                                        @Html.DisplayNameFor(model => model.Cantidad)
+                                    </dt>
+
+                                    <dd>
+                                        @Html.DisplayFor(model => model.Cantidad)
+                                    </dd>*@
+
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Pago)
+                                </dt>
+
+                                <dd>
+                                    @Html.DisplayFor(model => model.Pago)
+                                </dd>
+
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Descripcion)
+                                </dt>
+
+                                <dd>
+                                    @Html.DisplayFor(model => model.Descripcion)
+                                </dd>
+
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.fecha_recibo)
+                                </dt>
+
+                                <dd>
+                                    @Html.DisplayFor(model => model.fecha_recibo)
+                                </dd>
+
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.fecha_entrega)
+                                </dt>
+
+                                <dd>
+                                    @Html.DisplayFor(model => model.fecha_entrega)
+                                </dd>
+
+
+
+                            </dl>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <br>
+
+
+
+        </div>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions no-color">
+                <input type="submit" value="Borrar" class="btn btn-danger" /> |
+                @Html.ActionLink("Regresar a la lista", "Index")
+            </div>
+        }
 
     </div>
+    <br>
+
+
 
 
 

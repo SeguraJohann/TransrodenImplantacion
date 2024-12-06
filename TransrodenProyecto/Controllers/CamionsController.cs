@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using TransrodenProyecto.Models;
+using TransrodenProyecto.ViewModels;
 
 namespace TransrodenProyecto.Controllers
 {
@@ -21,45 +22,88 @@ namespace TransrodenProyecto.Controllers
             return View(camiones.ToList());
         }
 
-        // GET: Camions/Details/5
+
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            // Obtén el camión
             Camion camion = db.Camiones.Find(id);
             if (camion == null)
             {
                 return HttpNotFound();
             }
-            return View(camion);
+
+
+            var kilometrajes = db.Kilometrajes.Where(k => k.Id_Camion == id).OrderByDescending(k => k.Registro).ToList();
+
+
+            CamionKmViewModel viewModel = new CamionKmViewModel
+            {
+                CamionActual = camion,
+                Kilometros = kilometrajes
+            };
+
+            return View(viewModel);
         }
+
+
 
         // GET: Camions/Create
         public ActionResult Create()
         {
-            ViewBag.Id_Usuario = new SelectList(db.Usuarios, "Id_Usuario", "Nombre");
+
+            var transportista = db.Usuarios.Where(u => u.Rol == Rol.Transportista).Select(u => new SelectListItem{ Value = u.Id_Usuario.ToString(), Text = u.Nombre + " " + u.Apellidos }).ToList();
+
+
+            transportista.Insert(0, new SelectListItem
+            {
+                Value = "",
+                Text = "Sin Transportista"
+            });
+
+            ViewBag.Id_Usuario = transportista;
             return View();
         }
+
+
+
 
         // POST: Camions/Create
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id_Camion,Id_Usuario,Marca,Modelo,Tipo,Disponible")] Camion camion)
+        public ActionResult Create([Bind(Include = "Id_Camion,Id_Usuario,Marca,Modelo,TipoCarga,Disponible")] Camion camion)
         {
             if (ModelState.IsValid)
             {
+                if (string.IsNullOrEmpty(camion.Id_Usuario.ToString()))
+                {
+                    camion.Id_Usuario = null;
+                }
+
                 db.Camiones.Add(camion);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.Id_Usuario = new SelectList(db.Usuarios, "Id_Usuario", "Nombre", camion.Id_Usuario);
+            // Por si no se selecciono un valor valido, se pone el valor de nulo
+            var transportista = db.Usuarios .Where(u => u.Rol == Rol.Transportista).Select(u => new SelectListItem{ Value = u.Id_Usuario.ToString(), Text = u.Nombre + " " + u.Apellidos }).ToList();
+
+            transportista.Insert(0, new SelectListItem{ Value = "", Text = "Sin Usuario" });
+
+
+
+            ViewBag.Id_Usuario = transportista;
             return View(camion);
         }
+
+
+
 
         // GET: Camions/Edit/5
         public ActionResult Edit(int? id)
@@ -73,26 +117,55 @@ namespace TransrodenProyecto.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.Id_Usuario = new SelectList(db.Usuarios, "Id_Usuario", "Nombre", camion.Id_Usuario);
+
+            var transportista = db.Usuarios.Where(u => u.Rol == Rol.Transportista).Select(u => new SelectListItem { Value = u.Id_Usuario.ToString(), Text = u.Nombre + " " + u.Apellidos }).ToList();
+
+
+            transportista.Insert(0, new SelectListItem
+            {
+                Value = "",
+                Text = "Sin Transportista"
+            });
+
+            ViewBag.Id_Usuario = transportista;
+
             return View(camion);
         }
+
+
 
         // POST: Camions/Edit/5
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id_Camion,Id_Usuario,Marca,Modelo,Tipo,Disponible")] Camion camion)
+        public ActionResult Edit([Bind(Include = "Id_Camion,Id_Usuario,Marca,Modelo,TipoCarga,Disponible")] Camion camion)
         {
             if (ModelState.IsValid)
             {
+
+                if (string.IsNullOrEmpty(camion.Id_Usuario.ToString()))
+                {
+                    camion.Id_Usuario = null;
+                }
+
                 db.Entry(camion).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.Id_Usuario = new SelectList(db.Usuarios, "Id_Usuario", "Nombre", camion.Id_Usuario);
+
+            // Por si no se selecciono un valor valido, se pone el valor de nulo
+            var transportista = db.Usuarios.Where(u => u.Rol == Rol.Transportista).Select(u => new SelectListItem { Value = u.Id_Usuario.ToString(), Text = u.Nombre + " " + u.Apellidos }).ToList();
+
+            transportista.Insert(0, new SelectListItem { Value = "", Text = "Sin Usuario" });
+
+
+            ViewBag.Id_Usuario = transportista;
             return View(camion);
         }
+
+
+
 
         // GET: Camions/Delete/5
         public ActionResult Delete(int? id)
@@ -108,6 +181,8 @@ namespace TransrodenProyecto.Controllers
             }
             return View(camion);
         }
+
+
 
         // POST: Camions/Delete/5
         [HttpPost, ActionName("Delete")]
