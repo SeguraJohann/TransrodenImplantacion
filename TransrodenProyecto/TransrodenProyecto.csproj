@@ -484,6 +484,7 @@
     <Content Include="Views\Shared\_FooterCliente.cshtml" />
     <Content Include="Views\Shared\_FooterAdmin.cshtml" />
     <Content Include="Views\Shared\_FooterTransportista.cshtml" />
+    <Content Include="Views\Cuenta\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
