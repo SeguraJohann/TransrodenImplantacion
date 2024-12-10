@@ -38,11 +38,11 @@ namespace TransrodenProyecto.Controllers
         }
 
         // POST: Cuenta/Index
+        // POST: Cuenta/Index
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Index([Bind(Include = "Id_Usuario,Nombre,Apellidos,Cedula,Correo,Clave,Telefono,NotifCli")] Usuario usuarioActualizado)
         {
-            // Remover la validación de la clave
             ModelState.Remove("Clave");
 
             if (!ModelState.IsValid)
@@ -63,42 +63,27 @@ namespace TransrodenProyecto.Controllers
                 return HttpNotFound();
             }
 
-            // Si no se proporcionó una nueva clave, mantener la existente
-            if (string.IsNullOrEmpty(usuarioActualizado.Clave))
-            {
-                usuarioActualizado.Clave = usuarioExistente.Clave; // Mantener la clave existente
-            }
-            else
-            {
-                usuarioActualizado.Clave = ConvertirSha256(usuarioActualizado.Clave); // Encriptar la nueva clave
-            }
-
-            // Actualizar los demás campos si han cambiado
-            if (usuarioActualizado.Nombre != usuarioExistente.Nombre)
-                usuarioExistente.Nombre = usuarioActualizado.Nombre;
-
-            if (usuarioActualizado.Apellidos != usuarioExistente.Apellidos)
-                usuarioExistente.Apellidos = usuarioActualizado.Apellidos;
-
-            if (usuarioActualizado.Cedula != usuarioExistente.Cedula)
-                usuarioExistente.Cedula = usuarioActualizado.Cedula;
-
-            if (usuarioActualizado.Correo != usuarioExistente.Correo)
-                usuarioExistente.Correo = usuarioActualizado.Correo;
-
-            if (usuarioActualizado.Telefono != usuarioExistente.Telefono)
-                usuarioExistente.Telefono = usuarioActualizado.Telefono;
-
+            // Actualizar los campos
+            usuarioExistente.Nombre = usuarioActualizado.Nombre;
+            usuarioExistente.Apellidos = usuarioActualizado.Apellidos;
+            usuarioExistente.Cedula = usuarioActualizado.Cedula;
+            usuarioExistente.Correo = usuarioActualizado.Correo;
+            usuarioExistente.Telefono = usuarioActualizado.Telefono;
             usuarioExistente.NotifCli = usuarioActualizado.NotifCli;
+
+            // Manejar la actualización de la contraseña
+            if (!string.IsNullOrEmpty(usuarioActualizado.Clave))
+            {
+                usuarioExistente.Clave = ConvertirSha256(usuarioActualizado.Clave);
+            }
+            // Si la clave está vacía, no se hace nada y se mantiene la existente
 
             try
             {
                 db.Entry(usuarioExistente).State = EntityState.Modified;
                 db.SaveChanges();
 
-                // Actualizar el nombre en la sesión
                 Session["Usuario"] = $"{usuarioExistente.Nombre}";
-
                 TempData["SuccessMessage"] = "Perfil actualizado correctamente.";
                 return RedirectToAction("Index");
             }
