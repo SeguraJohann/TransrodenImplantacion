@@ -34,9 +34,23 @@
             margin-top: 10px;
         }
     </style>
+    <script>
+        function printInvoice() {
+            // Ocultar elementos no imprimibles
+            const noPrintElements = document.querySelectorAll('.no-print, .print-button');
+            noPrintElements.forEach(element => element.style.display = 'none');
+
+            // Imprimir la página
+            window.print();
+
+            // Mostrar elementos no imprimibles después de imprimir
+            noPrintElements.forEach(element => element.style.display = 'block');
+        }
+    </script>
 </head>
 <body>
     <div class="content">
+        <div class="title">Transroden Express S.A</div>
         <div class="title">Detalles de la Factura</div>
         <div class="item">Factura N°: @Model.Id_Facturacion</div>
         <div class="item">Fecha de Emisión: @Model.Fecha.ToString("dd/MM/yyyy")</div>
@@ -45,7 +59,6 @@
         <div class="item total">Total: @String.Format("{0:C}", Model.Total)</div>
     </div>
 
-    <input type="button" value="Imprimir" onclick="javascript:window.print()" />
+    <input type="button" class="print-button no-print" value="Imprimir" onclick="printInvoice()" />
 </body>
 </html>
-
