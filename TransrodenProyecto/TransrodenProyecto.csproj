@@ -476,6 +476,8 @@
     <Content Include="Views\PaquetesCargasController\PaquetesRechazoPZ.cshtml" />
     <Content Include="Views\Shared\_BodegueroNav.cshtml" />
     <Content Include="Views\Shared\_FooterBodeguero.cshtml" />
+    <Content Include="Views\Shared\_SinSesionNav.cshtml" />
+    <Content Include="Views\Shared\_FooterSinSesion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_ClienteNav.cshtml" />

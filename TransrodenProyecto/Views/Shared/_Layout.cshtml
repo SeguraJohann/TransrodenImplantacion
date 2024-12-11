@@ -1,5 +1,4 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <title>@ViewBag.Title</title>
@@ -16,17 +15,14 @@
         {
             @Html.Partial("~/Views/Shared/_AdminNav.cshtml") //Administrador
         }
-
         else if (rol == TransrodenProyecto.Models.Rol.Bodeguero)    // Bodeguero
         {
             @Html.Partial("~/Views/Shared/_BodegueroNav.cshtml")// Bodeguero
         }
-
         else if (rol == TransrodenProyecto.Models.Rol.Transportista) //Transportista
         {
             @Html.Partial("~/Views/Shared/_TransportistaNav.cshtml") //Transportista
         }
-
         else                                                         // Clientes
         {
             @Html.Partial("~/Views/Shared/_ClienteNav.cshtml") // Clientes
@@ -34,21 +30,15 @@
     }
     else
     {
-        @Html.Partial("~/Views/Shared/_ClienteNav.cshtml")// Clientes si no tienen sesión
+        @Html.Partial("~/Views/Shared/_SinSesionNav.cshtml")// Navegación sin sesión
     }
     <!-- Nav -->
-
-
     <!-- Body-->
     <div class="container">
         @RenderBody()
     </div>
     <!-- Body-->
-
-
-
     <!-- Footer -->
-
     @if (Session["UsuarioRol"] != null)
     {
         var rol = (TransrodenProyecto.Models.Rol)Session["UsuarioRol"];
@@ -58,17 +48,14 @@
         {
             @Html.Partial("~/Views/Shared/_FooterAdmin.cshtml") //Administrador
         }
-
         else if (rol == TransrodenProyecto.Models.Rol.Bodeguero)    // Bodeguero
         {
             @Html.Partial("~/Views/Shared/_FooterBodeguero.cshtml")// Bodeguero
         }
-
         else if (rol == TransrodenProyecto.Models.Rol.Transportista) //Transportista
         {
             @Html.Partial("~/Views/Shared/_FooterTransportista.cshtml") //Transportista
         }
-
         else                                                         // Clientes
         {
             @Html.Partial("~/Views/Shared/_FooterCliente.cshtml") // Clientes
@@ -76,9 +63,9 @@
     }
     else
     {
-        @Html.Partial("~/Views/Shared/_FooterCliente.cshtml")// Clientes si no tienen sesión
+        @Html.Partial("~/Views/Shared/_FooterSinSesion.cshtml")// Footer para usuarios sin sesión
     }
     <!-- Footer -->
 
 </body>
-    </html>
+</html>

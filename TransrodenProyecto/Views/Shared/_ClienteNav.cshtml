@@ -129,6 +129,17 @@
                             Nosotros
                         </a>
 
+                        <a href="@Url.Action("Calculadora","Calculadora")" class="nav-item nav-link">
+                            <span class="d-block"><i class="bi bi-calculator"></i></span>
+                            Calculadora
+                        </a>
+
+                        <a href="@Url.Action("Index","Cuenta")" class="nav-item nav-link">
+                            <span class="d-block"><i class="fas fa-user"></i></span>
+                            Cuenta
+                        </a>
+
+
 
                         @if (Session["Usuario"] != null)
                         {
@@ -141,7 +152,7 @@
                         {
                             <a href="@Url.Action("Login", "Cuenta")" class="nav-item nav-link">
                                 <span class="d-block"><i class="fas fa-user"></i></span>
-                                Cuenta
+                                Login
                             </a>
                         }
 

@@ -127,7 +127,15 @@
                             }
 
                             // Enlace a Cargas
-                            <a href="@urlCargas" class="nav-item nav-link">Tracking</a>
+                            <div class="nav-item dropdown">
+                                <a href="#" class="nav-link" data-bs-toggle="dropdown">
+                                    <span class="dropdown-toggle">Tracking</span>
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a href="@Url.Action("DashboardSJ", "PaquetesCargasController")" class="dropdown-item">San José</a>
+                                    <a href="@Url.Action("DashboardPZ", "PaquetesCargasController")" class="dropdown-item">Perez Zeledón</a>
+                                </div>
+                            </div>
                         }
                         else
                         {
@@ -159,6 +167,14 @@
 
                         <a href="@Url.Action("Marketing","Marketing")" class="nav-item nav-link" id="contact">
                             Mercadeo
+                        </a>
+
+                        <a href="@Url.Action("AdminCalculadora","AdminCalculadora")" class="nav-item nav-link" id="contact">
+                            Calculadora
+                        </a>
+
+                        <a href="@Url.Action("Index","Camions")" class="nav-item nav-link" id="contact">
+                            Camiones
                         </a>
 
 
