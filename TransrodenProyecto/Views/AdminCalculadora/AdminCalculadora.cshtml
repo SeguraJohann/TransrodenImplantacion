@@ -1,8 +1,9 @@
-﻿@model IEnumerable<TransrodenProyecto.Models.Camion>
+﻿@model TransrodenProyecto.ViewModels.AdminCalculadoraViewModel
 @using TransrodenProyecto.Models
 @{
     Layout = null;
 }
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -194,71 +195,118 @@
 
     <div class="container mt-5">
 
-
-        <h2 class="text-center">Lista de Camiones</h2>
-
-
-        <div class="d-flex justify-content-end mb-4">
-            <a href="@Url.Action("Create", "Camions")" class="btn btn-danger">
-                <i class="fa fa-truck"></i> Agregar Camion
-            </a>
-        </div>
-
-
+        <h2 class="text-center">Panel de Administración de Calculadora</h2>
+        <br>
+        <h3>Cajas</h3>
+        <p>
+            <a href="@Url.Action("Create", "CalcCajas")" class="btn btn-success btn-sm">Crear</a>
+        </p>
         <table class="table">
             <tr>
                 <th>
-                    Camionero Asignado
+                    Tipo
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Marca)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Modelo)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.TipoCarga)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Disponible)
+                    Costo
                 </th>
                 <th></th>
             </tr>
 
-            @foreach (var item in Model)
+            @foreach (var item in Model.Caja)
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Usuario.Nombre)
+                        @Html.DisplayFor(modelItem => item.Tipo)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Marca)
+                        @Html.DisplayFor(modelItem => item.Costo)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Modelo)
+                        <a href="@Url.Action("Edit", "CalcCajas", new { id = item.Id_Caja })" class="btn btn-primary btn-sm">Editar</a> |
+                        <!--<a href="@Url.Action("Details", "CalcCajas", new { id = item.Id_Caja })" class="btn btn-warning btn-sm">Detalles</a> |-->
+                        <a href="@Url.Action("Delete", "CalcCajas", new { id = item.Id_Caja })" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+
+
+
+                </tr>
+            }
+        </table>
+
+        <br>
+        <h3>Entregas</h3>
+        <p>
+            <a href="@Url.Action("Create", "CalcEntregas")" class="btn btn-success btn-sm">Crear</a>
+        </p>
+        <table class="table">
+            <tr>
+                <th>
+                    Tipo
+                </th>
+                <th>
+                    Tarifa
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model.Entrega)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Tipo)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.TipoCarga)
+                        @Html.DisplayFor(modelItem => item.Tarifa)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Disponible)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Editar", "Edit", new { id = item.Id_Camion }, new { @class = "btn btn-success" }) |
-                        @Html.ActionLink("Detalles", "Details", new { id = item.Id_Camion }, new { @class = "btn btn-primary" }) |
-                        @Html.ActionLink("Borrar", "Delete", new { id = item.Id_Camion }, new { @class = "btn btn-danger" })
-                        <!--
-                    <a href="@Url.Action("KmRegistro", "Kilometrajes", new { id = item.Id_Camion})" class="btn btn-primary">
-                        Agregar Kilometraje
-                    </a>
-                        -->
+                        <a href="@Url.Action("Edit", "CalcEntregas", new { id = item.Id_Entrega  })" class="btn btn-primary btn-sm">Editar</a> |
+                        <!-- <a href="@Url.Action("Details", "CalcEntregas", new { id = item.Id_Entrega  })" class="btn btn-warning btn-sm">Detalles</a> |-->
+                        <a href="@Url.Action("Delete", "CalcEntregas", new { id = item.Id_Entrega  })" class="btn btn-danger btn-sm">Delete</a>
                     </td>
                 </tr>
             }
 
         </table>
+
+
+
         <br>
+        <h3>Domicilios</h3>
+        <p>
+            <a href="@Url.Action("Create", "CalcDomicilios")" class="btn btn-success btn-sm">Crear</a>
+        </p>
+        <table class="table">
+            <tr>
+                <th>
+                    Tipo
+                </th>
+                <th>
+                    Costo
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model.Domicilio)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Costo)
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Edit", "CalcDomicilios", new { id = item.Id_Domicilio  })" class="btn btn-primary btn-sm">Editar</a> |
+                        <!--<a href="@Url.Action("Details", "CalcDomicilios", new { id = item.Id_Domicilio  })" class="btn btn-warning btn-sm">Detalles</a> | -->
+                        <a href="@Url.Action("Delete", "CalcDomicilios", new { id = item.Id_Domicilio  })" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+            }
+
+        </table>
+
     </div>
+
         <!-- Footer Start -->
         <div class="container-fluid footer py-5 wow fadeIn" data-wow-delay="0.2s">
             <div class="container py-5">

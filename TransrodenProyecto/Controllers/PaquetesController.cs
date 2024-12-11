@@ -69,6 +69,7 @@ namespace TransrodenProyecto.Controllers
             return View(paquete);
         }
 
+
         // GET: Paquetes/Details/5
         public ActionResult DetailsTransp(int? id)
         {
@@ -76,11 +77,21 @@ namespace TransrodenProyecto.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Paquete paquete = db.Paquetes.Include(p => p.Envio).FirstOrDefault(p => p.Id_Paquete == id);
+
+            // Incluimos Envio explícitamente
+            var paquete = db.Paquetes.Include(p => p.Envio).FirstOrDefault(p => p.Id_Paquete == id);
+
             if (paquete == null)
             {
                 return HttpNotFound();
             }
+
+
+            if (paquete.Envio == null)
+            {
+                paquete.Envio = new Envio();
+            }
+
             return View(paquete);
         }
 
@@ -102,8 +113,8 @@ namespace TransrodenProyecto.Controllers
             {
                 // Obtener la sede del usuario desde la sesión
                 int? sedeValue = Session["Sede"] as int?;
-                EstadoPaquete estado; // Cambiar a EstadoPaquete
-                OrigenPaquete origen; // Cambiar a OrigenPaquete
+                EstadoPaquete estado;
+                OrigenPaquete origen; 
 
 
                 if (sedeValue.HasValue)
@@ -166,6 +177,80 @@ namespace TransrodenProyecto.Controllers
 
             return View(model);
         }
+
+
+
+
+        // GET: Paquetes/RegistrarPaquete
+        public ActionResult RegistrarPaqueteAdmin()
+        {
+            return View();
+        }
+
+
+        // Crear y guardar el paquete
+        [HttpPost]
+        public async Task<ActionResult> RegistrarPaqueteAdmin(Paquete model)
+        {
+            if (ModelState.IsValid)
+            {
+
+                if (model.Origen == OrigenPaquete.PerezZeledon)
+                {
+                    model.Estado = EstadoPaquete.SinAsignarPZ;
+                }
+                else
+                {
+                    model.Estado = EstadoPaquete.SinAsignarSJ;
+                }
+
+
+                var nuevoPaquete = new Paquete
+                {
+                    NumeroRastreo = GenerarNumeroRastreo(),
+                    Cliente = model.Cliente,
+                    Tipo = model.Tipo,
+                    Origen = model.Origen,
+                    Estado = model.Estado,
+                    NombreEmisor = model.NombreEmisor,
+                    CedulaEmisor = model.CedulaEmisor,
+                    NombreReceptor = model.NombreReceptor,
+                    CedulaReceptor = model.CedulaReceptor,
+                    Domicilio = model.Domicilio,
+                    Direccion = model.Direccion,
+                    TelefonoDomicilio = model.TelefonoDomicilio,
+                    Cantidad = "1",
+                    Pago = model.Pago,
+                    Descripcion = model.Descripcion,
+                    fecha_recibo = System.DateTime.Now
+                };
+
+                db.Paquetes.Add(nuevoPaquete);
+                await db.SaveChangesAsync();
+
+
+
+                // Guardar estado en historial
+
+                var nuevoRastreo = new Historial
+                {
+                    Id_Paquete = nuevoPaquete.Id_Paquete,
+                    Estado = nuevoPaquete.Estado,
+                    NumeroRastreo = nuevoPaquete.NumeroRastreo,
+                    Fecha = DateTime.Now
+                };
+
+                db.Historiales.Add(nuevoRastreo);
+                await db.SaveChangesAsync();
+
+
+                // Redirije a Facturación
+                return RedirectToAction("GenerarFactura", "Facturacions", new { idPaquete = nuevoPaquete.Id_Paquete });
+            }
+
+            return View(model);
+        }
+
 
 
 

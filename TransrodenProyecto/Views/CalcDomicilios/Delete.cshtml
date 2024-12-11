@@ -1,8 +1,9 @@
-﻿@model IEnumerable<TransrodenProyecto.Models.Camion>
+﻿@model TransrodenProyecto.Calculadora.CalcDomicilio
 @using TransrodenProyecto.Models
 @{
     Layout = null;
 }
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -191,74 +192,44 @@
         </div>
     </div>
     <!-- Navbar -->
-
     <div class="container mt-5">
-
-
-        <h2 class="text-center">Lista de Camiones</h2>
-
-
-        <div class="d-flex justify-content-end mb-4">
-            <a href="@Url.Action("Create", "Camions")" class="btn btn-danger">
-                <i class="fa fa-truck"></i> Agregar Camion
-            </a>
-        </div>
-
-
-        <table class="table">
-            <tr>
-                <th>
-                    Camionero Asignado
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Marca)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Modelo)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.TipoCarga)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Disponible)
-                </th>
-                <th></th>
-            </tr>
-
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Usuario.Nombre)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Marca)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Modelo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TipoCarga)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Disponible)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Editar", "Edit", new { id = item.Id_Camion }, new { @class = "btn btn-success" }) |
-                        @Html.ActionLink("Detalles", "Details", new { id = item.Id_Camion }, new { @class = "btn btn-primary" }) |
-                        @Html.ActionLink("Borrar", "Delete", new { id = item.Id_Camion }, new { @class = "btn btn-danger" })
-                        <!--
-                    <a href="@Url.Action("KmRegistro", "Kilometrajes", new { id = item.Id_Camion})" class="btn btn-primary">
-                        Agregar Kilometraje
-                    </a>
-                        -->
-                    </td>
-                </tr>
-            }
-
-        </table>
+        <h3>Estas seguro de eliminar este domicilio?</h3>
         <br>
-    </div>
+        <div>
+            <h2 class="text-center">Borrar Domicilio</h2>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Nombre)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Nombre)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Costo)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Costo)
+                </dd>
+
+            </dl>
+            <br>
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-actions no-color">
+                    <input type="submit" value="Borrar" class="btn btn-danger" /> |
+                    <a href="@Url.Action("AdminCalculadora", "AdminCalculadora")" class="btn btn-primary btn-sm">Regresar</a>
+                </div>
+            }
+        </div>
+        </div>
+    <br>
+    <br>
         <!-- Footer Start -->
         <div class="container-fluid footer py-5 wow fadeIn" data-wow-delay="0.2s">
             <div class="container py-5">

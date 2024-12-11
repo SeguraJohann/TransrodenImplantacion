@@ -14,9 +14,10 @@ namespace TransrodenProyecto.Models
         public int Id_Camion { get; set; }
 
 
-        public int Id_Usuario { get; set; }
+        // Para que acepte null
+        public int? Id_Usuario { get; set; }
         public Usuario Usuario { get; set; }
-
+        
 
         [Required]
         public string Marca { get; set; }
@@ -28,9 +29,11 @@ namespace TransrodenProyecto.Models
 
         //Enum
         [Required]
-        public int Tipo { get; set; }
+        public TipoCarga TipoCarga { get; set; }
 
 
+
+        // Que no esta averiado
         [Required]
         public bool Disponible { get; set; }
     }

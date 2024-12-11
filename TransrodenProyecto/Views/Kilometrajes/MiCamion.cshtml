@@ -1,8 +1,8 @@
-﻿@model IEnumerable<TransrodenProyecto.Models.Camion>
-@using TransrodenProyecto.Models
+﻿@model TransrodenProyecto.ViewModels.CamionKmViewModel
 @{
     Layout = null;
 }
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -87,87 +87,36 @@
     <div class="container-fluid nav-bar px-0 px-lg-0 py-lg-0" id="maincontainer">
         <div class="container" id="containertop">
             <nav class="navbar navbar-expand-lg navbar-light">
-
+                <!-- <a href="#" class="navbar-brand p-0"> -->
+                <!--<h1 class="text-primary mb-0"><i class="fab fa-slack me-2"></i> LifeSure</h1> -->
                 <img src="~/Content/assets/img/Logo.png" alt="Logo" width="230" height="150">
-
+                <!-- </a> -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                     <span class="fa fa-bars"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
 
                     <div class="navbar-nav mx-0 mx-lg-auto">
-
-                        <a href="@Url.Action("IndexAdmin", "Admin")" class="nav-item nav-link active">
+                        <!-- <a href="index.html" class="nav-item nav-link active">Inicio</a> -->
+                        <a href="@Url.Action("IndexTransportista", "Admin")" class="nav-item nav-link active">
                             Inicio
                         </a>
 
-                        <a href="@Url.Action("Index","Usuarios")" class="nav-item nav-link">
-                            Usuarios
-                        </a>
 
-                        <a href="@Url.Action("Index","Paquetes")" class="nav-item nav-link">
-                            Paqueteria
-                        </a>
-
-                        @if (Session["Usuario"] != null)
-                        {
-                            // Obtener la sede del usuario desde la sesión
-                            var sedeUsuario = Session["Sede"] != null ? (Sede)Session["Sede"] : Sede.SanJose; // Valor por defecto
-
-                            // Determinar la URL según la sede
-                            string urlCargas;
-                            if (sedeUsuario == Sede.SanJose)
-                            {
-                                urlCargas = Url.Action("DashboardSJ", "PaquetesCargasController");
-                            }
-                            else if (sedeUsuario == Sede.PerezZeledon)
-                            {
-                                urlCargas = Url.Action("DashBoardPZ", "PaquetesCargasController");
-                            }
-                            else
-                            {
-                                urlCargas = "#"; // En caso de que la sede no sea válida, puedes redirigir a una página de error o similar.
-                            }
-
-                            // Enlace a Cargas
-                            <a href="@urlCargas" class="nav-item nav-link">Tracking</a>
-                        }
-                        else
-                        {
-                            <a href="@Url.Action("Login", "Cuenta")" class="nav-item nav-link">
-                                <span class="d-block"><i class="fas fa-user"></i></span>
-                                Cuenta
-                            </a>
-                        }
-
-                        <a href="@Url.Action("Index","Facturacions")" class="nav-item nav-link">
-                            Facturacion
-                        </a>
-
-                        <a href="@Url.Action("Index","Camions")" class="nav-item nav-link">
-                            Camiones
+                        <a href="@Url.Action("MiCamion", "Kilometrajes")" class="nav-item nav-link active">
+                            Mi camion
                         </a>
 
 
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link" data-bs-toggle="dropdown">
-                                <span class="dropdown-toggle">Contabilidad</span>
+                                <span class="dropdown-toggle">Tracking</span>
                             </a>
                             <div class="dropdown-menu">
-                                <a href="@Url.Action("ContabilidadDiaria", "Contabilidad")" class="dropdown-item">Consulta Diaria</a>
-                                <a href="@Url.Action("ContabilidadSemanal", "Contabilidad")" class="dropdown-item">Consulta Semanal</a>
-                                <a href="@Url.Action("ContabilidadMensual", "Contabilidad")" class="dropdown-item">Consulta Mensual</a>
-                                <a href="@Url.Action("ContabilidadAnual", "Contabilidad")" class="dropdown-item">Consulta Anual</a>
+                                <a href="@Url.Action("AsignTransportista", "Admin")" class="dropdown-item">Tracking Admin</a>
+                                <a href="@Url.Action("TrackingAdmin", "Modulo4")" class="dropdown-item">Rastreo Paquete</a>
                             </div>
                         </div>
-
-
-
-
-                        <a href="@Url.Action("Marketing","Marketing")" class="nav-item nav-link" id="contact">
-                            Mercadeo
-                        </a>
-
 
 
                         @if (Session["Usuario"] != null)
@@ -184,7 +133,6 @@
                                 Cuenta
                             </a>
                         }
-
                     </div>
                 </div>
             </nav>
@@ -192,73 +140,71 @@
     </div>
     <!-- Navbar -->
 
+
     <div class="container mt-5">
 
 
-        <h2 class="text-center">Lista de Camiones</h2>
+        <h2 class="text-center">Mi Camión</h2>
 
 
-        <div class="d-flex justify-content-end mb-4">
-            <a href="@Url.Action("Create", "Camions")" class="btn btn-danger">
-                <i class="fa fa-truck"></i> Agregar Camion
-            </a>
+        @using (Html.BeginForm("CambiarCamion", "Kilometrajes", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <label for="Id_Camion">Cambiar de camión:</label>
+                @Html.DropDownList("Id_Camion", Model.CamionesDisponibles, "Seleccione un camión", new { @class = "form-control" })
+            </div>
+            <br>
+            <button type="submit" class="btn btn-danger">Cambiar</button>
+        }
+
+
+        <br>
+        <br>
+
+        <div>
+            <h4>Camión Actual</h4>
+            @if (Model.CamionActual != null)
+            {
+                <p><strong>@Model.CamionActual.Marca - @Model.CamionActual.Modelo</strong></p>
+                <a href="@Url.Action("KmRegistro", "Kilometrajes", new { id = Model.CamionActual.Id_Camion })" class="btn btn-primary">
+                    Agregar Kilometraje
+                </a>
+            }
+            else
+            {
+                <p><em>No tiene un camión asignado</em></p>
+            }
         </div>
 
+        <br>
+        <br>
+
+        <h4>Historial de Kilómetros</h4>
 
         <table class="table">
-            <tr>
-                <th>
-                    Camionero Asignado
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Marca)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Modelo)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.TipoCarga)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Disponible)
-                </th>
-                <th></th>
-            </tr>
-
-            @foreach (var item in Model)
-            {
+            <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Usuario.Nombre)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Marca)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Modelo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TipoCarga)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Disponible)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Editar", "Edit", new { id = item.Id_Camion }, new { @class = "btn btn-success" }) |
-                        @Html.ActionLink("Detalles", "Details", new { id = item.Id_Camion }, new { @class = "btn btn-primary" }) |
-                        @Html.ActionLink("Borrar", "Delete", new { id = item.Id_Camion }, new { @class = "btn btn-danger" })
-                        <!--
-                    <a href="@Url.Action("KmRegistro", "Kilometrajes", new { id = item.Id_Camion})" class="btn btn-primary">
-                        Agregar Kilometraje
-                    </a>
-                        -->
-                    </td>
+                    <th>@Html.DisplayNameFor(model => model.Kilometros.First().Km_anterior)</th>
+                    <th>@Html.DisplayNameFor(model => model.Kilometros.First().Km_actual)</th>
+                    <th>@Html.DisplayNameFor(model => model.Kilometros.First().Transportista)</th>
+                    <th>@Html.DisplayNameFor(model => model.Kilometros.First().Registro)</th>
                 </tr>
-            }
-
+            </thead>
+            <tbody>
+                @foreach (var km in Model.Kilometros)
+                {
+                    <tr>
+                        <td>@km.Km_anterior</td>
+                        <td>@km.Km_actual</td>
+                        <td>@km.Transportista</td>
+                        <td>@km.Registro</td>
+                    </tr>
+                }
+            </tbody>
         </table>
-        <br>
     </div>
+
         <!-- Footer Start -->
         <div class="container-fluid footer py-5 wow fadeIn" data-wow-delay="0.2s">
             <div class="container py-5">
@@ -294,49 +240,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!--
-                        <div class="pt-5" style="border-top: 1px solid rgba(255, 255, 255, 0.08);">
-                            <div class="row g-0">
-                                <div class="col-12">
-                                    <div class="row g-4">
-                                        <div class="col-lg-6 col-xl-4">
-                                            <div class="d-flex">
-                                                <div class="btn-xl-square bg-primary text-white rounded p-4 me-4">
-                                                    <i class="fas fa-map-marker-alt fa-2x"></i>
-                                                </div>
-                                                <div>
-                                                    <h4 class="text-white">Address</h4>
-                                                    <p class=" text-white mb-0">San Isidro - Perez Zeledon, Barrio Mexico - San Jose</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6 col-xl-4">
-                                            <div class="d-flex">
-                                                <div class="btn-xl-square bg-primary text-white rounded p-4 me-4">
-                                                    <i class="fas fa-envelope fa-2x"></i>
-                                                </div>
-                                                <div>
-                                                    <h4 class="text-white">Correo</h4>
-                                                    <p class="text-white mb-0">transroden@gmail.com</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6 col-xl-4">
-                                            <div class="d-flex">
-                                                <div class="btn-xl-square bg-primary text-white rounded p-4 me-4">
-                                                    <i class="fa fa-phone-alt fa-2x"></i>
-                                                </div>
-                                                <div>
-                                                    <h4 class="text-white">Telefono</h4>
-                                                    <p class=" text-white mb-0">+506 0000 0000</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
                     </div>
                 </div>
             </div>

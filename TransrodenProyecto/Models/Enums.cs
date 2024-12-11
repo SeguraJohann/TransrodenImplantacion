@@ -90,4 +90,11 @@ namespace TransrodenProyecto.Models
     }
 
 
+    public enum TipoCarga
+    {
+        Pesada = 0,
+        Liviana = 1
+    }
+
+
 }

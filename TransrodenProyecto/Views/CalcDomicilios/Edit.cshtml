@@ -1,8 +1,10 @@
-﻿@model IEnumerable<TransrodenProyecto.Models.Camion>
+﻿@model TransrodenProyecto.Calculadora.CalcDomicilio
+
 @using TransrodenProyecto.Models
 @{
     Layout = null;
 }
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -191,74 +193,47 @@
         </div>
     </div>
     <!-- Navbar -->
-
     <div class="container mt-5">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
 
+            <div class="form-horizontal">
+                <h2 class="text-center"> Editar Domicilio</h2>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.Id_Domicilio)
 
-        <h2 class="text-center">Lista de Camiones</h2>
-
-
-        <div class="d-flex justify-content-end mb-4">
-            <a href="@Url.Action("Create", "Camions")" class="btn btn-danger">
-                <i class="fa fa-truck"></i> Agregar Camion
-            </a>
-        </div>
-
-
-        <table class="table">
-            <tr>
-                <th>
-                    Camionero Asignado
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Marca)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Modelo)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.TipoCarga)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Disponible)
-                </th>
-                <th></th>
-            </tr>
-
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Usuario.Nombre)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Marca)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Modelo)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TipoCarga)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Disponible)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Editar", "Edit", new { id = item.Id_Camion }, new { @class = "btn btn-success" }) |
-                        @Html.ActionLink("Detalles", "Details", new { id = item.Id_Camion }, new { @class = "btn btn-primary" }) |
-                        @Html.ActionLink("Borrar", "Delete", new { id = item.Id_Camion }, new { @class = "btn btn-danger" })
-                        <!--
-                    <a href="@Url.Action("KmRegistro", "Kilometrajes", new { id = item.Id_Camion})" class="btn btn-primary">
-                        Agregar Kilometraje
-                    </a>
-                        -->
-                    </td>
-                </tr>
-            }
-
-        </table>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <br>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Costo, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Costo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Costo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <br>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Guardar" class="btn btn-success" />
+                    </div>
+                </div>
+            </div>
+        }
         <br>
-    </div>
+        <div>
+            <a href="@Url.Action("AdminCalculadora", "AdminCalculadora")" class="btn btn-primary btn-sm">Regresar</a>
+        </div>
+        <br>
+        <br>
+        </div>
         <!-- Footer Start -->
         <div class="container-fluid footer py-5 wow fadeIn" data-wow-delay="0.2s">
             <div class="container py-5">
