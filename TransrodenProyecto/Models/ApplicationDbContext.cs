@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
+using TransrodenProyecto.Calculadora;
 
 namespace TransrodenProyecto.Models
 {
@@ -11,7 +12,12 @@ namespace TransrodenProyecto.Models
         public ApplicationDbContext() : base("DefaultConnection")
         {
         }
-        public DbSet<Calculadora> Calculadoras { get; set; }
+
+        //Para la calculadora
+        public DbSet<CalcDomicilio> CalcDomicilios { get; set; }
+        public DbSet<CalcCaja> CalcCaja { get; set; }
+        public DbSet<CalcEntrega> CalcEntrega { get; set; }
+
 
         public DbSet<Camion> Camiones { get; set; }
 
@@ -62,5 +68,6 @@ namespace TransrodenProyecto.Models
             base.OnModelCreating(modelBuilder);
         }
 
+        public System.Data.Entity.DbSet<TransrodenProyecto.Models.Kilometraje> Kilometrajes { get; set; }
     }
 }

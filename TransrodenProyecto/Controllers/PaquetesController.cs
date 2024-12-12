@@ -69,6 +69,7 @@ namespace TransrodenProyecto.Controllers
             return View(paquete);
         }
 
+
         // GET: Paquetes/Details/5
         public ActionResult DetailsTransp(int? id)
         {
@@ -76,11 +77,21 @@ namespace TransrodenProyecto.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Paquete paquete = db.Paquetes.Include(p => p.Envio).FirstOrDefault(p => p.Id_Paquete == id);
+
+            // Incluimos Envio explícitamente
+            var paquete = db.Paquetes.Include(p => p.Envio).FirstOrDefault(p => p.Id_Paquete == id);
+
             if (paquete == null)
             {
                 return HttpNotFound();
             }
+
+
+            if (paquete.Envio == null)
+            {
+                paquete.Envio = new Envio();
+            }
+
             return View(paquete);
         }
 
@@ -102,8 +113,8 @@ namespace TransrodenProyecto.Controllers
             {
                 // Obtener la sede del usuario desde la sesión
                 int? sedeValue = Session["Sede"] as int?;
-                EstadoPaquete estado; // Cambiar a EstadoPaquete
-                OrigenPaquete origen; // Cambiar a OrigenPaquete
+                EstadoPaquete estado;
+                OrigenPaquete origen;
 
 
                 if (sedeValue.HasValue)
@@ -152,7 +163,7 @@ namespace TransrodenProyecto.Controllers
                 {
                     Id_Paquete = nuevoPaquete.Id_Paquete,
                     Estado = nuevoPaquete.Estado,
-                    NumeroRastreo = nuevoPaquete.NumeroRastreo, 
+                    NumeroRastreo = nuevoPaquete.NumeroRastreo,
                     Fecha = DateTime.Now
                 };
 
@@ -166,6 +177,80 @@ namespace TransrodenProyecto.Controllers
 
             return View(model);
         }
+
+
+
+
+        // GET: Paquetes/RegistrarPaquete
+        public ActionResult RegistrarPaqueteAdmin()
+        {
+            return View();
+        }
+
+
+        // Crear y guardar el paquete
+        [HttpPost]
+        public async Task<ActionResult> RegistrarPaqueteAdmin(Paquete model)
+        {
+            if (ModelState.IsValid)
+            {
+
+                if (model.Origen == OrigenPaquete.PerezZeledon)
+                {
+                    model.Estado = EstadoPaquete.SinAsignarPZ;
+                }
+                else
+                {
+                    model.Estado = EstadoPaquete.SinAsignarSJ;
+                }
+
+
+                var nuevoPaquete = new Paquete
+                {
+                    NumeroRastreo = GenerarNumeroRastreo(),
+                    Cliente = model.Cliente,
+                    Tipo = model.Tipo,
+                    Origen = model.Origen,
+                    Estado = model.Estado,
+                    NombreEmisor = model.NombreEmisor,
+                    CedulaEmisor = model.CedulaEmisor,
+                    NombreReceptor = model.NombreReceptor,
+                    CedulaReceptor = model.CedulaReceptor,
+                    Domicilio = model.Domicilio,
+                    Direccion = model.Direccion,
+                    TelefonoDomicilio = model.TelefonoDomicilio,
+                    Cantidad = "1",
+                    Pago = model.Pago,
+                    Descripcion = model.Descripcion,
+                    fecha_recibo = System.DateTime.Now
+                };
+
+                db.Paquetes.Add(nuevoPaquete);
+                await db.SaveChangesAsync();
+
+
+
+                // Guardar estado en historial
+
+                var nuevoRastreo = new Historial
+                {
+                    Id_Paquete = nuevoPaquete.Id_Paquete,
+                    Estado = nuevoPaquete.Estado,
+                    NumeroRastreo = nuevoPaquete.NumeroRastreo,
+                    Fecha = DateTime.Now
+                };
+
+                db.Historiales.Add(nuevoRastreo);
+                await db.SaveChangesAsync();
+
+
+                // Redirije a Facturación
+                return RedirectToAction("GenerarFactura", "Facturacions", new { idPaquete = nuevoPaquete.Id_Paquete });
+            }
+
+            return View(model);
+        }
+
 
 
 
@@ -312,5 +397,65 @@ namespace TransrodenProyecto.Controllers
             }
             base.Dispose(disposing);
         }
+
+        public ActionResult GetPaquetes(int page = 1, string searchString = null, string searchName = null, string searchCedula = null, string startDate = null, string endDate = null)
+        {
+            int pageSize = 10;
+            var paquetesQuery = db.Paquetes.AsQueryable();
+
+            // Apply filters if provided
+            if (!string.IsNullOrEmpty(searchString))
+                paquetesQuery = paquetesQuery.Where(p => p.NumeroRastreo.Contains(searchString));
+
+            if (!string.IsNullOrEmpty(searchName))
+                paquetesQuery = paquetesQuery.Where(p =>
+                    p.NombreEmisor.Contains(searchName) ||
+                    p.NombreReceptor.Contains(searchName));
+
+            if (!string.IsNullOrEmpty(searchCedula))
+                paquetesQuery = paquetesQuery.Where(p =>
+                    p.CedulaEmisor.Contains(searchCedula) ||
+                    p.CedulaReceptor.Contains(searchCedula));
+
+            if (DateTime.TryParse(startDate, out var start))
+                paquetesQuery = paquetesQuery.Where(p => p.fecha_recibo >= start);
+
+            if (DateTime.TryParse(endDate, out var end))
+                paquetesQuery = paquetesQuery.Where(p => p.fecha_recibo <= end);
+
+            // Order by most recent first
+            paquetesQuery = paquetesQuery.OrderByDescending(p => p.fecha_recibo);
+
+            // Pagination
+            var paquetes = paquetesQuery
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            int totalPaquetes = paquetesQuery.Count();
+            var totalPages = (int)Math.Ceiling((double)totalPaquetes / pageSize);
+
+            return Json(new
+            {
+                data = paquetes.Select(p => new
+                {
+                    p.Id_Paquete,
+                    p.NumeroRastreo,
+                    p.Tipo,
+                    p.Estado,
+                    p.NombreEmisor,
+                    p.CedulaEmisor,
+                    p.Domicilio,
+                    p.Direccion,
+                    p.TelefonoDomicilio,
+                    p.Pago,
+                    p.Descripcion
+                }),
+                totalPages,
+                currentPage = page
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+
     }
 }

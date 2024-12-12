@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TransrodenProyecto.Models.Calculadora>
+﻿@model IEnumerable<TransrodenProyecto.Calculadora.CalcEntrega>
 
 @{
     Layout = null;
@@ -35,9 +35,9 @@
                 @Html.DisplayFor(modelItem => item.Tarifa)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.Id_Calc }) |
-                @Html.ActionLink("Details", "Details", new { id=item.Id_Calc }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.Id_Calc })
+                @Html.ActionLink("Edit", "Edit", new { id=item.Id_Entrega }) |
+                @Html.ActionLink("Details", "Details", new { id=item.Id_Entrega }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.Id_Entrega })
             </td>
         </tr>
     }

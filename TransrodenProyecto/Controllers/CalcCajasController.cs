@@ -6,113 +6,114 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using TransrodenProyecto.Calculadora;
 using TransrodenProyecto.Models;
 
 namespace TransrodenProyecto.Controllers
 {
-    public class CalculadorasController : Controller
+    public class CalcCajasController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Calculadoras
+        // GET: CalcCajas
         public ActionResult Index()
         {
-            return View(db.Calculadoras.ToList());
+            return View(db.CalcCaja.ToList());
         }
 
-        // GET: Calculadoras/Details/5
+        // GET: CalcCajas/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Calculadora calculadora = db.Calculadoras.Find(id);
-            if (calculadora == null)
+            CalcCaja calcCaja = db.CalcCaja.Find(id);
+            if (calcCaja == null)
             {
                 return HttpNotFound();
             }
-            return View(calculadora);
+            return View(calcCaja);
         }
 
-        // GET: Calculadoras/Create
+        // GET: CalcCajas/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Calculadoras/Create
+        // POST: CalcCajas/Create
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id_Calc,Tipo,Tarifa")] Calculadora calculadora)
+        public ActionResult Create([Bind(Include = "Id_Caja,Tipo,Costo")] CalcCaja calcCaja)
         {
             if (ModelState.IsValid)
             {
-                db.Calculadoras.Add(calculadora);
+                db.CalcCaja.Add(calcCaja);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("AdminCalculadora", "AdminCalculadora");
             }
 
-            return View(calculadora);
+            return RedirectToAction("AdminCalculadora", "AdminCalculadora");
         }
 
-        // GET: Calculadoras/Edit/5
+        // GET: CalcCajas/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Calculadora calculadora = db.Calculadoras.Find(id);
-            if (calculadora == null)
+            CalcCaja calcCaja = db.CalcCaja.Find(id);
+            if (calcCaja == null)
             {
                 return HttpNotFound();
             }
-            return View(calculadora);
+            return View(calcCaja);
         }
 
-        // POST: Calculadoras/Edit/5
+        // POST: CalcCajas/Edit/5
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id_Calc,Tipo,Tarifa")] Calculadora calculadora)
+        public ActionResult Edit([Bind(Include = "Id_Caja,Tipo,Costo")] CalcCaja calcCaja)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(calculadora).State = EntityState.Modified;
+                db.Entry(calcCaja).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("AdminCalculadora", "AdminCalculadora");
             }
-            return View(calculadora);
+            return RedirectToAction("AdminCalculadora", "AdminCalculadora");
         }
 
-        // GET: Calculadoras/Delete/5
+        // GET: CalcCajas/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Calculadora calculadora = db.Calculadoras.Find(id);
-            if (calculadora == null)
+            CalcCaja calcCaja = db.CalcCaja.Find(id);
+            if (calcCaja == null)
             {
                 return HttpNotFound();
             }
-            return View(calculadora);
+            return View(calcCaja);
         }
 
-        // POST: Calculadoras/Delete/5
+        // POST: CalcCajas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Calculadora calculadora = db.Calculadoras.Find(id);
-            db.Calculadoras.Remove(calculadora);
+            CalcCaja calcCaja = db.CalcCaja.Find(id);
+            db.CalcCaja.Remove(calcCaja);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("AdminCalculadora", "AdminCalculadora");
         }
 
         protected override void Dispose(bool disposing)

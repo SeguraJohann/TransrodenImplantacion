@@ -172,71 +172,105 @@
     <!-- Navbar -->
 
 
+
     <div class="container mt-5">
-
-
-        <h2 class="text-center">Detalles de la Facturación</h2>
-
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Información de la Factura</h3>
-            </div>
-            <div class="panel-body">
-                <dl class="dl-horizontal">
-                    <dt>Factura N°:</dt>
-                    <dd>@Model.Id_Facturacion</dd>
-
-                    <dt>Fecha de Emisión:</dt>
-                    <dd>@Model.Fecha.ToString("dd/MM/yyyy")</dd>
-
-                    <dt>Precio:</dt>
-                    <dd>@String.Format("{0:C}", Model.Precio)</dd>
-
-                    <dt>Subtotal:</dt>
-                    <dd>@String.Format("{0:C}", Model.Iva)</dd>
-
-                    <dt>Total:</dt>
-                    <dd>@String.Format("{0:C}", Model.Total)</dd>
-                </dl>
-            </div>
-        </div>
-
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Detalles del Paquete</h3>
-            </div>
-            <div class="panel-body">
-                <dl class="dl-horizontal">
-                    <dt>Paquete N°:</dt>
-                    <dd>@Model.Paquete.Id_Paquete</dd>
-
-                    <dt>Rastreo N°:</dt>
-                    <dd>@Model.Paquete.NumeroRastreo</dd>
-
-                    @*<dt>Cantidad:</dt>
-                    <dd>@Model.Paquete.Cantidad</dd>*@
-
-                    <dt>Emisor:</dt>
-                    <dd>@Model.Paquete.NombreEmisor</dd>
-
-                    <dt>Cédula del Emisor:</dt>
-                    <dd>@Model.Paquete.CedulaEmisor</dd>
-
-                    <dt>Receptor:</dt>
-                    <dd>@Model.Paquete.NombreReceptor</dd>
-
-                    <dt>Destino:</dt>
-                    <dd>@Model.Paquete.Direccion</dd>
-                </dl>
-            </div>
-        </div>
+        <h2 class="text-center">Mis Facturas</h2>
         <br>
 
+
+        <div class="form-horizontal">
+
+
+            <div class="row">
+
+                <!-- Columna izquierda -->
+                <div class="col-md-6">
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Información de la Factura</h3>
+                        </div>
+                        <div class="panel-body">
+                            <dl class="dl-horizontal">
+
+                                <dt>Factura N°:</dt>
+                                <dd>@Model.Id_Facturacion</dd>
+
+                                <dt>Fecha de Emisión:</dt>
+                                <dd>@Model.Fecha.ToString("dd/MM/yyyy")</dd>
+
+                                <dt>Precio:</dt>
+                                <dd>@String.Format("{0:C}", Model.Precio)</dd>
+
+                                <dt>Subtotal:</dt>
+                                <dd>@String.Format("{0:C}", Model.Iva)</dd>
+
+                                <dt>Total:</dt>
+                                <dd>@String.Format("{0:C}", Model.Total)</dd>
+
+
+
+
+                            </dl>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+                <!-- Columna derecha -->
+                <div class="col-md-6">
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Detalles del Paquete</h3>
+                        </div>
+                        <div class="panel-body">
+                            <dl class="dl-horizontal">
+
+                                <dt>Paquete N°:</dt>
+                                <dd>@Model.Paquete.Id_Paquete</dd>
+
+                                <dt>Rastreo N°:</dt>
+                                <dd>@Model.Paquete.NumeroRastreo</dd>
+
+                                @*<dt>Cantidad:</dt>
+                                    <dd>@Model.Paquete.Cantidad</dd>*@
+
+                                <dt>Emisor:</dt>
+                                <dd>@Model.Paquete.NombreEmisor</dd>
+
+                                <dt>Cédula del Emisor:</dt>
+                                <dd>@Model.Paquete.CedulaEmisor</dd>
+
+                                <dt>Receptor:</dt>
+                                <dd>@Model.Paquete.NombreReceptor</dd>
+
+                                <dt>Destino:</dt>
+                                <dd>@Model.Paquete.Direccion</dd>
+
+
+
+                            </dl>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <br>
+
+
+
+        </div>
+
         <a href="@Url.Action("FacturasUsuario", "Facturacions")" class="btn btn-primary">Volver a Mis Facturas</a>
+
     </div>
     <br>
 
-    <!--
+
 
     <!-- Footer Start -->
     <div class="container-fluid footer py-5 wow fadeIn" data-wow-delay="0.2s">

@@ -1,4 +1,4 @@
-﻿@model TransrodenProyecto.Models.Calculadora
+﻿@model TransrodenProyecto.Calculadora.CalcCaja
 
 @{
     Layout = null;
@@ -13,7 +13,7 @@
 </head>
 <body>
     <div>
-        <h4>Calculadora</h4>
+        <h4>CalcCaja</h4>
         <hr />
         <dl class="dl-horizontal">
             <dt>
@@ -25,17 +25,17 @@
             </dd>
     
             <dt>
-                @Html.DisplayNameFor(model => model.Tarifa)
+                @Html.DisplayNameFor(model => model.Costo)
             </dt>
     
             <dd>
-                @Html.DisplayFor(model => model.Tarifa)
+                @Html.DisplayFor(model => model.Costo)
             </dd>
     
         </dl>
     </div>
     <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id_Calc }) |
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id_Caja }) |
         @Html.ActionLink("Back to List", "Index")
     </p>
 </body>
