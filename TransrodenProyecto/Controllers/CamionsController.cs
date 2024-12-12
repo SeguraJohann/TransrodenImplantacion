@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using TransrodenProyecto.Models;
+using TransrodenProyecto.Security;
 using TransrodenProyecto.ViewModels;
 
 namespace TransrodenProyecto.Controllers
@@ -16,13 +17,14 @@ namespace TransrodenProyecto.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Camions
+        [AdminOnly]
         public ActionResult Index()
         {
             var camiones = db.Camiones.Include(c => c.Usuario);
             return View(camiones.ToList());
         }
 
-
+        [AdminOnly]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -53,6 +55,7 @@ namespace TransrodenProyecto.Controllers
 
 
         // GET: Camions/Create
+        [AdminOnly]
         public ActionResult Create()
         {
 
@@ -106,6 +109,7 @@ namespace TransrodenProyecto.Controllers
 
 
         // GET: Camions/Edit/5
+        [AdminOnly]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -168,6 +172,7 @@ namespace TransrodenProyecto.Controllers
 
 
         // GET: Camions/Delete/5
+        [AdminOnly]
         public ActionResult Delete(int? id)
         {
             if (id == null)

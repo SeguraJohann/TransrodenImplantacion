@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<TransrodenProyecto.Calculadora.CalcCaja>
 
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <!DOCTYPE html>
@@ -25,23 +25,24 @@
             </th>
             <th></th>
         </tr>
-    
-    @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tipo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Costo)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.Id_Caja }) |
-                @Html.ActionLink("Details", "Details", new { id=item.Id_Caja }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.Id_Caja })
-            </td>
-        </tr>
-    }
-    
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tipo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Costo)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id_Caja }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id_Caja }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id_Caja })
+                </td>
+            </tr>
+        }
+
     </table>
 
 </body>

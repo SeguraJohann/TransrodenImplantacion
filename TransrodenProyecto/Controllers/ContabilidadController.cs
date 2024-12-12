@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using TransrodenProyecto.Models;
+using TransrodenProyecto.Security;
 
 namespace TransrodenProyecto.Controllers
 {
@@ -27,6 +28,7 @@ namespace TransrodenProyecto.Controllers
 
         private ApplicationDbContext db = new ApplicationDbContext();
         // GET: Contabilidad
+        [AdminOnly]
         public ActionResult ContabilidadDiaria(DateTime? fechaDia)
         {
             // Si no se proporciona una fecha, usar la fecha actual
@@ -55,6 +57,7 @@ namespace TransrodenProyecto.Controllers
             return View(facturaciones);
         }
 
+        [AdminOnly]
         public ActionResult ContabilidadSemanal(DateTime? fechaInicio)
         {
             if (fechaInicio == null)
@@ -85,7 +88,7 @@ namespace TransrodenProyecto.Controllers
         }
 
 
-
+        [AdminOnly]
         public ActionResult ContabilidadMensual(int? mes, int? año)
         {
             if (mes == null || año == null)
@@ -116,7 +119,7 @@ namespace TransrodenProyecto.Controllers
         }
 
 
-
+        [AdminOnly]
         public ActionResult ContabilidadAnual(int? yearCont)
         {
             if (yearCont == null)

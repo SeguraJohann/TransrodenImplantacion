@@ -9,6 +9,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using TransrodenProyecto.Models;
+using TransrodenProyecto.Security;
 
 namespace TransrodenProyecto.Controllers
 {
@@ -17,6 +18,7 @@ namespace TransrodenProyecto.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Usuarios
+        [AdminOnly]
         public ActionResult Index(string searchCed)
         {
 
@@ -37,6 +39,7 @@ namespace TransrodenProyecto.Controllers
         }
 
         // GET: Usuarios/Details/5
+        [AdminOnly]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -52,6 +55,7 @@ namespace TransrodenProyecto.Controllers
         }
 
         // GET: Usuarios/Create
+        [AdminOnly]
         public ActionResult Create()
         {
             return View();
@@ -77,6 +81,7 @@ namespace TransrodenProyecto.Controllers
         }
 
         // GET: Usuarios/Edit/5
+        [AdminOnly]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -111,6 +116,7 @@ namespace TransrodenProyecto.Controllers
         }
 
         // GET: Usuarios/Delete/5
+        [AdminOnly]
         public ActionResult Delete(int? id)
         {
             if (id == null)

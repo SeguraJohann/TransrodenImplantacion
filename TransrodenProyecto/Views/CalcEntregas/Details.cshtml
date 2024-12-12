@@ -1,42 +1,31 @@
 ﻿@model TransrodenProyecto.Calculadora.CalcEntrega
 
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div>
+    <h4>CalcEntrega</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Tipo)
+        </dt>
 
-<!DOCTYPE html>
+        <dd>
+            @Html.DisplayFor(model => model.Tipo)
+        </dd>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Details</title>
-</head>
-<body>
-    <div>
-        <h4>CalcEntrega</h4>
-        <hr />
-        <dl class="dl-horizontal">
-            <dt>
-                @Html.DisplayNameFor(model => model.Tipo)
-            </dt>
-    
-            <dd>
-                @Html.DisplayFor(model => model.Tipo)
-            </dd>
-    
-            <dt>
-                @Html.DisplayNameFor(model => model.Tarifa)
-            </dt>
-    
-            <dd>
-                @Html.DisplayFor(model => model.Tarifa)
-            </dd>
-    
-        </dl>
-    </div>
-    <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id_Entrega }) |
-        @Html.ActionLink("Back to List", "Index")
-    </p>
-</body>
-</html>
+        <dt>
+            @Html.DisplayNameFor(model => model.Tarifa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tarifa)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id_Entrega }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

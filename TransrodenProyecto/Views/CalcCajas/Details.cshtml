@@ -1,7 +1,7 @@
 ﻿@model TransrodenProyecto.Calculadora.CalcCaja
 
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <!DOCTYPE html>
@@ -19,19 +19,19 @@
             <dt>
                 @Html.DisplayNameFor(model => model.Tipo)
             </dt>
-    
+
             <dd>
                 @Html.DisplayFor(model => model.Tipo)
             </dd>
-    
+
             <dt>
                 @Html.DisplayNameFor(model => model.Costo)
             </dt>
-    
+
             <dd>
                 @Html.DisplayFor(model => model.Costo)
             </dd>
-    
+
         </dl>
     </div>
     <p>

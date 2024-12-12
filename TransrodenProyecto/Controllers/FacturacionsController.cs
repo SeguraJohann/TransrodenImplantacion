@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using TransrodenProyecto.Models;
+using TransrodenProyecto.Security;
 
 namespace TransrodenProyecto.Controllers
 {
@@ -16,6 +17,7 @@ namespace TransrodenProyecto.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Facturacions
+        [AdminBodOnly]
         public ActionResult Index(int? searchId)
         {
             var facturaciones = db.Facturaciones.Include(f => f.Paquete).Include(f => f.Usuario);
@@ -29,6 +31,7 @@ namespace TransrodenProyecto.Controllers
         }
 
         // GET: Facturacions/Details/5
+        [AdminBodOnly]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -50,6 +53,7 @@ namespace TransrodenProyecto.Controllers
 
 
         // Cargar y mostrar el formulario de factura
+        [AdminBodOnly]
         public async Task<ActionResult> GenerarFactura(int? idPaquete)
         {
             // Aqui se busca el paquete
@@ -124,6 +128,7 @@ namespace TransrodenProyecto.Controllers
 
 
         // Vista Detalles de la factura
+        [AdminBodOnly]
         public async Task<ActionResult> DetalleFacturacion(int id)
         {
             var facturacion = await db.Facturaciones
@@ -198,6 +203,7 @@ namespace TransrodenProyecto.Controllers
 
 
         // GET: Facturacions/Create
+        [AdminBodOnly]
         public ActionResult Create()
         {
             ViewBag.Id_Paquete = new SelectList(db.Paquetes, "Id_Paquete", "NumeroRastreo");
@@ -228,6 +234,7 @@ namespace TransrodenProyecto.Controllers
 
 
         // GET: Facturacions/Edit/5
+        [AdminBodOnly]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -263,6 +270,7 @@ namespace TransrodenProyecto.Controllers
         }
 
         // GET: Facturacions/Delete/5
+        [AdminBodOnly]
         public ActionResult Delete(int? id)
         {
             if (id == null)
