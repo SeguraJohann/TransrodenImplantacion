@@ -127,3 +127,13 @@
     </p>
 
 </div>
+
+<script src="~/Content/assets/js/main.js"></script>
+<script type="text/javascript">
+    function abrirVentanaImpresion(idFactura) {
+        var url = '@Url.Action("ImprimirFactura", "Facturacions", new { id = "__id__" })';
+        url = url.replace("__id__", idFactura);
+        var opciones = "width=300,height=600,scrollbars=yes,resizable=yes";
+        window.open(url, "Imprimir Factura", opciones);
+    }
+</script>
