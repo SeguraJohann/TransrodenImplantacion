@@ -98,10 +98,6 @@
                             Inicio
                         </a>
 
-                        <a href="@Url.Action("Index","Usuarios")" class="nav-item nav-link">
-                            Usuarios
-                        </a>
-
                         <a href="@Url.Action("Index","Paquetes")" class="nav-item nav-link">
                             Paqueteria
                         </a>
@@ -152,7 +148,32 @@
 
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link" data-bs-toggle="dropdown">
+                                <span class="dropdown-toggle">Administrativo</span>
+                            </a>
+                            <div class="dropdown-menu">
+                                <a href="@Url.Action("Index","Usuarios")" class="nav-item nav-link">
+                                    Usuarios
+                                </a>
+
+                                <a href="@Url.Action("Marketing","Marketing")" class="nav-item nav-link" id="contact">
+                                    Mercadeo
+                                </a>
+
+                                <a href="@Url.Action("AdminCalculadora","AdminCalculadora")" class="nav-item nav-link" id="contact">
+                                    Calculadora
+                                </a>
+
+
+                                <a href="@Url.Action("Index","Camions")" class="nav-item nav-link" id="contact">
+                                    Camiones
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link" data-bs-toggle="dropdown">
                                 <span class="dropdown-toggle">Contabilidad</span>
+                                
                             </a>
                             <div class="dropdown-menu">
                                 <a href="@Url.Action("ContabilidadDiaria", "Contabilidad")" class="dropdown-item">Consulta Diaria</a>
@@ -162,20 +183,6 @@
                             </div>
                         </div>
 
-
-
-
-                        <a href="@Url.Action("Marketing","Marketing")" class="nav-item nav-link" id="contact">
-                            Mercadeo
-                        </a>
-
-                        <a href="@Url.Action("AdminCalculadora","AdminCalculadora")" class="nav-item nav-link" id="contact">
-                            Calculadora
-                        </a>
-
-                        <a href="@Url.Action("Index","Camions")" class="nav-item nav-link" id="contact">
-                            Camiones
-                        </a>
 
 
 
