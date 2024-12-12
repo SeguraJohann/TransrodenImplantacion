@@ -175,6 +175,9 @@
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\RecuperarClaveController.cs" />
+    <Compile Include="Security\AdminBodOnlyAttribute.cs" />
+    <Compile Include="Security\BodOnlyAttribute.cs" />
+    <Compile Include="Security\AdminOnlyAttribute.cs" />
     <Compile Include="ViewModels\AdminCalculadoraViewModel.cs" />
     <Compile Include="ViewModels\CalculadoraViewModel.cs" />
     <Compile Include="ViewModels\CamionKmViewModel.cs" />

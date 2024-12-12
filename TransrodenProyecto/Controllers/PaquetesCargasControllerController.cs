@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Data.Entity;
 using TransrodenProyecto.Models;
 using TransrodenProyecto.ViewModels;
+using TransrodenProyecto.Security;
 
 
 namespace TransrodenProyecto.Controllers
@@ -18,6 +19,7 @@ namespace TransrodenProyecto.Controllers
         // ++++++++++++++++++++++++++++++++++++++++++ Vista del modulo de tracking ++++++++++++++++++++++++++++++++++
 
         //Menu para todo relacionado a Tracking SJ
+        [AdminBodOnly]
         public ActionResult DashboardSJ()
         {
             return View();
@@ -25,6 +27,7 @@ namespace TransrodenProyecto.Controllers
 
 
         //Menu para todo relacionado a Tracking PZ
+        [AdminBodOnly]
         public ActionResult DashboardPZ()
         {
             return View();
@@ -32,19 +35,20 @@ namespace TransrodenProyecto.Controllers
 
 
         //Menu para la bodega de SJ
+        [AdminBodOnly]
         public ActionResult BodegaSJ()
         {
             return View();
         }
 
-
+        [AdminBodOnly]
         //Menu para la bodega de PZ
         public ActionResult BodegaPZ()
         {
             return View();
         }
 
-
+        [AdminBodOnly]
         //Asignar paquetes a las cargas desde SJ
         public ActionResult AsignarPaqueteSJCarga()
         {
@@ -58,7 +62,7 @@ namespace TransrodenProyecto.Controllers
             return View(viewModel);
         }
 
-
+        [AdminBodOnly]
         //Asignar paquetes a las cargas desde PZ
         public ActionResult AsignarPaquetePZCarga()
         {
@@ -72,7 +76,7 @@ namespace TransrodenProyecto.Controllers
             return View(viewModel);
         }
 
-
+        [AdminBodOnly]
         //Ver cargas en transito
         public ActionResult VistaCargaTransito()
         {
@@ -86,7 +90,7 @@ namespace TransrodenProyecto.Controllers
         }
 
 
-
+        [AdminBodOnly]
         //Todos los paquetes que se encuentra en la bodega SJ
         public ActionResult PaquetesBodegaSJ()
         {
@@ -104,7 +108,7 @@ namespace TransrodenProyecto.Controllers
         }
 
 
-
+        [AdminBodOnly]
         //Todos los paquetes que se encuentra en la bodega SJ que no son domicilio
         public ActionResult PaquetesReclamoSJ()
         {
@@ -120,7 +124,7 @@ namespace TransrodenProyecto.Controllers
 
 
 
-
+        [AdminBodOnly]
         //Todos los paquetes que se encuentra en la bodega PZ
         public ActionResult PaquetesBodegaPZ()
         {
@@ -139,7 +143,7 @@ namespace TransrodenProyecto.Controllers
 
 
 
-
+        [AdminBodOnly]
         //Todos los paquetes que se encuentra en la bodega SJ que no son domicilio
         public ActionResult PaquetesReclamoPZ()
         {
@@ -153,7 +157,7 @@ namespace TransrodenProyecto.Controllers
         }
 
 
-
+        [AdminBodOnly]
         public ActionResult PaquetesRechazoSJ()
         {
             var viewModel = new PaqueteCargaViewModel
@@ -169,6 +173,7 @@ namespace TransrodenProyecto.Controllers
 
 
 
+        [AdminBodOnly]
         public ActionResult PaquetesRechazoPZ()
         {
             var viewModel = new PaqueteCargaViewModel
@@ -321,7 +326,7 @@ namespace TransrodenProyecto.Controllers
 
 
 
-
+        [AdminBodOnly]
         // Muestra los paquetes que estan asignados a la carga pero para las vistas de asignacion
         public ActionResult CargaPaquetes(int idCarga)
         {
@@ -346,7 +351,7 @@ namespace TransrodenProyecto.Controllers
             return View(viewModel);
         }
 
-
+        [AdminBodOnly]
         //Para otras vista donde solo se requiera ver el paquete nada mas
         public ActionResult CargaPaquetesView(int idCarga)
         {
