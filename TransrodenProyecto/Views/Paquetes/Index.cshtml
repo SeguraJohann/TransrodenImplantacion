@@ -14,11 +14,40 @@
     <h2 class="text-center">Paquetes</h2>
 
 
-    <div class="d-flex justify-content-end mb-4">
-        <a href="@Url.Action("RegistrarPaquete", "Paquetes")" class="btn btn-danger">
-            <i class="fas fa-box"></i> Agregar Paquete
-        </a>
-    </div>
+
+    @if (Session["Usuario"] != null)
+    {
+
+        var usuarioRol = (Rol)Session["UsuarioRol"];
+
+
+        if (usuarioRol == Rol.Administrador)
+        {
+            <div class="d-flex justify-content-end mb-4">
+                <a href="@Url.Action("RegistrarPaqueteAdmin", "Paquetes")" class="btn btn-danger">
+                    <i class="fas fa-box"></i> Agregar Paquete
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="d-flex justify-content-end mb-4">
+                <a href="@Url.Action("RegistrarPaquete", "Paquetes")" class="btn btn-danger">
+                    <i class="fas fa-box"></i> Agregar Paquete
+                </a>
+            </div>
+        }
+
+    }
+    else
+    {
+        <div class="d-flex justify-content-end mb-4">
+            <a href="@Url.Action("RegistrarPaquete", "Paquetes")" class="btn btn-danger">
+                <i class="fas fa-box"></i> Agregar Paquete
+            </a>
+        </div>
+    }
+
 
 
 

@@ -8,6 +8,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using TransrodenProyecto.Models;
+using TransrodenProyecto.Security;
 
 namespace TransrodenProyecto.Controllers
 {
@@ -15,6 +16,7 @@ namespace TransrodenProyecto.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         // GET: Marketing
+        [AdminOnly]
         public ActionResult Marketing()
         {
             return View();
