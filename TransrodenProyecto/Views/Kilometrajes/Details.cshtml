@@ -1,66 +1,55 @@
 ﻿@model TransrodenProyecto.Models.Kilometraje
 
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div>
+    <h4>Kilometraje</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Camion.Marca)
+        </dt>
 
-<!DOCTYPE html>
+        <dd>
+            @Html.DisplayFor(model => model.Camion.Marca)
+        </dd>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Details</title>
-</head>
-<body>
-    <div>
-        <h4>Kilometraje</h4>
-        <hr />
-        <dl class="dl-horizontal">
-            <dt>
-                @Html.DisplayNameFor(model => model.Camion.Marca)
-            </dt>
-    
-            <dd>
-                @Html.DisplayFor(model => model.Camion.Marca)
-            </dd>
-    
-            <dt>
-                @Html.DisplayNameFor(model => model.Km_registrado)
-            </dt>
-    
-            <dd>
-                @Html.DisplayFor(model => model.Km_registrado)
-            </dd>
-    
-            <dt>
-                @Html.DisplayNameFor(model => model.Km_actual)
-            </dt>
-    
-            <dd>
-                @Html.DisplayFor(model => model.Km_actual)
-            </dd>
-    
-            <dt>
-                @Html.DisplayNameFor(model => model.Transportista)
-            </dt>
-    
-            <dd>
-                @Html.DisplayFor(model => model.Transportista)
-            </dd>
-    
-            <dt>
-                @Html.DisplayNameFor(model => model.Registro)
-            </dt>
-    
-            <dd>
-                @Html.DisplayFor(model => model.Registro)
-            </dd>
-    
-        </dl>
-    </div>
-    <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id_Km }) |
-        @Html.ActionLink("Back to List", "Index")
-    </p>
-</body>
-</html>
+        <dt>
+            @Html.DisplayNameFor(model => model.Km_registrado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Km_registrado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Km_actual)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Km_actual)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Transportista)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Transportista)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Registro)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Registro)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id_Km }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

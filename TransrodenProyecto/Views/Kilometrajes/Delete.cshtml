@@ -1,72 +1,63 @@
 ﻿@model TransrodenProyecto.Models.Kilometraje
 
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Kilometraje</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Camion.Marca)
+        </dt>
 
-<!DOCTYPE html>
+        <dd>
+            @Html.DisplayFor(model => model.Camion.Marca)
+        </dd>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Delete</title>
-</head>
-<body>
-    <h3>Are you sure you want to delete this?</h3>
-    <div>
-        <h4>Kilometraje</h4>
-        <hr />
-        <dl class="dl-horizontal">
-            <dt>
-                @Html.DisplayNameFor(model => model.Camion.Marca)
-            </dt>
-    
-            <dd>
-                @Html.DisplayFor(model => model.Camion.Marca)
-            </dd>
-    
-            <dt>
-                @Html.DisplayNameFor(model => model.Km_registrado)
-            </dt>
-    
-            <dd>
-                @Html.DisplayFor(model => model.Km_registrado)
-            </dd>
-    
-            <dt>
-                @Html.DisplayNameFor(model => model.Km_actual)
-            </dt>
-    
-            <dd>
-                @Html.DisplayFor(model => model.Km_actual)
-            </dd>
-    
-            <dt>
-                @Html.DisplayNameFor(model => model.Transportista)
-            </dt>
-    
-            <dd>
-                @Html.DisplayFor(model => model.Transportista)
-            </dd>
-    
-            <dt>
-                @Html.DisplayNameFor(model => model.Registro)
-            </dt>
-    
-            <dd>
-                @Html.DisplayFor(model => model.Registro)
-            </dd>
-    
-        </dl>
-    
-        @using (Html.BeginForm()) {
-            @Html.AntiForgeryToken()
-    
-            <div class="form-actions no-color">
-                <input type="submit" value="Delete" class="btn btn-default" /> |
-                @Html.ActionLink("Back to List", "Index")
-            </div>
-        }
-    </div>
-</body>
-</html>
+        <dt>
+            @Html.DisplayNameFor(model => model.Km_registrado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Km_registrado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Km_actual)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Km_actual)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Transportista)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Transportista)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Registro)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Registro)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>
+
