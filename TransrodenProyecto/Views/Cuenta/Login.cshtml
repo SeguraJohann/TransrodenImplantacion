@@ -2,30 +2,27 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<!-- Contenedor exterior con fondo gris -->
+<div class="login-outer-container">
     <!-- Main Container -->
-    <div class="container d-flex align-items-center justify-content-center min-vh-50 py-5">
+    <div class="container d-flex align-items-center justify-content-center min-vh-50 py-5 login-container">
         <!-- Padding exterior de la caja login -->
         <div class="row justify-content-center w-100">
             <!-- Ancho de la caja login -->
             <div class="col-lg-4 col-md-6">
                 <div class="bg-white rounded p-4 p-sm-5 shadow-sm">
                     <h3 class="text-center mb-4">Iniciar Sesión</h3>
-
                     @using (Html.BeginForm("Login", "Cuenta", FormMethod.Post))
                     {
                         @Html.AntiForgeryToken()
-
                         <div class="mb-3">
                             <label for="correo" class="form-label">Correo</label>
                             <input type="email" name="correo" class="form-control" required />
                         </div>
-
-
                         <div class="mb-3">
                             <label for="clave" class="form-label">Clave</label>
                             <input type="password" name="clave" class="form-control" required />
                         </div>
-
                         <div class="row mb-4">
                             <div class="col d-flex align-items-center">
                                 <div class="form-check">
@@ -33,21 +30,19 @@
                                     <label class="form-check-label" for="formRemember"> Recordarme </label>
                                 </div>
                             </div>
-                            <div class="col text-end">
-                                <a href="@Url.Action("RecuperarClave", "RecuperarClave")" class="btn btn-danger">¿Olvidaste tu contraseña?</a>
-
-
-
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col text-center">
+                                <a href="@Url.Action("RecuperarClave", "RecuperarClave")" class="forgot-password">
+                                    ¿Olvidaste tu contraseña?
+                                </a>
                             </div>
                         </div>
-
-
-                        <button type="submit" class="btn btn-danger w-100">Iniciar Sesión</button>
-
+                        <button type="submit" class="btn btn-light w-100">Iniciar Sesión</button>
                         @* Mostrar mensajes de error *@
-                        @Html.ValidationSummary("", new { @class = "text-danger" })
-
-
+                        <div class="validation-summary-valid text-danger" data-valmsg-summary="true">
+                            @Html.ValidationSummary("", new { @class = "text-danger" })
+                        </div>
                         <h6 class="text-center mt-3">¿No se ha registrado?</h6>
                         <a href="@Url.Action("Register", "Cuenta")" class="btn btn-primary w-100">Registrarse</a>
                     }
@@ -55,3 +50,4 @@
             </div>
         </div>
     </div>
+</div>

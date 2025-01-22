@@ -28,19 +28,36 @@
 
     // Header carousel
     $(".header-carousel").owlCarousel({
-        animateOut: 'fadeOut',
         items: 1,
         margin: 0,
-        stagePadding: 0,
         autoplay: true,
-        smartSpeed: 500,
+        smartSpeed: 300,        // Transición más rápida
+        autoplayTimeout: 5000,
         dots: true,
         loop: true,
-        nav : true,
-        navText : [
+        nav: true,
+        navText: [
             '<i class="bi bi-arrow-left"></i>',
             '<i class="bi bi-arrow-right"></i>'
         ],
+        touchDrag: true,       // Mantener interacción táctil
+        mouseDrag: true,       // Mantener drag con mouse
+        pullDrag: false,       // Deshabilitar pull drag para mejor control
+        freeDrag: false,       // Deshabilitar free drag
+        slideTransition: 'ease-out' // Transición más natural
+    });
+
+    // Añadir control para prevenir clicks múltiples
+    let isAnimating = false;
+    $('.owl-nav button').click(function (e) {
+        if (isAnimating) {
+            e.preventDefault();
+            return false;
+        }
+        isAnimating = true;
+        setTimeout(() => {
+            isAnimating = false;
+        }, 300); // Mismo tiempo que smartSpeed
     });
 
 

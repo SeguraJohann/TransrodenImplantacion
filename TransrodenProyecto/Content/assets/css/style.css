@@ -1,3 +1,38 @@
+/*** Colores personalizados ***/
+
+
+
+:root {
+    --logo-blue: #0d6efd;
+    --bg-dark: #282C34
+}
+
+
+/* Estilos que no venían en la plantilla*/
+
+.login-container {
+    background-color: #ffffff; /* Fondo blanco para el contenedor principal */
+}
+
+/* Agregamos una nueva clase para el contenedor exterior */
+.login-outer-container {
+    background-color: #f8f9fa; /* Color gris suave para el margen */
+}
+
+.forgot-password {
+    color: #0d6efd;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+    .forgot-password:hover {
+        color: #0a58ca;
+        text-decoration: underline;
+    }
+
+
+/* Boton Verde*/
+
 
 /*** Spinner Start ***/
 #spinner {
@@ -303,42 +338,35 @@
     height: 700px;
 }
 
-.header-carousel .owl-nav .owl-prev,
-.header-carousel .owl-nav .owl-next {
+.header-carousel .owl-nav {
     position: absolute;
-    width: 60px;
-    height: 60px;
-    border-radius: 60px;
-    background: var(--bs-light);
-    color: var(--bs-primary);
-    font-size: 26px;
+    bottom: 30px;
+    left: 0;
+    right: 0;
     display: flex;
-    align-items: center;
     justify-content: center;
-    transition: 0.5s;
-    bottom: 30px;
-    left: 50%; /* Posición ambas flechas al 50% del contenedor */
-    transform: translateX(-50%);
+    gap: 20px;
 }
 
-.header-carousel .owl-nav .owl-prev {
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    margin-left: -100px;
-}
-.header-carousel .owl-nav .owl-next {
-    bottom: 30px;
-    right: 50%;
-    transform: translateX(-50%);
-    margin-right: 100px;
-}
+    .header-carousel .owl-nav .owl-prev,
+    .header-carousel .owl-nav .owl-next {
+        width: 60px;
+        height: 60px;
+        border-radius: 60px;
+        background: var(--bs-light);
+        color: var(--bs-primary);
+        font-size: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.5s;
+    }
 
-.header-carousel .owl-nav .owl-prev:hover,
-.header-carousel .owl-nav .owl-next:hover {
-    box-shadow: inset 0 0 100px 0 var(--bs-secondary);
-    color: var(--bs-white);
-}
+        .header-carousel .owl-nav .owl-prev:hover,
+        .header-carousel .owl-nav .owl-next:hover {
+            box-shadow: inset 0 0 100px 0 var(--bs-primary);
+            color: var(--bs-white);
+        }
 
 /*Este es el fondo del navbar*/
 .header-carousel .header-carousel-item .carousel-caption {
@@ -348,7 +376,8 @@
     left: 0;
     bottom: 0;
     /*background: rgba(0, 0, 0, .2);*/
-    background: rgb(192, 27, 28);
+    /*background: rgb(192, 27, 28);*/
+    background: var(--bg-dark);
     display: flex;
     align-items: center;
 }
@@ -414,9 +443,10 @@
     transition: 0.5s;
 }
 
-.feature .feature-item:hover {
-    background: rgb(192, 27, 28);
-}
+    .feature .feature-item:hover {
+        /*background: rgb(192, 27, 28);*/
+        background: var(--bg-dark);
+    }
 
 .feature .feature-item .feature-icon {
     position: relative;
@@ -599,7 +629,8 @@
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
     /*background: var(--bs-primary);*/
-    background: rgb(192, 27, 28);
+    /*background: rgb(192, 27, 28);*/
+    background: var(--bg-dark);
     transition: 0.5s;
     z-index: 1;
 }
@@ -847,7 +878,8 @@
 /*** Footer Start ***/
 .footer {
     /*background: var(--bs-dark);*/
-    background: rgb(192, 27, 28);
+    /*background: rgb(192, 27, 28);*/
+    background: var(--bg-dark);
 }
 
 .footer .footer-item {

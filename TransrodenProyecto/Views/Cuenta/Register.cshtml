@@ -4,101 +4,97 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-    <!-- Registro Clientes Interfaz -->
-    <div class="container-fluid bg-light py-5">
-        <div class="container py-5">
-            <div class="row g-5 align-items-center">
-                <div class="col-xl-6 wow fadeInLeft" data-wow-delay="0.2s">
-                    <div class="h-100">
-                        <div class="mb-5">
-                            <h1 class="display-4 mb-0 text-center" style="color: cornflowerblue">Registrarse</h1>
+<!-- Registro Clientes Interfaz -->
+<div class="container-fluid bg-light py-5">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <!-- Añadido justify-content-center -->
+            <div class="col-xl-8 wow fadeInLeft" data-wow-delay="0.2s">
+                <!-- Cambiado a col-xl-8 para centrar -->
+                <div class="bg-white rounded shadow-sm p-5">
+                    <!-- Añadido bg-white, rounded y shadow-sm para el efecto -->
+                    <div class="mb-5">
+                        <h1 class="display-4 mb-0 text-center" style="color: cornflowerblue">Registrarse</h1>
+                    </div>
+
+                    @using (Html.BeginForm("Register", "Cuenta", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Nombre)
+                            @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Nombre)
                         </div>
 
-                        @using (Html.BeginForm("Register", "Cuenta", FormMethod.Post))
-                        {
-                            @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Apellidos)
+                            @Html.TextBoxFor(m => m.Apellidos, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Apellidos)
+                        </div>
 
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.Nombre)
-                                @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.Nombre)
-                            </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Cedula)
+                            @Html.TextBoxFor(m => m.Cedula, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Cedula)
+                        </div>
 
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.Apellidos)
-                                @Html.TextBoxFor(m => m.Apellidos, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.Apellidos)
-                            </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Correo)
+                            @Html.TextBoxFor(m => m.Correo, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Correo)
+                        </div>
 
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.Cedula)
-                                @Html.TextBoxFor(m => m.Cedula, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.Cedula)
-                            </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Clave)
+                            @Html.PasswordFor(m => m.Clave, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Clave)
+                        </div>
 
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.Correo)
-                                @Html.TextBoxFor(m => m.Correo, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.Correo)
-                            </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Telefono)
+                            @Html.TextBoxFor(m => m.Telefono, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Telefono)
+                        </div>
+                        <!--  Nueva linea de codigo para las notificaciones  -->
+                        <div class="form-group">
 
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.Clave)
-                                @Html.PasswordFor(m => m.Clave, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.Clave)
-                            </div>
-
-                            <div class="form-group">
-                                @Html.LabelFor(m => m.Telefono)
-                                @Html.TextBoxFor(m => m.Telefono, new { @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.Telefono)
-                            </div>
-                            <!--  Nueva linea de codigo para las notificaciones  -->
-                            <div class="form-group">
-
-                                <div class="col-md-10">
-                                    <div class="form-check">
-                                        @Html.CheckBoxFor(model => model.NotifCli, new { @class = "form-check-input" })
-                                        @Html.Label("Desea recibir notificaciones?", new { @class = "form-check-label" })
-                                        @Html.ValidationMessageFor(model => model.NotifCli, "", new { @class = "text-danger" })
-                                    </div>
+                            <div class="col-md-10">
+                                <div class="form-check">
+                                    @Html.CheckBoxFor(model => model.NotifCli, new { @class = "form-check-input" })
+                                    @Html.Label("Desea recibir notificaciones?", new { @class = "form-check-label" })
+                                    @Html.ValidationMessageFor(model => model.NotifCli, "", new { @class = "text-danger" })
                                 </div>
                             </div>
+                        </div>
 
-                            <!-- Mensaje de registro completado -->
-                            <div id="mensajeRegistro" style="display:none; margin-top:10px;" class="alert alert-success text-center">
-                                Registro completado
-                            </div>
+                        <!-- Mensaje de registro completado -->
+                        <div id="mensajeRegistro" style="display:none; margin-top:10px;" class="alert alert-success text-center">
+                            Registro completado
+                        </div>
 
-                            <!-- Botón para registrarse -->
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary" onclick="mostrarMensaje()">Registrar</button>
-                            </div>
+                        <!-- Botón para registrarse -->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary" onclick="mostrarMensaje()">Registrar</button>
+                        </div>
 
-                            <script>
-                                function mostrarMensaje() {
-                                    var mensaje = document.getElementById("mensajeRegistro");
-                                    mensaje.style.display = "block";
+                        <script>
+                            function mostrarMensaje() {
+                                var mensaje = document.getElementById("mensajeRegistro");
+                                mensaje.style.display = "block";
 
-                                    // Mostrar el mensaje durante 3 segundos, luego redirigir
-
-
+                                // Mostrar el mensaje durante 3 segundos, luego redirigir
 
 
-                                }
-                            </script>
-                        }
 
-                    </div>
-                </div>
 
-                <div class="col-xl-6 wow fadeInRight" data-wow-delay="0.4s">
-                    <img src="~/Content/assets/img/carousel-2.png" class="img-fluid w-100" alt="Registro de clientes">
-                    <div class="text-center">
-                        <h2 class="display-4 mb-0" style="color: red">Regístrese ahora</h2>
-                    </div>
+                            }
+                        </script>
+                    }
+
                 </div>
             </div>
         </div>
     </div>
-    <!-- Registro Clientes Interfaz -->
+</div>
+<!-- Registro Clientes Interfaz -->
