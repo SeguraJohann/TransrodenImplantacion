@@ -4,7 +4,16 @@
 
 :root {
     --logo-blue: #0d6efd;
-    --bg-dark: #282C34
+    --bg-dark: #282C34;
+    --bg-positivo: #38985a;
+    --bg-negativo: #c63847;
+    --bg-info: #015fc9;
+}
+
+/* Para hacer zoomout por defecto*/
+body {
+    zoom: 0.8;
+
 }
 
 
@@ -16,7 +25,7 @@
 
 /* Agregamos una nueva clase para el contenedor exterior */
 .login-outer-container {
-    background-color: #f8f9fa; /* Color gris suave para el margen */
+    background-color: #e8eef3; /* Color gris suave para el margen */
 }
 
 .forgot-password {
@@ -30,6 +39,23 @@
         text-decoration: underline;
     }
 
+.btn-positivo {
+    background-color: var(--bg-positivo);
+    color: white;
+    transition: all 0.3s ease;
+    border: none;
+    padding: 10px 20px;
+}
+
+    .btn-positivo:hover {
+        color: var(--bs-white);
+        background: var(--bs-dark);
+    }
+
+    .btn-positivo:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
 
 /* Boton Verde*/
 
@@ -166,6 +192,7 @@
 
 #maincontainer {
     background: var(--bs-white);
+    background: #f8f9fa;
 }
 
 #containertop {
@@ -803,7 +830,7 @@
     position: absolute;
     top: -58px;
     right: 0;
-    background: rgb(192, 27, 28);
+    background: var(--bg-info);
     color: var(--bs-white);
     padding: 5px 30px;
     border-radius: 30px;
@@ -819,7 +846,7 @@
     position: absolute;
     top: -58px;
     left: 0;
-    background: rgb(192, 27, 28);
+    background: var(--bg-info);
     color: var(--bs-white);
     padding: 5px 30px;
     border-radius: 30px;

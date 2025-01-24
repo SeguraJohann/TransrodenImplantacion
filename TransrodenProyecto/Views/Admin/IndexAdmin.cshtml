@@ -7,18 +7,19 @@
 
 
 
-    <div class="container mt-5">
-
-        @if (Session["Usuario"] != null)
-        {
-            <H3 class="navbar-text">Bienvenido, @Session["Usuario"]!</H3>
-        }
-    </div>
+    
 
     <div class="container-fluid service py-5">
         <div class="container py-5">
             <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
-                <h4 class="text-primary">Pagina de Inicio</h4>
+                <div class="container mt-5">
+
+                    @if (Session["Usuario"] != null)
+                    {
+                        <H3 class="navbar-text">Bienvenido, @Session["Usuario"]!</H3>
+                    }
+                </div>
+                <!--<h4 class="text-primary">Pagina de Inicio</h4> -->
                 <h1 class="display-4 mb-4">Este es el modulo administrativo de la Web Transroden Express SA</h1>
                 <p class="mb-0">
                     Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tenetur adipisci facilis cupiditate recusandae aperiam temporibus corporis itaque quis facere, numquam, ad culpa deserunt sint dolorem autem obcaecati, ipsam mollitia hic.

@@ -2,21 +2,32 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="container mt-5">
 
-    <h2 class="text-center">Agregar un Nuevo Registro de Kilometraje</h2>
+<div class="login-outer-container">
+    <div class="container d-flex align-items-center justify-content-center min-vh-50 py-5 login-container">
+        <div class="row justify-content-center w-100">
+            <div class="col-lg-4 col-md-6">
+                <div class="bg-white rounded p-4 p-sm-5 shadow-sm">
+                    <h2 class="text-center mb-4">Agregar Nuevo Kilometraje</h2>
 
-    @using (Html.BeginForm("AgregarKm", "Kilometrajes", FormMethod.Post))
-    {
-        @Html.AntiForgeryToken()
-        @Html.HiddenFor(model => model.Id_Camion)
+                    @using (Html.BeginForm("AgregarKm", "Kilometrajes", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(model => model.Id_Camion)
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Km_actual)
-            @Html.EditorFor(model => model.Km_actual, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Km_actual, "", new { @class = "text-danger" })
+                        <div class="form-group mb-4">
+                            @Html.LabelFor(model => model.Km_actual, "Kilometraje Actual", new { @class = "form-label" })
+                            @Html.EditorFor(model => model.Km_actual, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Km_actual, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn w-100" style="background-color: var(--bg-positivo); color: white;">Guardar</button>
+
+                        </div>
+                    }
+                </div>
+            </div>
         </div>
-        <br>
-        <button type="submit" class="btn btn-primary">Guardar</button>
-    }
+    </div>
 </div>

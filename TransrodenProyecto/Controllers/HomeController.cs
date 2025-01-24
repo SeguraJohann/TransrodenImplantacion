@@ -57,6 +57,10 @@ namespace TransrodenProyecto.Controllers
             return View();
         }
 
+        public ActionResult Tests()
+        {
+            return View();
+        }
 
     }
 }

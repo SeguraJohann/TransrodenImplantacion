@@ -5,60 +5,73 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<div class="login-outer-container">
+    <div class="container d-flex align-items-center justify-content-center min-vh-50 py-5 login-container">
+        <div class="row justify-content-center w-100">
+            <div class="col-12">
+                <div class="bg-white rounded p-4 p-sm-5 shadow-sm">
+                    <h2 class="text-center mb-4">Envío Domicilios Asignados</h2>
 
-    <div class="container mt-5">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Id Envío</th>
+                                    <th>Transportista</th>
+                                    <th>Estado</th>
+                                    <th>Paquetes Asignados</th>
+                                    <th>Ver Paquetes</th>
+                                    <th>Cambiar Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var envio in Model.Envios)
+                                {
+                                    <tr>
+                                        <td>@envio.Id_Envio</td>
+                                        <td>@envio.Usuario.Nombre</td>
+                                        <td>@envio.Estado.ToString()</td>
+                                        <td>@envio.NumeroPaquetes</td>
+                                        <td>
+                                            <a href="@Url.Action("EnvioPaquetesTransport", "PaquetesEnviosController", new { idEnvio = envio.Id_Envio })"
+                                               class="btn" style="background-color: var(--bg-positivo); color: white;">
+                                                Ver
+                                            </a>
+                                        </td>
+                                        <td>
+                                            @using (Html.BeginForm("EstadoEnvioTransp", "PaquetesEnviosController", FormMethod.Post))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                @Html.Hidden("idEnvio", envio.Id_Envio)
 
-        <!-- Cargas para enviar -->
-        <h2 class="text-center">Envio Domicilios Asignados</h2>
-        <br>
+                                                <div class="d-flex gap-2">
+                                                    <select name="nuevoEstado" class="form-select">
+                                                        <option value="">Estado</option>
+                                                        <option value="EnTransito">En Tránsito</option>
+                                                        <option value="Entregado">Entregado</option>
+                                                    </select>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Id Envio</th>
-                    <th>Transportista</th>
-                    <th>Estado</th>
-                    <th>Paquetes Asignados</th>
-                    <th>Ver Paquetes</th>
-                    <th>Cambiar Estado</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var envio in Model.Envios)
-                {
-                    <tr>
-                        <td>@envio.Id_Envio</td>
-                        <td>@envio.Usuario.Nombre</td>
-                        <td>@envio.Estado.ToString()</td>
-                        <td>@envio.NumeroPaquetes</td>
-                        <td>
-                            <a href="@Url.Action("EnvioPaquetesTransport", "PaquetesEnviosController", new { idEnvio = envio.Id_Envio })" class="btn btn-primary">
-                                Ver
-                            </a>
-                        </td>
-                        <td>
-                            @using (Html.BeginForm("EstadoEnvioTransp", "PaquetesEnviosController", FormMethod.Post))
-                            {
-                                @Html.AntiForgeryToken()
-                                @Html.Hidden("idEnvio", envio.Id_Envio)
+                                                    <button type="submit" class="btn" style="background-color: var(--bg-dark); color: white;">
+                                                        Actualizar
+                                                    </button>
+                                                </div>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
 
-                                <select name="nuevoEstado" class="form-control">
-                                    <option value="">Estado</option>
-                                    <option value="EnTransito">EnTransito</option>
-                                    <option value="Entregado">Entregado</option>
-                                </select>
+                    <div class="text-center mt-4">
 
-                                <button type="submit" class="btn btn-danger mt-2">Actualizar</button>
-                            }
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-
-        <br>
-        <a href="@Url.Action("AsignTransportista", "Admin")" class="btn btn-success">
-            Regresar
-        </a>
+                        <a href="@Url.Action("AsignTransportista", "Admin")"
+                           class="btn" style="background-color: var(--bg-info); color: white;">
+                            Regresar <i class="bi bi-arrow-return-left"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
+</div>

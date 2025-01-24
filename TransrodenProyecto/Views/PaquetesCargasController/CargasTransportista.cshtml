@@ -1,59 +1,74 @@
 ﻿@using TransrodenProyecto.Models
 @model TransrodenProyecto.ViewModels.PaqueteCargaViewModel
-
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<div class="login-outer-container">
+    <div class="container d-flex align-items-center justify-content-center min-vh-50 py-5 login-container">
+        <div class="row justify-content-center w-100">
+            <div class="col-12">
+                <div class="bg-white rounded p-4 p-sm-5 shadow-sm">
+                    <h2 class="text-center mb-4">Cargas Asignadas</h2>
 
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Id Carga</th>
+                                    <th>Transportista</th>
+                                    <th>Estado</th>
+                                    <th>Paquetes Asignados</th>
+                                    <th>Ver Paquetes</th>
+                                    <th>Cambiar Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var carga in Model.Cargas)
+                                {
+                                    <tr>
+                                        <td>@carga.Id_Carga</td>
+                                        <td>@carga.Usuario.Nombre</td>
+                                        <td>@carga.Estado.ToString()</td>
+                                        <td>@carga.NumeroPaquetes</td>
+                                        <td>
+                                            <a href="@Url.Action("CargaPaquetesViewTransp", "PaquetesCargasController", new { idCarga = carga.Id_Carga })"
+                                               class="btn" style="background-color: var(--bg-positivo); color: white;">
+                                                Ver
+                                            </a>
+                                        </td>
+                                        <td>
+                                            @using (Html.BeginForm("EstadoCargaTransp", "PaquetesCargasController", FormMethod.Post))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                @Html.Hidden("idCarga", carga.Id_Carga)
 
-    <div class="container mt-5">
+                                                <div class="d-flex gap-2">
+                                                    <select name="nuevoEstado" class="form-select">
+                                                        <option value="">Estado</option>
+                                                        <option value="Averia">Averia</option>
+                                                    </select>
 
-        <!-- Cargas para enviar -->
-        <h2 class="text-center">Cargas Asignadas</h2>
-        <br>
+                                                    <button type="submit" class="btn" style="background-color: var(--bg-dark); color: white;">
+                                                        Actualizar
+                                                    </button>
+                                                </div>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Id Carga</th>
-                    <th>Transportista</th>
-                    <th>Estado</th>
-                    <th>Paquetes Asignados</th>
-                    <th>Ver Paquetes</th>
-                    <th>Cambiar Estado</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var carga in Model.Cargas)
-                {
-                    <tr>
-                        <td>@carga.Id_Carga</td>
-                        <td>@carga.Usuario.Nombre</td>
-                        <td>@carga.Estado.ToString()</td>
-                        <td>@carga.NumeroPaquetes</td>
-                        <td>
-                            <a href="@Url.Action("CargaPaquetesViewTransp", "PaquetesCargasController", new { idCarga = carga.Id_Carga })" class="btn btn-success">
-                                Ver
-                            </a>
-                        </td>
-                        <td>
-                            @using (Html.BeginForm("EstadoCargaTransp", "PaquetesCargasController", FormMethod.Post))
-                            {
-                                @Html.AntiForgeryToken()
-                                @Html.Hidden("idCarga", carga.Id_Carga)
-
-                                <select name="nuevoEstado" class="form-control">
-                                    <option value="">Estado</option>
-                                    <option value="Averia">Averia</option>
-                                </select>
-
-                                <button type="submit" class="btn btn-danger mt-2">Actualizar</button>
-                            }
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                    <div class="text-center mt-4">
+                        <a href="@Url.Action("AsignTransportista", "Admin")"
+                           class="btn" style="background-color: var(--bg-info); color: white;">
+                            Regresar <i class="bi bi-arrow-return-left"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    
+</div>

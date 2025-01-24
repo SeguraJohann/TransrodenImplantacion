@@ -512,6 +512,7 @@
     <Content Include="Views\Shared\_FooterBodeguero.cshtml" />
     <Content Include="Views\Shared\_SinSesionNav.cshtml" />
     <Content Include="Views\Shared\_FooterSinSesion.cshtml" />
+    <Content Include="Views\Home\Tests.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_ClienteNav.cshtml" />

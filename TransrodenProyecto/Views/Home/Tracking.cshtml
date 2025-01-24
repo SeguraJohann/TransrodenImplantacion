@@ -5,104 +5,101 @@
 
 
 
-    <!-- Imagen de Banner -->
-    <div class="container-fluid bg-breadcrumb">
-        <div class="container text-center py-5" style="max-width: 900px;">
-            <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Experiencia, Servicio y Calidad!</h4>
-            <ol class="breadcrumb d-flex justify-content-center mb-0 wow fadeInDown" data-wow-delay="0.3s">
-                <li class="breadcrumb-item"><a href="index.html">Inicio</a></li>
-                <li class="breadcrumb-item"><a href="#">Rastreo</a></li>
-            </ol>
+<!-- Imagen de Banner
+<div class="container-fluid bg-breadcrumb">
+    <div class="container text-center py-5" style="max-width: 900px;">
+        <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Experiencia, Servicio y Calidad!</h4>
+        <ol class="breadcrumb d-flex justify-content-center mb-0 wow fadeInDown" data-wow-delay="0.3s">
+            <li class="breadcrumb-item"><a href="index.html">Inicio</a></li>
+            <li class="breadcrumb-item"><a href="#">Rastreo</a></li>
+        </ol>
+    </div>
+</div>
+    -->
+<!-- Barra de Busqueda -->
+
+<div class="container mt-5">
+    <h2 class="mb-4">Buscar Paquete</h2>
+
+    <!-- Formulario de Búsqueda -->
+    <form>
+        <div class="form-group">
+            <label for="trackingNumber">Número de Tracking</label>
+            <input type="text" class="form-control" id="trackingNumber" placeholder="Ingrese el número de tracking">
         </div>
-    </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Buscar</button>
+        <br>
+    </form>
+</div>
 
 
+<!-- About Start -->
+<div class="container-fluid bg-light about py-5">
+    <div class="container py-5">
+        <div class="row g-5">
 
-    <!-- Barra de Busqueda -->
-
-    <div class="container mt-5">
-        <h2 class="mb-4">Buscar Paquete</h2>
-
-        <!-- Formulario de Búsqueda -->
-        <form>
-            <div class="form-group">
-                <label for="trackingNumber">Número de Tracking</label>
-                <input type="text" class="form-control" id="trackingNumber" placeholder="Ingrese el número de tracking">
+            <div class="col-xl-6 wow fadeInLeft" data-wow-delay="0.2s">
+                <div class="about-item-content bg-white rounded p-5 h-100">
+                    <div class="mt-5">
+                        <h3>Detalles del Paquete</h3>
+                        <br>
+                        <table class="table table-details">
+                            <tr>
+                                <th>Número de Tracking:</th>
+                                <td>123456789</td>
+                            </tr>
+                            <tr>
+                                <th>Emisor:</th>
+                                <td>Empresa A</td>
+                            </tr>
+                            <tr>
+                                <th>Receptor:</th>
+                                <td>Juan Pérez</td>
+                            </tr>
+                            <tr>
+                                <th>Destino:</th>
+                                <td>Ciudad A</td>
+                            </tr>
+                            <tr>
+                                <th>Estado Actual:</th>
+                                <td>Entregado</td>
+                            </tr>
+                        </table>
+                        <div style="text-align: center;">
+                            <img src="~/Content/assets/img/rastreoentrega.jpg" alt="Logo" width="320" height="150">
+                        </div>
+                    </div>
+                </div>
             </div>
-            <br>
-            <button type="submit" class="btn btn-primary">Buscar</button>
-            <br>
-        </form>
-    </div>
 
-
-    <!-- About Start -->
-    <div class="container-fluid bg-light about py-5">
-        <div class="container py-5">
-            <div class="row g-5">
-
-                <div class="col-xl-6 wow fadeInLeft" data-wow-delay="0.2s">
-                    <div class="about-item-content bg-white rounded p-5 h-100">
-                        <div class="mt-5">
-                            <h3>Detalles del Paquete</h3>
+            <div class="col-xl-6 wow fadeInRight" data-wow-delay="0.2s">
+                <div class="bg-white rounded p-5 h-100">
+                    <div class="row g-4 justify-content-center">
+                        <div class="mt-4">
+                            <h3>Historial del Paquete</h3>
                             <br>
-                            <table class="table table-details">
-                                <tr>
-                                    <th>Número de Tracking:</th>
-                                    <td>123456789</td>
-                                </tr>
-                                <tr>
-                                    <th>Emisor:</th>
-                                    <td>Empresa A</td>
-                                </tr>
-                                <tr>
-                                    <th>Receptor:</th>
-                                    <td>Juan Pérez</td>
-                                </tr>
-                                <tr>
-                                    <th>Destino:</th>
-                                    <td>Ciudad A</td>
-                                </tr>
-                                <tr>
-                                    <th>Estado Actual:</th>
-                                    <td>Entregado</td>
-                                </tr>
-                            </table>
+                            <br>
+                            <ul class="timeline">
+                                <li class="timeline-item">
+                                    <span class="badge badge-secondary">Bodega PZ</span>
+                                    <p>San José - 2024-08-10 10:00</p>
+                                </li>
+                                <li class="timeline-item">
+                                    <span class="badge badge-warning">En Tránsito</span>
+                                    <p>Ruta hacia Perez Zeledon - 2024-08-11 08:00</p>
+                                </li>
+                                <li class="timeline-item">
+                                    <span class="badge badge-info">En Tránsito Domicilio</span>
+                                    <p>Ciudad A - 2024-08-11 14:30</p>
+                                </li>
+                                <li class="timeline-item">
+                                    <span class="badge badge-info">Entregado</span>
+                                    <p>Entregado - 2024-08-11 18:00</p>
+                                </li>
+                            </ul>
                             <div style="text-align: center;">
-                                <img src="~/Content/assets/img/rastreoentrega.jpg" alt="Logo" width="320" height="150">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xl-6 wow fadeInRight" data-wow-delay="0.2s">
-                    <div class="bg-white rounded p-5 h-100">
-                        <div class="row g-4 justify-content-center">
-                            <div class="mt-4">
-                                <h3>Historial del Paquete</h3>
-                                <br>
-                                <br>
-                                <ul class="timeline">
-                                    <li class="timeline-item">
-                                        <span class="badge badge-secondary">Bodega PZ</span>
-                                        <p>San José - 2024-08-10 10:00</p>
-                                    </li>
-                                    <li class="timeline-item">
-                                        <span class="badge badge-warning">En Tránsito</span>
-                                        <p>Ruta hacia Perez Zeledon - 2024-08-11 08:00</p>
-                                    </li>
-                                    <li class="timeline-item">
-                                        <span class="badge badge-info">En Tránsito Domicilio</span>
-                                        <p>Ciudad A - 2024-08-11 14:30</p>
-                                    </li>
-                                    <li class="timeline-item">
-                                        <span class="badge badge-info">Entregado</span>
-                                        <p>Entregado - 2024-08-11 18:00</p>
-                                    </li>
-                                </ul>
-                                <div style="text-align: center;">
-                                    <img src="~/Content/assets/img/entregado.jpg" alt="Logo" width="110" height="100">
-                                </div>
+                                <img src="~/Content/assets/img/entregado.jpg" alt="Logo" width="110" height="100">
                             </div>
                         </div>
                     </div>
@@ -110,10 +107,11 @@
             </div>
         </div>
     </div>
-    <!-- About End -->
+</div>
+<!-- About End -->
 
 
-    <script>
+<script>
 // Tiempo de inactividad en milisegundos (1 minuto)
 var idleTime = 0;
 var idleLimit = 300; // 1 minuto en segundos
@@ -147,4 +145,4 @@ const inputs = document.querySelectorAll('input, textarea');
 inputs.forEach(input => {
     input.onfocus = resetIdleTime; // Reinicia el contador cuando se enfoca un campo de entrada
 });
-    </script>
+</script>

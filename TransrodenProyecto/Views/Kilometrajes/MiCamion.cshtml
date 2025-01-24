@@ -2,67 +2,67 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="container mt-5">
 
+<div class="login-outer-container">
+    <div class="container d-flex align-items-center justify-content-center min-vh-50 py-5 login-container">
+        <div class="row justify-content-center w-100">
+            <div class="col-lg-8 col-md-10">
+                <div class="bg-white rounded p-4 p-sm-5 shadow-sm">
+                    <h2 class="text-center mb-4">Mi Camión</h2>
 
-    <h2 class="text-center">Mi Camión</h2>
+                    @using (Html.BeginForm("CambiarCamion", "Kilometrajes", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form-group mb-4">
+                            <label class="form-label" for="Id_Camion">Cambiar de camión:</label>
+                            @Html.DropDownList("Id_Camion", Model.CamionesDisponibles, "Seleccione un camión", new { @class = "form-control" })
+                        </div>
+                        <button type="submit" class="btn w-100 mb-4" style="background-color: var(--bg-positivo); color: white;">Cambiar</button>
+                    }
 
+                    <div class="mb-4">
+                        <h4 class="mb-3">Camión Actual</h4>
+                        @if (Model.CamionActual != null)
+                        {
+                            <p class="mb-3"><strong>@Model.CamionActual.Marca - @Model.CamionActual.Modelo</strong></p>
+                            
+                        }
+                        else
+                        {
+                            <p><em>No tiene un camión asignado</em></p>
+                        }
+                    </div>
 
-    @using (Html.BeginForm("CambiarCamion", "Kilometrajes", FormMethod.Post))
-    {
-        @Html.AntiForgeryToken()
-        <div class="form-group">
-            <label for="Id_Camion">Cambiar de camión:</label>
-            @Html.DropDownList("Id_Camion", Model.CamionesDisponibles, "Seleccione un camión", new { @class = "form-control" })
+                    <h4 class="mb-3">Historial de Kilómetros</h4>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>@Html.DisplayNameFor(model => model.Kilometros.First().Km_anterior)</th>
+                                    <th>@Html.DisplayNameFor(model => model.Kilometros.First().Km_actual)</th>
+                                    <th>@Html.DisplayNameFor(model => model.Kilometros.First().Transportista)</th>
+                                    <th>@Html.DisplayNameFor(model => model.Kilometros.First().Registro)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var km in Model.Kilometros)
+                                {
+                                    <tr>
+                                        <td>@km.Km_anterior</td>
+                                        <td>@km.Km_actual</td>
+                                        <td>@km.Transportista</td>
+                                        <td>@km.Registro</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <a href="@Url.Action("KmRegistro", "Kilometrajes", new { id = Model.CamionActual.Id_Camion })"
+                           class="btn w-100" style="background-color: var(--bg-positivo); color: white;">
+                            Agregar Kilometraje
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <br>
-        <button type="submit" class="btn btn-danger">Cambiar</button>
-    }
-
-
-    <br>
-    <br>
-
-    <div>
-        <h4>Camión Actual</h4>
-        @if (Model.CamionActual != null)
-        {
-            <p><strong>@Model.CamionActual.Marca - @Model.CamionActual.Modelo</strong></p>
-            <a href="@Url.Action("KmRegistro", "Kilometrajes", new { id = Model.CamionActual.Id_Camion })" class="btn btn-primary">
-                Agregar Kilometraje
-            </a>
-        }
-        else
-        {
-            <p><em>No tiene un camión asignado</em></p>
-        }
     </div>
-
-    <br>
-    <br>
-
-    <h4>Historial de Kilómetros</h4>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>@Html.DisplayNameFor(model => model.Kilometros.First().Km_anterior)</th>
-                <th>@Html.DisplayNameFor(model => model.Kilometros.First().Km_actual)</th>
-                <th>@Html.DisplayNameFor(model => model.Kilometros.First().Transportista)</th>
-                <th>@Html.DisplayNameFor(model => model.Kilometros.First().Registro)</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var km in Model.Kilometros)
-            {
-                <tr>
-                    <td>@km.Km_anterior</td>
-                    <td>@km.Km_actual</td>
-                    <td>@km.Transportista</td>
-                    <td>@km.Registro</td>
-                </tr>
-            }
-        </tbody>
-    </table>
 </div>
-

@@ -10,21 +10,21 @@
 
 
 
-    <!-- Imagen de Banner -->
-    <div class="container-fluid bg-breadcrumb">
-        <div class="container text-center py-5" style="max-width: 900px;">
-            <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Experiencia, Servicio y Calidad!</h4>
-            <ol class="breadcrumb d-flex justify-content-center mb-0 wow fadeInDown" data-wow-delay="0.3s">
-                <li class="breadcrumb-item"><a href="index.html">Inicio</a></li>
-                <li class="breadcrumb-item"><a href="#">Rastreo</a></li>
-            </ol>
-        </div>
+<!-- Imagen de Banner
+<div class="container-fluid bg-breadcrumb">
+    <div class="container text-center py-5" style="max-width: 900px;">
+        <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Experiencia, Servicio y Calidad!</h4>
+        <ol class="breadcrumb d-flex justify-content-center mb-0 wow fadeInDown" data-wow-delay="0.3s">
+            <li class="breadcrumb-item"><a href="index.html">Inicio</a></li>
+            <li class="breadcrumb-item"><a href="#">Rastreo</a></li>
+        </ol>
     </div>
+</div> -->
 
 
 
-    @{
-        var estadoDescripcion = new Dictionary<EstadoPaquete, string>
+@{
+    var estadoDescripcion = new Dictionary<EstadoPaquete, string>
 {
         { EstadoPaquete.SinAsignar, "Sin Asignar" },
         { EstadoPaquete.SinAsignarSJ, "En poder de Transroden San José" },
@@ -38,70 +38,77 @@
         { EstadoPaquete.NoEntregado, "El paquete no pudo ser entregado, por favor contactanos para coordinar su reenvio o ve a la sucursal de tu conveniencia." },
         { EstadoPaquete.Reenvio, "El paquete esta siendo preparado para su reenvio" }
     };
-    }
+}
 
 
-    <div class="container mt-5">
-        <h2 class="text-center">Rastreo de paquete</h2>
-        <br>
+<!-- Contenedor exterior con fondo gris -->
+<div class="login-outer-container">
+    <!-- Main Container -->
+    <div class="container d-flex align-items-center justify-content-center min-vh-50 py-5 login-container">
+        <!-- Padding exterior de la caja de rastreo -->
+        <div class="row justify-content-center w-100">
+            <!-- Ancho de la caja de rastreo -->
+            <div class="col-lg-8 col-md-10">
+                <div class="bg-white rounded p-4 p-sm-5 shadow-sm">
+                    <h2 class="text-center mb-4">Rastreo de paquete</h2>
+                    <form method="get" action="@Url.Action("Rastreo")">
+                        <div class="mb-4">
+                            <label for="numeroRastreo" class="form-label">Ingresa el Número de Rastreo:</label>
+                            <input type="text" name="numeroRastreo" id="numeroRastreo" class="form-control" placeholder="Número de rastreo" required />
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 mb-4">Buscar</button>
+                    </form>
 
-        <form method="get" action="@Url.Action("Rastreo")">
-            <div class="form-group">
-                <label for="numeroRastreo">Ingresa el Número de Rastreo:</label>
-                <br>
-                <br>
-                <input type="text" name="numeroRastreo" id="numeroRastreo" class="form-control" placeholder="número de rastreo" />
-            </div>
-            <br>
-            <button type="submit" class="btn btn-primary">Buscar</button>
-        </form>
+                    @{
+                        if (Model.Paquete != null)
+                        {
+                            <div class="bg-light p-4 rounded mb-4">
+                                <h4 class="mb-3">Detalles del Paquete</h4>
+                                <div class="row">
+                                    <div class="col-md-6 mb-2">
+                                        <p><strong>Número de Rastreo:</strong> @Model.Paquete.NumeroRastreo</p>
+                                        <p><strong>Nombre Emisor:</strong> @Model.Paquete.NombreEmisor</p>
+                                    </div>
+                                    <div class="col-md-6 mb-2">
+                                        <p><strong>Nombre Receptor:</strong> @Model.Paquete.NombreReceptor</p>
+                                        <p><strong>Dirección:</strong> @Model.Paquete.Direccion</p>
+                                    </div>
+                                </div>
+                            </div>
 
-        <br />
-        <br>
-        @{
-            if (Model.Paquete != null)
-            {
-
-                <div>
-                    <p><strong>Número de Rastreo:</strong> @Model.Paquete.NumeroRastreo</p>
-                    <p><strong>Nombre Emisor:</strong> @Model.Paquete.NombreEmisor</p>
-                    <p><strong>Nombre Receptor:</strong> @Model.Paquete.NombreReceptor</p>
-                    <p><strong>Dirección:</strong> @Model.Paquete.Direccion</p>
-
-                </div>
-                <br />
-
-                <h3>Historial de Rastreo</h3>
-                <br>
-
-                if (Model.Historial != null && Model.Historial.Any())
-                {
-
-
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Estado</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.Historial)
+                            <h3 class="mb-3">Historial de Rastreo</h3>
+                            if (Model.Historial != null && Model.Historial.Any())
                             {
-                                <tr>
-                                    <td>@item.Fecha</td>
-                                    <td>@estadoDescripcion[item.Estado]</td>
-                                </tr>
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Fecha</th>
+                                                <th>Estado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.Historial)
+                                            {
+                                                <tr>
+                                                    <td>@item.Fecha</td>
+                                                    <td>@estadoDescripcion[item.Estado]</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
                             }
-                        </tbody>
-                    </table>
-                }
-                else
-                {
-                    <p>No se encontraron registros de rastreo para este paquete.</p>
-                }
-            }
-        }
-
+                            else
+                            {
+                                <div class="alert alert-info">
+                                    No se encontraron registros de rastreo para este paquete.
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
     </div>
-
+</div>

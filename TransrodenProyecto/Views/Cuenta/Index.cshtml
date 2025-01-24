@@ -6,77 +6,82 @@
 
 
 <body>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <h2 class="mb-4">Mi Perfil</h2>
 
-                @if (TempData["SuccessMessage"] != null)
-                {
-                    <div class="alert alert-success">
-                        @TempData["SuccessMessage"]
-                    </div>
-                }
+    <div class="login-outer-container">
+        <div class="container d-flex align-items-center justify-content-center min-vh-50 py-5 login-container">
+            <div class="row justify-content-center w-100">
+                <div class="col-lg-6 col-md-8">
+                    <div class="bg-white rounded p-4 p-sm-5 shadow-sm">
+                        <h2 class="text-center mb-4">Mi Perfil</h2>
 
-                @using (Html.BeginForm("Index", "Cuenta", FormMethod.Post))
-                {
-                    @Html.AntiForgeryToken()
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    @Html.HiddenFor(model => model.Id_Usuario)
-                    @Html.HiddenFor(model => model.Rol)
-                    @Html.HiddenFor(model => model.Sede)
-
-                    <div class="form-group mb-3">
-                        @Html.LabelFor(model => model.Nombre, "Nombre", new { @class = "control-label" })
-                        @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
-                    </div>
-
-                    <div class="form-group mb-3">
-                        @Html.LabelFor(model => model.Apellidos, "Apellidos", new { @class = "control-label" })
-                        @Html.EditorFor(model => model.Apellidos, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Apellidos, "", new { @class = "text-danger" })
-                    </div>
-
-                    <div class="form-group mb-3">
-                        @Html.LabelFor(model => model.Cedula, "Cédula", new { @class = "control-label" })
-                        @Html.EditorFor(model => model.Cedula, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Cedula, "", new { @class = "text-danger" })
-                    </div>
-
-                    <div class="form-group mb-3">
-                        @Html.LabelFor(model => model.Correo, "Correo", new { @class = "control-label" })
-                        @Html.EditorFor(model => model.Correo, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Correo, "", new { @class = "text-danger" })
-                    </div>
-
-                    <div class="form-group mb-3">
-                        @Html.LabelFor(model => model.Telefono, "Teléfono", new { @class = "control-label" })
-                        @Html.EditorFor(model => model.Telefono, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
-                    </div>
-
-                    <div class="form-group mb-3">
-                        @Html.LabelFor(model => model.Clave, "Contraseña", new { @class = "control-label" })
-                        @Html.Password("Clave", null, new
+                        @if (TempData["SuccessMessage"] != null)
                         {
-                            @class = "form-control",
-                            placeholder = "Dejar en blanco para mantener la contraseña actual",
-                            data_val = "false" // Esto deshabilita la validación del lado del cliente
-                        })
-                        <small class="text-muted">Dejar en blanco si no desea cambiar la contraseña</small>
-                    </div>
+                            <div class="alert alert-success">
+                                @TempData["SuccessMessage"]
+                            </div>
+                        }
 
-                    <div class="form-check mb-3">
-                        @Html.CheckBoxFor(model => model.NotifCli, new { @class = "form-check-input" })
-                        @Html.LabelFor(model => model.NotifCli, "Recibir notificaciones", new { @class = "form-check-label" })
-                    </div>
+                        @using (Html.BeginForm("Index", "Cuenta", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            @Html.HiddenFor(model => model.Id_Usuario)
+                            @Html.HiddenFor(model => model.Rol)
+                            @Html.HiddenFor(model => model.Sede)
 
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                        @Html.ActionLink("Volver", "Index", "Home", null, new { @class = "btn btn-secondary" })
+                            <div class="form-group mb-3">
+                                @Html.LabelFor(model => model.Nombre, "Nombre", new { @class = "form-label" })
+                                @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group mb-3">
+                                @Html.LabelFor(model => model.Apellidos, "Apellidos", new { @class = "form-label" })
+                                @Html.EditorFor(model => model.Apellidos, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Apellidos, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group mb-3">
+                                @Html.LabelFor(model => model.Cedula, "Cédula", new { @class = "form-label" })
+                                @Html.EditorFor(model => model.Cedula, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Cedula, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group mb-3">
+                                @Html.LabelFor(model => model.Correo, "Correo", new { @class = "form-label" })
+                                @Html.EditorFor(model => model.Correo, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Correo, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group mb-3">
+                                @Html.LabelFor(model => model.Telefono, "Teléfono", new { @class = "form-label" })
+                                @Html.EditorFor(model => model.Telefono, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group mb-3">
+                                @Html.LabelFor(model => model.Clave, "Contraseña", new { @class = "form-label" })
+                                @Html.Password("Clave", null, new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "Dejar en blanco para mantener la contraseña actual",
+                                    data_val = "false"
+                                })
+                                <small class="text-muted">Dejar en blanco si no desea cambiar la contraseña</small>
+                            </div>
+
+                            <div class="form-check mb-4">
+                                @Html.CheckBoxFor(model => model.NotifCli, new { @class = "form-check-input" })
+                                @Html.LabelFor(model => model.NotifCli, "Recibir notificaciones", new { @class = "form-check-label" })
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn w-100" style="background-color: var(--bg-positivo); color: white;">Guardar Cambios</button>
+                                @Html.ActionLink("Volver", "Index", "Home", null, new { @class = "btn w-100", @style = "background-color: var(--bg-negativo); color: white;" })
+                            </div>
+                        }
                     </div>
-                }
+                </div>
             </div>
         </div>
     </div>
