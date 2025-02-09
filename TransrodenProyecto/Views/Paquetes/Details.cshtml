@@ -6,179 +6,124 @@
 }
 
 
-
-    <div class="container mt-5">
-        <h2 class="text-center">Detalles del Paquete</h2>
-        <br>
-
-
-        <div class="form-horizontal">
-
-
-            <div class="row">
-
-                <!-- Columna izquierda -->
-                <div class="col-md-6">
-
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                        </div>
-                        <div class="panel-body">
-                            <dl class="dl-horizontal">
-
-                                <!--
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.Carga.Id_Carga)
-                                </dt>
-
-                                <dd>
-                                    @Html.DisplayFor(model => model.Carga.Id_Carga)
-                                </dd>
-
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.Envio.Id_Envio)
-                                </dt>
-
-                                <dd>
-                                    @Html.DisplayFor(model => model.Envio.Id_Envio)
-                                </dd>
-                                    -->
-
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.NumeroRastreo)
-                                </dt>
-
-                                <dd>
-                                    @Html.DisplayFor(model => model.NumeroRastreo)
-                                </dd>
-
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.Cliente)
-                                </dt>
-
-                                <dd>
-                                    @Html.DisplayFor(model => model.Cliente)
-                                </dd>
-
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.Tipo)
-                                </dt>
-
-                                <dd>
-                                    @Html.DisplayFor(model => model.Tipo)
-                                </dd>
-
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.Origen)
-                                </dt>
-
-                                <dd>
-                                    @Html.DisplayFor(model => model.Origen)
-                                </dd>
-
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.Estado)
-                                </dt>
-
-                                <dd>
-                                    @Html.DisplayFor(model => model.Estado)
-                                </dd>
-
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.NombreEmisor)
-                                </dt>
-
-                                <dd>
-                                    @Html.DisplayFor(model => model.NombreEmisor)
-                                </dd>
-
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.CedulaEmisor)
-                                </dt>
-
-                                <dd>
-                                    @Html.DisplayFor(model => model.CedulaEmisor)
-                                </dd>
-
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.NombreReceptor)
-                                </dt>
-
-                                <dd>
-                                    @Html.DisplayFor(model => model.NombreReceptor)
-                                </dd>
-
-
-
-
-                            </dl>
-                        </div>
-                    </div>
-
-
-                </div>
-
-
-                <!-- Columna derecha -->
-                <div class="col-md-6">
-
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                        </div>
-                        <div class="panel-body">
-                            <dl class="dl-horizontal">
-
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.CedulaReceptor)
-                                </dt>
-
-                                <dd>
-                                    @Html.DisplayFor(model => model.CedulaReceptor)
-                                </dd>
-
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.Domicilio)
-                                </dt>
-
-                                <dd>
-                                    @Html.DisplayFor(model => model.Domicilio)
-                                </dd>
-
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.Direccion)
-                                </dt>
-
-                                <dd>
-                                    @Html.DisplayFor(model => model.Direccion)
-                                </dd>
-
-                                <dt>
-                                    @Html.DisplayNameFor(model => model.TelefonoDomicilio)
-                                </dt>
-
-                                <dd>
-                                    @Html.DisplayFor(model => model.TelefonoDomicilio)
-                                </dd>
-
-
-
-                            </dl>
-                        </div>
-                    </div>
-
-
-                </div>
-            </div>
-            <br>
-
-
-
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <h2 class="mb-0">Detalles del Paquete</h2>
+            <span class="badge bg-primary fs-5">@Html.DisplayFor(model => model.Estado)</span>
         </div>
 
-        <p>
-            @Html.ActionLink("Editar", "Edit", new { id = Model.Id_Paquete }, new { @class = "btn btn-success" }) |
-            @Html.ActionLink("Regresar a la lista", "Index")
-        </p>
+        <div class="card-body">
+            <div class="row g-4">
+                <!-- Información Principal -->
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">
+                                <i class="fas fa-box me-2"></i>Información del Paquete
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <div class="alert alert-info">
+                                        <strong>Número de Rastreo:</strong><br>
+                                        @Html.DisplayFor(model => model.NumeroRastreo)
+                                    </div>
+                                </div>
+                            </div>
 
+                            <div class="row g-3">
+                                <div class="col-sm-6">
+                                    <label class="fw-bold">Tipo de Cliente</label>
+                                    <p>@Html.DisplayFor(model => model.Cliente)</p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="fw-bold">Tipo de Paquete</label>
+                                    <p>@Html.DisplayFor(model => model.Tipo)</p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="fw-bold">Origen</label>
+                                    <p>@Html.DisplayFor(model => model.Origen)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Información de Entrega -->
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">
+                                <i class="fas fa-truck me-2"></i>Información de Entrega
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge @(Model.Domicilio ? "bg-success" : "bg-danger") me-2 fs-5 ">
+                                        <i class="fas @(Model.Domicilio ? "fa-check" : "fa-times") me-1"></i>
+                                        Entrega a Domicilio
+                                    </span>
+                                </div>
+                                @if (Model.Domicilio)
+                                {
+                                    <div class="card bg-light">
+                                        <div class="card-body">
+                                            <p class="mb-1"><strong>Dirección:</strong> @Html.DisplayFor(model => model.Direccion)</p>
+                                            <p class="mb-0"><strong>Teléfono:</strong> @Html.DisplayFor(model => model.TelefonoDomicilio)</p>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Información del Emisor y Receptor -->
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">
+                                <i class="fas fa-users me-2"></i>Información de Contacto
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="card bg-light mb-3">
+                                        <div class="card-body">
+                                            <h6 class="card-title text-primary">Emisor</h6>
+                                            <p class="mb-1"><strong>Nombre:</strong> @Html.DisplayFor(model => model.NombreEmisor)</p>
+                                            <p class="mb-0"><strong>Cédula:</strong> @Html.DisplayFor(model => model.CedulaEmisor)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card bg-light">
+                                        <div class="card-body">
+                                            <h6 class="card-title text-primary">Receptor</h6>
+                                            <p class="mb-1"><strong>Nombre:</strong> @Html.DisplayFor(model => model.NombreReceptor)</p>
+                                            <p class="mb-0"><strong>Cédula:</strong> @Html.DisplayFor(model => model.CedulaReceptor)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="d-flex justify-content-center gap-2">
+                        @Html.ActionLink("Editar", "Edit", new { id = Model.Id_Paquete }, new { @class = "btn btn-positivo d-flex align-items-center" })
+                        @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-primary d-flex align-items-center justify-content-center" })
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-   
+</div>

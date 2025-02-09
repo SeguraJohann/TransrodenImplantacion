@@ -1,75 +1,83 @@
 ﻿@using TransrodenProyecto.Models
 @model TransrodenProyecto.ViewModels.PaqueteCargaViewModel
-
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-    <!-- Paquetes recibidos -->
-    <div class="container mt-5">
-        <h3 class="text-center">Paquetes pendientes de reclamo</h3>
-        <br>
+<div class="login-outer-container">
+    <div class="container d-flex align-items-center justify-content-center min-vh-50 py-5 login-container">
+        <div class="row justify-content-center w-100">
+            <div class="col-12">
+                <div class="bg-white rounded p-4 p-sm-5 shadow-sm">
+                    <h2 class="text-center mb-4">Paquetes pendientes de reclamo</h2>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Numero de Rastreo</th>
-                    <th>Emisor</th>
-                    <th>Receptor</th>
-                    <th>Cedula Receptor</th>
-                    <th>Domicilio</th>
-                    <th>Pago</th>
-                    <th>Estado</th>
-                    <th>Accion</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var paquete in Model.Paquetes)
-                {
-                    <tr>
-                        <td>@paquete.NumeroRastreo</td>
-                        <td>@paquete.NombreEmisor</td>
-                        <td>@paquete.NombreReceptor</td>
-                        <td>@paquete.CedulaReceptor</td>
-                        <td>
-                            @if (paquete.Domicilio)
-                            {
-                                <i class="fas fa-check"></i>
-                            }
-                            else
-                            {
-                                <i class="far fa-times-circle"></i>
-                            }
-                        </td>
-                        <td>
-                            @if (@paquete.Pago)
-                            {
-                                <i class="fas fa-check"></i>
-                            }
-                            else
-                            {
-                                <i class="far fa-times-circle"></i>
-                            }
-                        </td>
-                        <td>@paquete.Estado.ToString()</td>
-                        <td>
-                            @using (Html.BeginForm("ActualizarEstadoPaquete", "PaquetesCargasController", FormMethod.Post))
-                            {
-                                @Html.AntiForgeryToken()
-                                @Html.Hidden("idPaquete", paquete.Id_Paquete)
-
-                                <select name="nuevoEstado" class="form-control">
-                                    <option value="">Estado</option>
-                                    <option value="BodegaSJ">BodegaSJ</option>
-                                    <option value="Entregado">Entregado</option>
-                                </select>
-
-                                <button type="submit" class="btn btn-success mt-2">Actualizar</button>
-                            }
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                    <div class="table-responsive shadow-sm rounded">
+                        <table class="table table-hover align-middle mb-0 bg-white">
+                            <thead class="bg-lightt">
+                                <tr>
+                                    <th>Numero de Rastreo</th>
+                                    <th>Emisor</th>
+                                    <th>Receptor</th>
+                                    <th>Cedula Receptor</th>
+                                    <th>Domicilio</th>
+                                    <th>Pago</th>
+                                    <th>Estado</th>
+                                    <th>Actualizar Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var paquete in Model.Paquetes)
+                                {
+                                    <tr>
+                                        <td>@paquete.NumeroRastreo</td>
+                                        <td>@paquete.NombreEmisor</td>
+                                        <td>@paquete.NombreReceptor</td>
+                                        <td>@paquete.CedulaReceptor</td>
+                                        <td class="text-center">
+                                            @if (paquete.Domicilio)
+                                            {
+                                                <i class="fas fa-check text-success"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="far fa-times-circle text-danger"></i>
+                                            }
+                                        </td>
+                                        <td class="text-center">
+                                            @if (@paquete.Pago)
+                                            {
+                                                <i class="fas fa-check text-success"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="far fa-times-circle text-danger"></i>
+                                            }
+                                        </td>
+                                        <td>@paquete.Estado.ToString()</td>
+                                        <td>
+                                            @using (Html.BeginForm("ActualizarEstadoPaquete", "PaquetesCargasController", FormMethod.Post))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                @Html.Hidden("idPaquete", paquete.Id_Paquete)
+                                                <div class="d-flex flex-column gap-2">
+                                                    <select name="nuevoEstado" class="form-select">
+                                                        <option value="">Estado</option>
+                                                        <option value="BodegaSJ">BodegaSJ</option>
+                                                        <option value="Entregado">Entregado</option>
+                                                    </select>
+                                                    <button type="submit" class="btn btn-action">
+                                                        <i class="fas fa-sync-alt me-2"></i>Actualizar
+                                                    </button>
+                                                </div>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
+</div>

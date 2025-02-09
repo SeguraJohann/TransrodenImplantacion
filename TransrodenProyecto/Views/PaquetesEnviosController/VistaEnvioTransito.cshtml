@@ -1,61 +1,131 @@
 ﻿@using TransrodenProyecto.Models
-@model TransrodenProyecto.ViewModels.PaqueteEnvioViewModel
+@model TransrodenProyecto.ViewModels.PaqueteCargaViewModel
 
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h3>Envios</h3>
-<br>
-<a href="@Url.Action("Create", "Envios")" class="btn btn-danger">
-    <i class="fas fa-user-plus"></i> Agregar Envio
-</a>
-<br>
+@{
+    var sedeUser = Session["Sede"] != null ? (Sede)Session["Sede"] : Sede.SanJose;
+}
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Id Envio</th>
-            <th>Transportista</th>
-            <th>Estado</th>
-            <th>Paquetes Asignados</th>
-            <th>Ver Paquetes</th>
-            <!--<th>Cambiar Estado</th>-->
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var envio in Model.Envios)
-        {
-            <tr>
-                <td>@envio.Id_Envio</td>
-                <td>@envio.Usuario.Nombre</td>
-                <td>@envio.Estado.ToString()</td>
-                <td>@envio.NumeroPaquetes</td>
-                <td>
-                    <a href="@Url.Action("EnvioPaquetes", "PaquetesEnviosController", new { idEnvio = envio.Id_Envio })" class="btn btn-success">
-                        Ver Paquetes
-                    </a>
-                </td>
-                <!--
-                  <td>
-                     @using (Html.BeginForm("ActualizarEstadoEnvioGlobal", "PaquetesEnviosController", FormMethod.Post))
-                     {
-                         @Html.AntiForgeryToken()
-                         @Html.Hidden("idEnvio", envio.Id_Envio)
+<div class="container-fluid bg-light py-4">
+    <!-- Header Section -->
+    <div class="text-center mb-4">
+        <h1 class="display-4">Sistema de Gestión de Cargas y Envíos</h1>
+        <p class="lead text-muted">Control de Paquetes en Tránsito</p>
+    </div>
 
-                         <select name="nuevoEstado" class="form-control">
-                             <option value="">Estado</option>
-                             <option value="BodegaSJ">BodegaSJ</option>
-                             <option value="BodegaPZ">BodegaPZ</option>
-                             <option value="EnTransito">EnTransito</option>
-                             <option value="Entregado">Entregado</option>
-                         </select>
+    <!-- Cargas en Tránsito Section -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white">
+            <h2 class="card-title mb-0">
+                <i class="fa fa-truck-loading me-2"></i>Cargas en Tránsito
+            </h2>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Origen</th>
+                            <th>Transportista</th>
+                            <th>Estado</th>
+                            <th>Paquetes</th>
+                            <th>Acciones</th>
+                            <th>Actualizar Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var carga in Model.Cargas)
+                        {
+                            <tr>
+                                <td><span class="badge bg-info">@carga.Id_Carga</span></td>
+                                <td>@carga.Origen</td>
+                                <td>
+                                    <i class="fa fa-user me-1"></i>
+                                    @carga.Usuario.Nombre
+                                </td>
+                                <td><span class="badge bg-primary">@carga.Estado.ToString()</span></td>
+                                <td>
+                                    <span class="badge bg-secondary">@carga.NumeroPaquetes</span>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("CargaPaquetesView", "PaquetesCargasController", new { idCarga = carga.Id_Carga })"
+                                       class="btn btn-sm btn-outline-success">
+                                        <i class="fa fa-eye me-1"></i>Ver Paquetes
+                                    </a>
+                                </td>
+                                <td>
+                                    @using (Html.BeginForm("ActualizarEstadoCargaGlobal", "PaquetesCargasController", FormMethod.Post))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        @Html.Hidden("idCarga", carga.Id_Carga)
+                                        <div class="input-group input-group-sm">
+                                            <select name="nuevoEstado" class="form-select">
+                                                <option value="">Seleccionar Estado</option>
+                                                <option value="BodegaSJ">Bodega San José</option>
+                                                <option value="BodegaPZ">Bodega Pérez Zeledón</option>
+                                                <option value="EnTransito">En Tránsito</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-outline-primary">
+                                                <i class="fa fa-sync-alt"></i>
+                                            </button>
+                                        </div>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-                         <button type="submit" class="btn btn-primary mt-2">Actualizar</button>
-                     }
-                 </td>
-                 -->
-            </tr>
-        }
-    </tbody>
-</table>
+    <!-- Envíos Domicilio Section -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-white">
+            <h2 class="card-title mb-0">
+                <i class="fa fa-home me-2"></i>Envíos a Domicilio en Tránsito
+            </h2>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Transportista</th>
+                            <th>Estado</th>
+                            <th>Paquetes</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var envio in Model.Envios)
+                        {
+                            <tr>
+                                <td><span class="badge bg-info">@envio.Id_Envio</span></td>
+                                <td>
+                                    <i class="fa fa-user me-1"></i>
+                                    @envio.Usuario.Nombre
+                                </td>
+                                <td><span class="badge bg-primary">@envio.Estado.ToString()</span></td>
+                                <td>
+                                    <span class="badge bg-secondary">@envio.NumeroPaquetes</span>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("EnvioPaquetes", "PaquetesEnviosController", new { idEnvio = envio.Id_Envio })"
+                                       class="btn btn-sm btn-outline-success">
+                                        <i class="fa fa-eye me-1"></i>Ver Paquetes
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

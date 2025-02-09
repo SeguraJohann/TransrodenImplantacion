@@ -19,8 +19,112 @@ body {
 
 /* Estilos que no venían en la plantilla*/
 
+/* Nuevos estilos para los botones */
+.btn-add-package {
+    background-color: var(--bg-positivo);
+    color: white;
+}
+
+.btn-clean {
+    background-color: var(--bg-dark);
+    color: white;
+}
+
+.btn-edit {
+    background-color: var(--bg-positivo);
+    color: white;
+}
+
+.btn-details {
+    background-color: var(--bg-info);
+    color: white;
+}
+
+.btn-delete {
+    background-color: var(--bg-negativo);
+    color: white;
+}
+
+/* Estilos para la tabla */
+#paquetesTable {
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+    #paquetesTable thead {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background: var(--bs-light);
+    }
+
+/* Estilos para los botones de acción */
+.btn-icon {
+    padding: 0.25rem 0.5rem;
+    margin: 0 0.125rem;
+    transition: all 0.3s ease;
+}
+
+    .btn-icon:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    }
+
+.btn-action {
+    transition: all 0.3s ease;
+}
+
+    .btn-action:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        opacity: 0.9;
+    }
+
+/* Alineación vertical para celdas de tabla */
+.table td {
+    vertical-align: middle;
+}
+
+/* Botones grandes */
+.btn-action.button-add {
+    background-color: var(--bg-positivo);
+    color: white;
+}
+
+.btn-action.button-clean {
+    background-color: var(--bg-dark);
+    color: white;
+}
+
+/* Botones de la tabla */
+.btn-icon.button-edit {
+    background-color: var(--bg-positivo);
+    color: white;
+}
+
+.btn-icon.button-details {
+    background-color: var(--bg-info);
+    color: white;
+}
+
+.btn-icon.button-delete {
+    background-color: var(--bg-negativo);
+    color: white;
+}
 .login-container {
     background-color: #ffffff; /* Fondo blanco para el contenedor principal */
+}
+.btn-action:hover {
+    color: var(--bs-white);
+    background: var(--bs-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    opacity: 0.9;
+}
+
+.btn-icon:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
 }
 
 /* Agregamos una nueva clase para el contenedor exterior */

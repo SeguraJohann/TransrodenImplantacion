@@ -5,90 +5,113 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
-<div class="container mt-5">
-
-
-    <h3>Esta seguro de eliminar la factura?</h3>
-    <div>
-        <hr />
-        <dl class="dl-horizontal">
-            <dt>
-                @Html.DisplayNameFor(model => model.Paquete.NumeroRastreo)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Paquete.NumeroRastreo)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Usuario.Nombre)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Usuario.Nombre)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.NombreEmisor)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.NombreEmisor)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.CedulaEmisor)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.CedulaEmisor)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Total)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Total)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Precio)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Precio)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Iva)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Iva)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Fecha)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Fecha)
-            </dd>
-
-        </dl>
-
-        @using (Html.BeginForm())
-        {
-            @Html.AntiForgeryToken()
-
-            <div class="form-actions no-color">
-                <input type="submit" value="Borrar" class="btn btn-danger" /> |
-                @Html.ActionLink("Regresar a la lista", "Index")
+<div class="login-outer-container">
+    <div class="container py-5 login-container">
+        <div class="bg-white rounded shadow-sm p-4">
+            <div class="card-header bg-danger text-white rounded-top">
+                <h2 class="text-center mb-0">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Confirmar Eliminación
+                </h2>
             </div>
-        }
+
+            <div class="card-body">
+                <div class="alert alert-warning mb-4">
+                    <h4 class="alert-heading mb-3">
+                        <i class="fas fa-question-circle me-2"></i>
+                        ¿Está seguro de eliminar esta factura?
+                    </h4>
+                    <p class="mb-0">Esta acción no se puede deshacer. Por favor, revise los detalles antes de confirmar.</p>
+                </div>
+
+                <div class="row g-4">
+                    <!-- Información de Factura -->
+                    <div class="col-12">
+                        <div class="bg-light rounded p-3">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5 class="text-primary">Número de Rastreo</h5>
+                                    <p class="h4">@Html.DisplayFor(model => model.Paquete.NumeroRastreo)</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5 class="text-primary">Usuario</h5>
+                                    <p class="h4">@Html.DisplayFor(model => model.Usuario.Nombre)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Detalles de Facturación -->
+                    <div class="col-md-6">
+                        <div class="bg-white border rounded h-100">
+                            <div class="bg-light p-3 border-bottom">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-user me-2"></i>
+                                    Información del Emisor
+                                </h5>
+                            </div>
+                            <div class="p-3">
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <label class="fw-bold">Nombre del Emisor</label>
+                                        <p>@Html.DisplayFor(model => model.NombreEmisor)</p>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="fw-bold">Cédula del Emisor</label>
+                                        <p>@Html.DisplayFor(model => model.CedulaEmisor)</p>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="fw-bold">Fecha</label>
+                                        <p>@Html.DisplayFor(model => model.Fecha)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Información de Montos -->
+                    <div class="col-md-6">
+                        <div class="bg-white border rounded h-100">
+                            <div class="bg-light p-3 border-bottom">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-dollar-sign me-2"></i>
+                                    Detalles de Pago
+                                </h5>
+                            </div>
+                            <div class="p-3">
+                                <div class="row g-3">
+                                    <div class="col-sm-6">
+                                        <label class="fw-bold">Precio Base</label>
+                                        <p>@Html.DisplayFor(model => model.Precio)</p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="fw-bold">IVA</label>
+                                        <p>@Html.DisplayFor(model => model.Iva)</p>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="fw-bold">Total</label>
+                                        <p class="h4 text-primary">@Html.DisplayFor(model => model.Total)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="row mt-4">
+                        <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-danger btn-lg me-2">
+                                <i class="fas fa-trash-alt me-2"></i>
+                                Confirmar Eliminación
+                            </button>
+                            @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-positivo btn-lg" })
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
     </div>
 </div>
-
-

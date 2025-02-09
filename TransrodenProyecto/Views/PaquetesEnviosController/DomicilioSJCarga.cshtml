@@ -5,146 +5,150 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
-
-
-    <h1 class="text-center">Envios Domicilios San Jose</h1>
-
-
-    <br>
-    <div class="d-flex justify-content-center ">
+<div class="container-fluid bg-light py-4">
+    <!-- Header Section -->
+    <div class="text-center mb-4">
+        <h1 class="display-4 mb-4">Envíos Domicilios Perez Zeledón</h1>
         <a href="@Url.Action("VistaCargaTransito", "PaquetesCargasController")" class="btn btn-primary">
-            <i class="fa fa-truck"></i> Ver cargas en Transito
+            <i class="fa fa-truck me-2"></i> Ver cargas en Tránsito
         </a>
     </div>
 
-    <div class="container mt-5">
-        @if (Session["Usuario"] != null)
-        {
-            int? sedeValue = Session["Sede"] as int?;
-            string sedeTexto = sedeValue.HasValue ?
-                ((Sede)sedeValue.Value == Sede.SanJose ? "San José" : "Perez Zeledón") :
-                "";
+    <div class="row g-4">
+        <!-- Packages Section - First Column -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white">
+                    <h3 class="card-title mb-0">
+                        <i class="fa fa-box me-2"></i>Paquetes Sin Envío Asignado
+                    </h3>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("AsignarPaqueteAEnvioPZ", "PaquetesEnviosController", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
 
-            <h2 class="navbar-text">Lista de Envios @sedeTexto</h2>
-        }
-
-        <br>
-        <br>
-
-        <div class="row">
-            <div class="col-md-6">
-                <h3>Paquetes</h3>
-
-
-                @using (Html.BeginForm("AsignarPaqueteAEnvioSJ", "PaquetesEnviosController", FormMethod.Post))
-                {
-                    @Html.AntiForgeryToken()
-
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Número de Rastreo</th>
-                                <th>Emisor</th>
-                                <th>Receptor</th>
-                                <th>Estado</th>
-                                <th>Asignar a Envios</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for (int i = 0; i < Model.Paquetes.Count; i++)
-                            {
-                                var paquete = Model.Paquetes[i];
+                     <div class="table-responsive shadow-sm rounded">
+                        <table class="table table-hover align-middle mb-0 bg-white">
+                            <thead class="bg-lightt">
                                 <tr>
-                                    <td>@paquete.NumeroRastreo</td>
-                                    <td>@paquete.NombreEmisor</td>
-                                    <td>@paquete.NombreReceptor</td>
-                                    <td>@paquete.Estado.ToString()</td>
-                                    <td>
-                                        @Html.Hidden($"PaqueteEnvioAsignaciones[{i}].IdPaquete", paquete.Id_Paquete)
-
-                                        <select name="PaqueteEnvioAsignaciones[@i].IdEnvio" class="form-control">
-                                            <option value="">Seleccionar Envio</option>
-                                            @foreach (var envio in Model.Envios)
-                                            {
-                                                <option value="@envio.Id_Envio">
-                                                    @envio.Descripcion - Usuario: @envio.Usuario.Nombre
-                                                </option>
-                                            }
-                                        </select>
-                                    </td>
+                                    <th>Número de Rastreo</th>
+                                    <th>Emisor</th>
+                                    <th>Receptor</th>
+                                    <th>Estado</th>
+                                    <th>Asignar a Envío</th>
                                 </tr>
-                            }
-                        </tbody>
-
-                    </table>
-
-                    <button type="submit" class="btn btn-primary">Asignar Envio</button>
-                }
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.Paquetes.Count; i++)
+                                {
+                                    var paquete = Model.Paquetes[i];
+                                    <tr>
+                                        <td><span class="badge" style="background-color: var(--bg-info); color: white;">@paquete.NumeroRastreo</span></td>
+                                        <td>@paquete.NombreEmisor</td>
+                                        <td>@paquete.NombreReceptor</td>
+                                        <td><span class="badge" style="background-color: var(--bg-info);">@paquete.Estado.ToString()</span></td>
+                                        <td>
+                                            @Html.Hidden($"PaqueteEnvioAsignaciones[{i}].IdPaquete", paquete.Id_Paquete)
+                                            <select name="PaqueteEnvioAsignaciones[@i].IdEnvio" class="form-select form-select-sm">
+                                                <option value="">Seleccionar Envío</option>
+                                                @foreach (var envio in Model.Envios)
+                                                {
+                                                    <option value="@envio.Id_Envio">
+                                                        Envío: @envio.Id_Envio - Usuario: @envio.Usuario.Nombre
+                                                    </option>
+                                                }
+                                            </select>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                        <div class="text-end mt-3">
+                            <button type="submit" class="btn" style="background-color: var(--bg-positivo); color: white;">
+                                <i class="fa fa-save me-2"></i>Asignar Envío
+                            </button>
+                        </div>
+                    }
+                </div>
             </div>
-            <div class="col-md-6">
-                <h3>Envios</h3>
-                <br>
-                <a href="@Url.Action("Create", "Envios")" class="btn btn-danger">
-                    <i class="fas fa-user-plus"></i> Agregar Envio
-                </a>
-                <br>
+        </div>
 
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Id Carga</th>
-                            <th>Transportista</th>
-                            <th>Estado</th>
-                            <th>Paquetes Asignados</th>
-                            <th>Ver Paquetes</th>
-                            <th>Editar Envio</th>
-                            <th>Cambiar Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var envio in Model.Envios)
-                        {
-                            <tr>
-                                <td>@envio.Id_Envio</td>
-                                <td>@envio.Usuario.Nombre</td>
-                                <td>@envio.Estado.ToString()</td>
-                                <td>@envio.NumeroPaquetes</td>
-                                <td>
-                                    <a href="@Url.Action("EnvioPaquetes", "PaquetesEnviosController", new { idEnvio = envio.Id_Envio })" class="btn btn-success">
-                                        Ver
-                                    </a>
-                                </td>
-                                <td>
-                                    <a href="@Url.Action("Edit", "Envios", new { id = envio.Id_Envio })" class="btn btn-primary">
-                                        Editar
-                                    </a>
-                                    <a href="@Url.Action("Delete", "Envios", new { id = envio.Id_Envio })" class="btn btn-danger">
-                                        Borrar
-                                    </a>
-                                </td>
-                                <td>
-                                    @using (Html.BeginForm("ActualizarEstadoEnvioSJ", "PaquetesEnviosController", FormMethod.Post))
-                                    {
-                                        @Html.AntiForgeryToken()
-                                        @Html.Hidden("idEnvio", envio.Id_Envio)
-
-                                        <select name="nuevoEstado" class="form-control">
-                                            <option value="">Estado</option>
-                                            <option value="BodegaSJ">BodegaSJ</option>
-                                            <option value="EnTransito">EnTransito</option>
-                                        </select>
-
-                                        <button type="submit" class="btn btn-danger mt-2">Actualizar</button>
-                                    }
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+        <!-- Active Shipments Section - Second Column -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h3 class="card-title mb-0">
+                        <i class="fa fa-truck-loading me-2"></i>Envíos Activos
+                    </h3>
+                    <a href="@Url.Action("Create", "Envios")" class="btn btn-positivo" style="color: white;">
+                        <i class="fas fa-plus me-2"></i>Agregar Envío
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive shadow-sm rounded">
+                        <table class="table table-hover align-middle mb-0 bg-white">
+                            <thead class="bg-lightt">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Transportista</th>
+                                    <th>Estado</th>
+                                    <th>Paquetes</th>
+                                    <th>Acciones</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var envio in Model.Envios)
+                                {
+                                    <tr>
+                                        <td><span class="badge" style="background-color: var(--bg-info); color: white;">@envio.Id_Envio</span></td>
+                                        <td>@envio.Usuario.Nombre</td>
+                                        <td><span class="badge" style="background-color: var(--bg-dark); color: white;">@envio.Estado.ToString()</span></td>
+                                        <td>
+                                            <span class="badge" style="background-color: var(--bg-info); color: white;">@envio.NumeroPaquetes</span>
+                                            <a href="@Url.Action("EnvioPaquetes", "PaquetesEnviosController", new { idEnvio = envio.Id_Envio })"
+                                               class="btn btn-sm btn-outline-primary ms-2">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a href="@Url.Action("Edit", "Envios", new { id = envio.Id_Envio })"
+                                                   class="btn btn-sm btn-outline-primary">
+                                                    <i class="fa fa-edit"></i>
+                                                </a>
+                                                <a href="@Url.Action("Delete", "Envios", new { id = envio.Id_Envio })"
+                                                   class="btn btn-sm" style="background-color: var(--bg-negativo); color: white;">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @using (Html.BeginForm("ActualizarEstadoEnvioPZ", "PaquetesEnviosController", FormMethod.Post))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                @Html.Hidden("idEnvio", envio.Id_Envio)
+                                                <div class="input-group input-group-sm">
+                                                    <select name="nuevoEstado" class="form-select">
+                                                        <option value="">Estado</option>
+                                                        <option value="BodegaPZ">BodegaPZ</option>
+                                                        <option value="EnTransito">EnTransito</option>
+                                                    </select>
+                                                    <button type="submit" class="btn btn-outline-secondary">
+                                                        <i class="fa fa-sync-alt"></i>
+                                                    </button>
+                                                </div>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-
         </div>
     </div>
-    <br>
-
+</div>

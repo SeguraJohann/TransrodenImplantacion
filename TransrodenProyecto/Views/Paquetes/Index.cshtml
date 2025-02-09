@@ -18,16 +18,24 @@
                         <div class="d-flex justify-content-center mb-4">
                             @if (usuarioRol == Rol.Administrador)
                             {
-                                <a href="@Url.Action("RegistrarPaqueteAdmin", "Paquetes")" class="btn btn-action" style="background-color: var(--bg-positivo); color: white;">
+                                <a href="@Url.Action("RegistrarPaqueteAdmin", "Paquetes")" class="btn btn-action btn-add-package">
                                     <i class="fas fa-box-open me-2"></i><span>Agregar Paquete</span>
                                 </a>
                             }
                             else
                             {
-                                <a href="@Url.Action("RegistrarPaquete", "Paquetes")" class="btn btn-action" style="background-color: var(--bg-positivo); color: white;">
+                                <a href="@Url.Action("RegistrarPaquete", "Paquetes")" class="btn btn-action btn-add-package">
                                     <i class="fas fa-box-open me-2"></i><span>Agregar Paquete</span>
                                 </a>
                             }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="d-flex justify-content-center mb-4">
+                            <a href="@Url.Action("RegistrarPaquete", "Paquetes")" class="btn btn-action btn-add-package">
+                                <i class="fas fa-box-open me-2"></i><span>Agregar Paquete</span>
+                            </a>
                         </div>
                     }
 
@@ -58,7 +66,7 @@
                                     <input type="date" class="form-control" id="endDate">
                                 </div>
                                 <div class="col-12">
-                                    <button type="button" onclick="limpiarBusqueda()" class="btn btn-action" style="background-color: var(--bg-dark); color: white;">
+                                    <button type="button" onclick="limpiarBusqueda()" class="btn btn-action btn-clean">
                                         <i class="fas fa-eraser me-2"></i>Limpiar
                                     </button>
                                 </div>
@@ -66,9 +74,9 @@
                         </div>
                     </div>
 
-                    <div class="table-responsive">
-                        <table class="table table-hover" id="paquetesTable">
-                            <thead class="table-light">
+                    <div class="table-responsive shadow-sm rounded">
+                        <table class="table table-hover align-middle mb-0 bg-white" id="paquetesTable">
+                            <thead class="bg-lightt">
                                 <tr>
                                     <th>@Html.DisplayNameFor(model => model.NumeroRastreo)</th>
                                     <th>@Html.DisplayNameFor(model => model.Tipo)</th>
@@ -98,51 +106,22 @@
     </div>
 </div>
 
-<style>
-    #paquetesTable {
-        max-height: 600px;
-        overflow-y: auto;
-    }
-
-        #paquetesTable thead {
-            position: sticky;
-            top: 0;
-            z-index: 1;
-            background: var(--bs-light);
-        }
-
-    .btn-icon {
-        padding: 0.25rem 0.5rem;
-        margin: 0 0.125rem;
-        transition: all 0.3s ease;
-    }
-
-        .btn-icon:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-        }
-
-    .btn-action {
-        transition: all 0.3s ease;
-    }
-
-        .btn-action:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            opacity: 0.9;
-        }
-
-    .table td {
-        vertical-align: middle;
-    }
-</style>
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function () {
     let currentPage = 1;
     let totalPages = 1;
     let isLoading = false;
+
+    function formatValue(value, field) {
+        if (value === null || value === '') {
+            return 'Sin descripción';
+        }
+        if (typeof value === 'boolean') {
+            return value ? 'Sí' : 'No';
+        }
+        return value;
+    }
 
     function renderPagination(totalPages) {
         // [Código de paginación existente]
@@ -176,24 +155,24 @@ $(document).ready(function () {
                 response.data.forEach(paquete => {
                     tableBody += `
                         <tr>
-                            <td>${paquete.NumeroRastreo}</td>
-                            <td>${paquete.Tipo}</td>
-                            <td>${paquete.Estado}</td>
-                            <td>${paquete.NombreEmisor}</td>
-                            <td>${paquete.CedulaEmisor}</td>
-                            <td>${paquete.Domicilio}</td>
-                            <td>${paquete.Direccion}</td>
-                            <td>${paquete.TelefonoDomicilio}</td>
-                            <td>${paquete.Pago}</td>
-                            <td>${paquete.Descripcion}</td>
+                            <td>${formatValue(paquete.NumeroRastreo)}</td>
+                            <td>${formatValue(paquete.Tipo)}</td>
+                            <td>${formatValue(paquete.Estado)}</td>
+                            <td>${formatValue(paquete.NombreEmisor)}</td>
+                            <td>${formatValue(paquete.CedulaEmisor)}</td>
+                            <td>${formatValue(paquete.Domicilio)}</td>
+                            <td>${formatValue(paquete.Direccion)}</td>
+                            <td>${formatValue(paquete.TelefonoDomicilio)}</td>
+                            <td>${formatValue(paquete.Pago)}</td>
+                            <td>${formatValue(paquete.Descripcion)}</td>
                             <td>
-                                <a href="/Paquetes/Edit/${paquete.Id_Paquete}" class="btn btn-icon" style="background-color: var(--bg-positivo); color: white;" title="Editar">
+                                <a href="/Paquetes/Edit/${paquete.Id_Paquete}" class="btn btn-icon btn-edit" title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <a href="/Paquetes/Details/${paquete.Id_Paquete}" class="btn btn-icon" style="background-color: var(--bg-info); color: white;" title="Detalles">
+                                <a href="/Paquetes/Details/${paquete.Id_Paquete}" class="btn btn-icon btn-details" title="Detalles">
                                     <i class="fas fa-info-circle"></i>
                                 </a>
-                                <a href="/Paquetes/Delete/${paquete.Id_Paquete}" class="btn btn-icon" style="background-color: var(--bg-negativo); color: white;" title="Borrar">
+                                <a href="/Paquetes/Delete/${paquete.Id_Paquete}" class="btn btn-icon btn-delete" title="Borrar">
                                     <i class="fas fa-trash"></i>
                                 </a>
                             </td>

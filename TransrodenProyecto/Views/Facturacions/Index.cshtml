@@ -5,44 +5,64 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container mt-5">
-    <div class="d-flex justify-content-end mb-4">
-        <a href="@Url.Action("Create", "Facturacions")" class="btn btn-danger">
-            <i class="fas fa-box-plus"></i> Agregar Factura
-        </a>
-    </div>
+<div class="login-outer-container">
+    <div class="container d-flex align-items-center justify-content-center min-vh-50 py-5 login-container">
+        <div class="row justify-content-center w-100">
+            <div class="col-12">
+                <div class="bg-white rounded p-4 p-sm-5 shadow-sm">
+                    <h2 class="text-center mb-4">Lista de Facturaciones</h2>
 
-    <!-- Barra de búsqueda -->
-    <div class="form-group">
-        <label for="searchId">Buscar Factura:</label>
-        <input type="number" id="searchId" class="form-control" placeholder="Ingrese ID de la Factura" />
-    </div>
+                    <div class="d-flex justify-content-center mb-4">
+                        <a href="@Url.Action("Create", "Facturacions")" class="btn btn-action button-add">
+                            <i class="fas fa-box-plus me-2"></i><span>Agregar Factura</span>
+                        </a>
+                    </div>
+                    
 
-    <br>
-    <h2>Lista de Facturaciones</h2>
-    <div style="overflow-y: auto; max-height: 400px;">
-        <table class="table" id="facturacionTable">
-            <thead>
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.Id_Facturacion)</th>
-                    <th>@Html.DisplayNameFor(model => model.Paquete.NumeroRastreo)</th>
-                    <th>@Html.DisplayNameFor(model => model.Usuario.Nombre)</th>
-                    <th>@Html.DisplayNameFor(model => model.NombreEmisor)</th>
-                    <th>@Html.DisplayNameFor(model => model.CedulaEmisor)</th>
-                    <th>@Html.DisplayNameFor(model => model.Precio)</th>
-                    <th>@Html.DisplayNameFor(model => model.Iva)</th>
-                    <th>@Html.DisplayNameFor(model => model.Total)</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Contenido dinámico -->
-            </tbody>
-        </table>
+                    <div class="card mb-4">
+                        <div class="card-header bg-light">
+                            <h4 class="mb-0">Buscar Factura</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Búsqueda por ID de Factura</label>
+                                    <input type="number" id="searchId" class="form-control" placeholder="Ingrese ID de la Factura">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <div class="table-responsive shadow-sm rounded">
+                            <table class="table table-hover align-middle mb-0 bg-white" id="facturacionTable">
+                                <thead>
+                                    <tr class="bg-light">
+                                        <th class="px-4 py-3 text-uppercase small font-weight-bold">@Html.DisplayNameFor(model => model.Id_Facturacion)</th>
+                                        <th class="px-4 py-3 text-uppercase small font-weight-bold">@Html.DisplayNameFor(model => model.Paquete.NumeroRastreo)</th>
+                                        <th class="px-4 py-3 text-uppercase small font-weight-bold">@Html.DisplayNameFor(model => model.Usuario.Nombre)</th>
+                                        <th class="px-4 py-3 text-uppercase small font-weight-bold">@Html.DisplayNameFor(model => model.NombreEmisor)</th>
+                                        <th class="px-4 py-3 text-uppercase small font-weight-bold">@Html.DisplayNameFor(model => model.CedulaEmisor)</th>
+                                        <th class="px-4 py-3 text-uppercase small font-weight-bold">@Html.DisplayNameFor(model => model.Precio)</th>
+                                        <th class="px-4 py-3 text-uppercase small font-weight-bold">@Html.DisplayNameFor(model => model.Iva)</th>
+                                        <th class="px-4 py-3 text-uppercase small font-weight-bold">@Html.DisplayNameFor(model => model.Total)</th>
+                                        <th class="px-4 py-3 text-uppercase small font-weight-bold text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Contenido dinámico -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <nav class="mt-4">
+                        <ul class="pagination justify-content-center" id="pagination"></ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
     </div>
-    <nav>
-        <ul class="pagination" id="pagination"></ul>
-    </nav>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -154,7 +174,7 @@ $(document).ready(function () {
                             <td>${factura.Total}</td>
                             <td>
                                 <a href="/Facturacions/Edit/${factura.Id_Facturacion}" class="btn btn-success">Editar</a>
-                                <a href="/Facturacions/DetalleFacturacion/${factura.Id_Facturacion}" class="btn btn-primary">Detalle</a>
+                                <a href="/Facturacions/DetalleFacturacion/${factura.Id_Facturacion}" class="btn btn-primary">Detalles</a>
                                 <a href="/Facturacions/Delete/${factura.Id_Facturacion}" class="btn btn-danger">Borrar</a>
                             </td>
                         </tr>`;

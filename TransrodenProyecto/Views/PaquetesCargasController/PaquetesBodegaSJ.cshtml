@@ -1,45 +1,53 @@
 ﻿@using TransrodenProyecto.Models
 @model TransrodenProyecto.ViewModels.PaqueteCargaViewModel
-
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-    <div>
-        <h2 class="text-center">Todos los paquetes en Bodega SJ</h2>
+<div class="login-outer-container">
+    <div class="container d-flex align-items-center justify-content-center min-vh-50 py-5 login-container">
+        <div class="row justify-content-center w-100">
+            <div class="col-12">
+                <div class="bg-white rounded p-4 p-sm-5 shadow-sm">
+                    <h2 class="text-center mb-4">Paquetes en Bodega SJ</h2>
+
+                    
+                    <div class="table-responsive shadow-sm rounded">
+                        <table class="table table-hover align-middle mb-0 bg-white" id="paquetesTable">
+                            <thead class="bg-lightt">
+                                <tr>
+                                    <th>Número de Rastreo</th>
+                                    <th>Emisor</th>
+                                    <th>Receptor</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var paquete in Model.Paquetes)
+                                {
+                                    <tr>
+                                        <td>@paquete.NumeroRastreo</td>
+                                        <td>@paquete.NombreEmisor</td>
+                                        <td>@paquete.NombreReceptor</td>
+                                        <td>@paquete.Estado.ToString()</td>
+                                        <td>
+                                            <a href="@Url.Action("Details", "Paquetes", new { id = paquete.Id_Paquete })"
+                                               class="btn btn-icon btn-details" title="Ver Detalles">
+                                                <i class="fas fa-info-circle"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <nav class="mt-4">
+                        <ul class="pagination justify-content-center" id="pagination"></ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
     </div>
-
-
-    <div class="container mt-5">
-
-
-        <table class="table mt-4">
-            <thead>
-                <tr>
-                    <th>Número de Rastreo</th>
-                    <th>Emisor</th>
-                    <th>Receptor</th>
-                    <th>Estado</th>
-                    <th>Detalles del Paquete</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var paquete in Model.Paquetes)
-                {
-                    <tr>
-                        <td>@paquete.NumeroRastreo</td>
-                        <td>@paquete.NombreEmisor</td>
-                        <td>@paquete.NombreReceptor</td>
-                        <td>@paquete.Estado.ToString()</td>
-                        <td>
-                            <a href="@Url.Action("Details", "Paquetes", new { id = paquete.Id_Paquete })" class="btn btn-primary">
-                                Ver
-                            </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-
-   
+</div>
