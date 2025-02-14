@@ -1,4 +1,5 @@
-﻿@model TransrodenProyecto.Models.Paquete
+﻿@using TransrodenProyecto.Models
+@model TransrodenProyecto.Models.Paquete
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -37,11 +38,30 @@
                                 @Html.ValidationMessageFor(model => model.Tipo, "", new { @class = "text-danger" })
                             </div>
 
+
+                            <div class="form-group mb-3">
+                                @Html.LabelFor(model => model.Origen, "Origen del Paquete", new { @class = "form-label fw-bold" })
+                                @{
+                                    // Obtener todas las opciones del enum y filtrar
+                                    var opcionesFiltradas = Enum.GetValues(typeof(OrigenPaquete))
+                                                               .Cast<OrigenPaquete>()
+                                                               .Where(x => x != OrigenPaquete.Otro)
+                                                               .Select(x => new SelectListItem
+                                                               {
+                                                                   Text = x.ToString(),
+                                                                   Value = x.ToString()
+                                                               }).ToList();
+                                }
+                                @Html.DropDownListFor(model => model.Origen, opcionesFiltradas, "Selecciona el Origen del Paquete", new { @class = "form-select" })
+                                @Html.ValidationMessageFor(model => model.Origen, "", new { @class = "text-danger" })
+                            </div>
+
+                            <!--
                             <div class="form-group mb-3">
                                 @Html.LabelFor(model => model.Origen, "Origen del Paquete", new { @class = "form-label fw-bold" })
                                 @Html.EnumDropDownListFor(model => model.Origen, "Selecciona el Origen del Paquete", new { @class = "form-select" })
                                 @Html.ValidationMessageFor(model => model.Origen, "", new { @class = "text-danger" })
-                            </div>
+                            </div>-->
 
                             <div class="form-group mb-3" style="display: none;">
                                 @Html.LabelFor(model => model.Estado, "Estado", new { @class = "form-label fw-bold" })
@@ -135,7 +155,7 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-    <script>
+    <!-- <script>
         $(document).ready(function () {
             function toggleDireccion() {
                 if ($('#pago-checkbox').is(':checked')) {
@@ -166,6 +186,38 @@
 
             toggleCedulaFields();
 
+            $("#tipoCliente").change(function () {
+                toggleCedulaFields();
+            });
+        });
+    </script>-->
+    <script>
+        $(document).ready(function () {
+            function toggleDireccion() {
+                if ($('#pago-checkbox').is(':checked')) {
+                    $('#direccion-group').show();
+                    $('#telefono-group').show();
+                } else {
+                    $('#direccion-group').hide();
+                    $('#telefono-group').hide();
+                }
+            }
+            toggleDireccion();
+            $('#pago-checkbox').change(function () {
+                toggleDireccion();
+            });
+            function toggleCedulaFields() {
+                var selectedValue = $("#tipoCliente").val();
+                if (selectedValue == 1) {
+                    $("#cedulaEmisor-group").hide();
+                } else {
+                    $("#cedulaEmisor-group").show();
+                    $("#cedulaReceptor-group").show();
+                }
+            }
+            // Ejecutar la función al cargar la página para establecer el estado inicial
+            toggleCedulaFields();
+            // Ejecutar la función cada vez que se cambie el valor del dropdown
             $("#tipoCliente").change(function () {
                 toggleCedulaFields();
             });
