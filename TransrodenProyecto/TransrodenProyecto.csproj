@@ -371,6 +371,7 @@
     <Content Include="Content\assets\scss\bootstrap\scss\_type.scss" />
     <Content Include="Content\assets\scss\bootstrap\scss\_utilities.scss" />
     <Content Include="Content\assets\scss\bootstrap\scss\_variables.scss" />
+    <None Include="Properties\PublishProfiles\TransrodenSA - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\TransrodenServer - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
