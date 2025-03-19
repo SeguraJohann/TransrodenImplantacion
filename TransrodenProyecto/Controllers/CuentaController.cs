@@ -66,9 +66,9 @@ namespace TransrodenProyecto.Controllers
             // Actualizar los campos
             usuarioExistente.Nombre = usuarioActualizado.Nombre;
             usuarioExistente.Apellidos = usuarioActualizado.Apellidos;
-            usuarioExistente.Cedula = usuarioActualizado.Cedula;
+            usuarioExistente.Cedula = usuarioActualizado.Cedula.Replace(" ", ""); // Eliminar espacios en cédula
             usuarioExistente.Correo = usuarioActualizado.Correo;
-            usuarioExistente.Telefono = usuarioActualizado.Telefono;
+            usuarioExistente.Telefono = usuarioActualizado.Telefono.Replace(" ", ""); // Eliminar espacios en teléfono
             usuarioExistente.NotifCli = usuarioActualizado.NotifCli;
 
             // Manejar la actualización de la contraseña
@@ -110,12 +110,128 @@ namespace TransrodenProyecto.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Register(Usuario usuario)
         {
+            // Limpiar espacios en cédula y teléfono
+            if (usuario.Cedula != null)
+                usuario.Cedula = usuario.Cedula.Replace(" ", "");
+
+            if (usuario.Telefono != null)
+                usuario.Telefono = usuario.Telefono.Replace(" ", "");
+
+            // Validación de formato de nombre y apellidos (solo letras)
+            // Validación de formato de nombre (solo letras)
+            if (!System.Text.RegularExpressions.Regex.IsMatch(usuario.Nombre, @"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$"))
+            {
+                ModelState.AddModelError("Nombre", "El nombre solo debe contener letras.");
+            }
+            // Validación de longitud del nombre
+            else if (usuario.Nombre.Length < 2)
+            {
+                ModelState.AddModelError("Nombre", "El nombre debe tener al menos 2 caracteres.");
+            }
+            else if (usuario.Nombre.Length > 15)
+            {
+                ModelState.AddModelError("Nombre", "El nombre no debe exceder los 50 caracteres.");
+            }
+
+            // Validación de formato de apellidos (solo letras)
+            if (!System.Text.RegularExpressions.Regex.IsMatch(usuario.Apellidos, @"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$"))
+            {
+                ModelState.AddModelError("Apellidos", "Los apellidos solo deben contener letras.");
+            }
+            // Validación de longitud de apellidos
+            else if (usuario.Apellidos.Length < 2)
+            {
+                ModelState.AddModelError("Apellidos", "Los apellidos deben tener al menos 2 caracteres.");
+            }
+            else if (usuario.Apellidos.Length > 50)
+            {
+                ModelState.AddModelError("Apellidos", "Los apellidos no deben exceder los 50 caracteres.");
+            }
+
+            // Validación de formato de cédula (solo números)
+            if (!System.Text.RegularExpressions.Regex.IsMatch(usuario.Cedula, @"^\d+$"))
+            {
+                ModelState.AddModelError("Cedula", "La cédula solo debe contener números.");
+            }
+            else if (usuario.Cedula.Length != 9)
+            {
+                ModelState.AddModelError("Cedula", "La cédula debe contener exactamente 9 dígitos.");
+            }
+
+            // Verificar si el correo ya existe
+            var existingUserByEmail = db.Usuarios.FirstOrDefault(u => u.Correo == usuario.Correo);
+            if (existingUserByEmail != null)
+            {
+                ModelState.AddModelError("Correo", "El correo ya está registrado.");
+                return View(usuario);
+            }
+
+            // Verificar si la cédula ya existe
+            var existingUserByCedula = db.Usuarios.FirstOrDefault(u => u.Cedula == usuario.Cedula);
+            if (existingUserByCedula != null)
+            {
+                ModelState.AddModelError("Cedula", "Esta cédula ya está registrada en el sistema.");
+                return View(usuario);
+            }
+
+            // Verificar si el teléfono ya existe
+            var existingUserByTelefono = db.Usuarios.FirstOrDefault(u => u.Telefono == usuario.Telefono);
+            if (existingUserByTelefono != null)
+            {
+                ModelState.AddModelError("Telefono", "Este número de teléfono ya está registrado en el sistema.");
+                return View(usuario);
+            }
+
+            // Validación de formato de correo
+            if (!System.Text.RegularExpressions.Regex.IsMatch(usuario.Correo, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                ModelState.AddModelError("Correo", "El formato del correo electrónico no es válido.");
+            }
+
+            // Validación de formato de teléfono (solo números y exactamente 8 caracteres)
+            if (!System.Text.RegularExpressions.Regex.IsMatch(usuario.Telefono, @"^\d{8}$"))
+            {
+                ModelState.AddModelError("Telefono", "El teléfono debe contener 8 dígitos numéricos.");
+            }
+
+            // Validación de seguridad de contraseña (configurable con una bandera)
+            // Validación de seguridad de contraseña (configurable con una bandera)
+            bool pruebasModo = false; // Cambiar a false para activar validación de contraseña más estricta
+
+            if (!pruebasModo)
+            {
+                // Validaciones completas de seguridad
+                if (usuario.Clave.Length < 8)
+                {
+                    ModelState.AddModelError("Clave", "La contraseña debe tener al menos 8 caracteres.");
+                }
+
+                if (!System.Text.RegularExpressions.Regex.IsMatch(usuario.Clave, @"[a-zA-Z]"))
+                {
+                    ModelState.AddModelError("Clave", "La contraseña debe contener al menos una letra.");
+                }
+
+                if (!System.Text.RegularExpressions.Regex.IsMatch(usuario.Clave, @"\d"))
+                {
+                    ModelState.AddModelError("Clave", "La contraseña debe contener al menos un número.");
+                }
+            }
+            else
+            {
+                // Modo pruebas: validación mínima
+                if (!System.Text.RegularExpressions.Regex.IsMatch(usuario.Clave, @"[a-zA-Z]"))
+                {
+                    ModelState.AddModelError("Clave", "La contraseña debe contener al menos una letra.");
+                }
+            }
+
             if (ModelState.IsValid)
             {
+                // Verificar si el correo ya existe
                 var existingUser = db.Usuarios.FirstOrDefault(u => u.Correo == usuario.Correo);
                 if (existingUser != null)
                 {
-                    ModelState.AddModelError("", "El correo ya está registrado.");
+                    ModelState.AddModelError("Correo", "El correo ya está registrado.");
                     return View(usuario);
                 }
 
@@ -124,11 +240,13 @@ namespace TransrodenProyecto.Controllers
 
                 db.Usuarios.Add(usuario);
                 db.SaveChanges();
-                Thread.Sleep(3000);
 
+                // Para evitar el redirecionamiento automático que confunde al usuario
+                TempData["RegistroExitoso"] = "Usuario registrado exitosamente";
                 return RedirectToAction("Login", "Cuenta");
             }
 
+            // Si hay errores de validación, retornar a la vista con los errores
             return View(usuario);
         }
 

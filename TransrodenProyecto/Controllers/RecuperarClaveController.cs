@@ -83,7 +83,7 @@ namespace TransrodenProyecto.Controllers
 
         private string GenerarClaveSegura(int longitud = 12)
         {
-            const string caracteresPermitidos = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_-+=<>?";
+            const string caracteresPermitidos = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*";
             StringBuilder resultado = new StringBuilder();
 
             using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())

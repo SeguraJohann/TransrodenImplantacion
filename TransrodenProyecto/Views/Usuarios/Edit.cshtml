@@ -1,142 +1,148 @@
-﻿@using TransrodenProyecto.Models
-@model TransrodenProyecto.Models.Usuario
+﻿@model TransrodenProyecto.Models.Usuario
 
 @{
+    ViewBag.Title = "Editar Usuario";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container mt-5">
+<div class="login-outer-container">
+    <div class="container d-flex align-items-center justify-content-center min-vh-50 py-5 login-container">
+        <div class="row justify-content-center w-100">
+            <div class="col-12">
+                <div class="bg-white rounded p-4 p-sm-5 shadow-sm">
+                    <h2 class="text-center mb-4">Editar Usuario</h2>
 
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.HiddenFor(model => model.Id_Usuario)
+                        <input type="hidden" name="claveEncriptada" value="@ViewBag.ClaveEncriptada" />
 
-    <h2 class="text-center">Editar Usuario</h2>
+                        <div class="form-group mb-3">
+                            @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control", pattern = "[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+", minlength = "2", required = "required", title = "El nombre debe contener al menos 2 caracteres y solo letras" } })
+                            @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                        </div>
 
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
+                        <div class="form-group mb-3">
+                            @Html.LabelFor(model => model.Apellidos, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.Apellidos, new { htmlAttributes = new { @class = "form-control", pattern = "[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+", minlength = "2", required = "required", title = "Los apellidos deben contener al menos 2 caracteres y solo letras" } })
+                            @Html.ValidationMessageFor(model => model.Apellidos, "", new { @class = "text-danger" })
+                        </div>
 
-        <div class="form-horizontal">
+                        <div class="form-group mb-3">
+                            @Html.LabelFor(model => model.Cedula, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.Cedula, new { htmlAttributes = new { @class = "form-control", pattern = "\\d{9}", maxlength = "9", required = "required", title = "La cédula debe contener exactamente 9 dígitos", oninput = "this.value = this.value.replace(/\\s/g, '')" } })
+                            @Html.ValidationMessageFor(model => model.Cedula, "", new { @class = "text-danger" })
+                        </div>
 
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.HiddenFor(model => model.Id_Usuario)
+                        <div class="form-group mb-3">
+                            @Html.LabelFor(model => model.Correo, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.Correo, new { htmlAttributes = new { @class = "form-control", type = "email", required = "required", pattern = "[^@\\s]+@[^@\\s]+\\.[^@\\s]+", title = "Ingrese un formato de correo electrónico válido" } })
+                            @Html.ValidationMessageFor(model => model.Correo, "", new { @class = "text-danger" })
+                        </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
-                </div>
-            </div>
+                        <div class="form-group mb-3">
+                            @Html.LabelFor(model => model.Clave, htmlAttributes: new { @class = "form-label" })
+                            <div class="input-group">
+                                <!-- Usar TextBoxFor en lugar de EditorFor para tener más control -->
+                                @Html.TextBoxFor(model => model.Clave, new
+                                {
+                                    @class = "form-control",
+                                    @type = "password",
+                                    @placeholder = "Nueva contraseña",
+                                    @pattern = "(?=.*[a-zA-Z])(?=.*\\d).{8,}",
+                                    @title = "La contraseña debe tener al menos 8 caracteres, incluyendo al menos una letra y un número",
+                                    @data_val = "false" // Desactivar validación del lado del cliente para permitir envío con campo vacío
+                                })
+                            </div>
+                            <small class="form-text text-muted">Deje en blanco para mantener la contraseña actual</small>
+                            @Html.ValidationMessageFor(model => model.Clave, "", new { @class = "text-danger" })
+                        </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Apellidos, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Apellidos, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Apellidos, "", new { @class = "text-danger" })
-                </div>
-            </div>
+                        <div class="form-group mb-3">
+                            @Html.LabelFor(model => model.Telefono, htmlAttributes: new { @class = "form-label" })
+                            @Html.EditorFor(model => model.Telefono, new { htmlAttributes = new { @class = "form-control", pattern = "\\d{8}", maxlength = "8", required = "required", title = "El teléfono debe contener exactamente 8 dígitos", oninput = "this.value = this.value.replace(/\\s/g, '')" } })
+                            @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
+                        </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Cedula, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Cedula, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Cedula, "", new { @class = "text-danger" })
-                </div>
-            </div>
+                        <div class="form-group mb-3">
+                            @Html.LabelFor(model => model.Rol, htmlAttributes: new { @class = "form-label" })
+                            @Html.EnumDropDownListFor(model => model.Rol, htmlAttributes: new { @class = "form-control", id = "rolSelect" })
+                            @Html.ValidationMessageFor(model => model.Rol, "", new { @class = "text-danger" })
+                        </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Correo, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Correo, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Correo, "", new { @class = "text-danger" })
-                </div>
-            </div>
+                        <div class="form-group mb-3" id="sedeDiv">
+                            @Html.LabelFor(model => model.Sede, htmlAttributes: new { @class = "form-label" })
+                            @* Reemplazando EnumDropDownListFor por DropDownList para manejar el nullable *@
+                            @Html.DropDownList("Sede", Enum.GetValues(typeof(TransrodenProyecto.Models.Sede))
+                                .Cast<TransrodenProyecto.Models.Sede>()
+                                .Select(v => new SelectListItem
+                                {
+                                    Text = v.ToString(),
+                                    Value = ((int)v).ToString(),
+                                    Selected = Model.Sede.HasValue && (int)v == Model.Sede.Value
+                                }), new { @class = "form-control", @id = "sedeSelect" })
+                            @Html.ValidationMessageFor(model => model.Sede, "", new { @class = "text-danger" })
+                        </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Clave, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Clave, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Clave, "", new { @class = "text-danger" })
-                </div>
-            </div>
+                        <div class="form-group mb-3">
+                            <div class="form-check">
+                                @Html.EditorFor(model => model.NotifCli, new { htmlAttributes = new { @class = "form-check-input" } })
+                                @Html.LabelFor(model => model.NotifCli, htmlAttributes: new { @class = "form-check-label" })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.NotifCli, "", new { @class = "text-danger" })
+                        </div>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Telefono, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Telefono, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Rol, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EnumDropDownListFor(model => model.Rol, "Selecciona el Rol del usuario", new { @class = "form-control", id = "rolSelect" })
-                    @Html.ValidationMessageFor(model => model.Rol, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-md-10">
-                    <div class="form-check">
-                        @Html.CheckBoxFor(model => model.NotifCli, new { @class = "form-check-input" })
-                        @Html.Label("Desea recibir notificaciones?", new { @class = "form-check-label" })
-                        @Html.ValidationMessageFor(model => model.NotifCli, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-            </div>
-
-
-            <br>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                        <div class="form-group text-center mt-4">
+                            <input type="submit" value="Guardar" class="btn btn-action" />
+                            <a href="@Url.Action("Index", "Usuarios")" class="btn btn-secondary">Volver a la lista</a>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
-    }
-    <br>
-    <div>
-        @Html.ActionLink("Regresar a la lista", "Index")
     </div>
-    <br>
 </div>
 
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
 
+    <script>
+        $(document).ready(function () {
+            // Verificar si el validador existe antes de intentar configurarlo
+            var form = $('form');
+            var validator = form.data('validator');
 
-
-<!-- JavaScript Libraries -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/Content/assets/lib/wow/wow.min.js"></script>
-<script src="~/Content/assets/lib/easing/easing.min.js"></script>
-<script src="~/Content/assets/lib/waypoints/waypoints.min.js"></script>
-<script src="~/Content/assets/lib/counterup/counterup.min.js"></script>
-<script src="~/Content/assets/lib/lightbox/js/lightbox.min.js"></script>
-<script src="~/Content/assets/lib/owlcarousel/owl.carousel.min.js"></script>
-
-
-<!-- Template Javascript -->
-<script src="~/Content/assets/js/main.js"></script>
-<script>
-    $(document).ready(function() {
-        function toggleSedeField() {
-            const selectedRol = $('#rolSelect').val();
-            if (selectedRol == '@TransrodenProyecto.Models.Rol.Bodeguero') {
-                $('#sedeDiv').show();
+            if (validator && validator.settings) {
+                // Si el validador está disponible, configurarlo para ignorar el campo de contraseña
+                validator.settings.ignore = "#Clave";
             } else {
-                $('#sedeDiv').hide();
-                $('#sedeSelect').val('0'); // Resetea el valor de la sede
+                // Alternativa: agregar un controlador de eventos para el envío del formulario
+                form.on('submit', function () {
+                    // Permitir el envío del formulario incluso si el campo de contraseña está vacío
+                    return true;
+                });
             }
-        }
 
-        // Ejecuta la función al cargar la página para mostrar/ocultar el campo 'Sede' correctamente
-        toggleSedeField();
+            // Mostrar u ocultar el campo Sede según el rol seleccionado
+            function updateSedeVisibility() {
+                var selectedRole = $("#rolSelect").val();
+                if (selectedRole == "1") { // Bodeguero
+                    $("#sedeDiv").show();
+                } else {
+                    $("#sedeDiv").hide();
+                    // No resetear el valor si ya está seleccionado (para mantener datos existentes)
+                }
+            }
 
-        // Escucha el cambio en el campo 'Rol'
-        $('#rolSelect').change(function() {
-            toggleSedeField();
+            // Ejecutar al cargar la página
+            updateSedeVisibility();
+
+            // Ejecutar cuando cambie el selector de rol
+            $("#rolSelect").change(function () {
+                updateSedeVisibility();
+            });
         });
-    });
-</script>
+    </script>
+}

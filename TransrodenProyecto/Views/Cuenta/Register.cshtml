@@ -8,14 +8,23 @@
 <div class="container-fluid bg-light py-5">
     <div class="container py-5">
         <div class="row justify-content-center">
-            <!-- Añadido justify-content-center -->
             <div class="col-xl-8 wow fadeInLeft" data-wow-delay="0.2s">
-                <!-- Cambiado a col-xl-8 para centrar -->
                 <div class="bg-white rounded shadow-sm p-5">
-                    <!-- Añadido bg-white, rounded y shadow-sm para el efecto -->
                     <div class="mb-5">
                         <h1 class="display-4 mb-0 text-center" style="color: cornflowerblue">Registrarse</h1>
                     </div>
+
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                {
+                                    <li>@error.ErrorMessage</li>
+                                }
+                            </ul>
+                        </div>
+                    }
 
                     @using (Html.BeginForm("Register", "Cuenta", FormMethod.Post))
                     {
@@ -23,42 +32,41 @@
 
                         <div class="form-group">
                             @Html.LabelFor(m => m.Nombre)
-                            @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.Nombre)
+                            @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control", pattern = "[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+", minlength = "2", maxlength = "50", required = "required" })
+                            @Html.ValidationMessageFor(m => m.Nombre, "", new { @class = "text-danger" })
                         </div>
 
                         <div class="form-group">
                             @Html.LabelFor(m => m.Apellidos)
-                            @Html.TextBoxFor(m => m.Apellidos, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.Apellidos)
+                            @Html.TextBoxFor(m => m.Apellidos, new { @class = "form-control", pattern = "[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+", minlength = "2", maxlength = "50", required = "required" })
+                            @Html.ValidationMessageFor(m => m.Apellidos, "", new { @class = "text-danger" })
                         </div>
 
                         <div class="form-group">
                             @Html.LabelFor(m => m.Cedula)
-                            @Html.TextBoxFor(m => m.Cedula, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.Cedula)
+                            @Html.TextBoxFor(m => m.Cedula, new { @class = "form-control", pattern = "\\d{9}", title = "La cédula debe contener exactamente 9 dígitos", maxlength = "9", required = "required", oninput = "this.value = this.value.replace(/\\s/g, '')" })
+                            @Html.ValidationMessageFor(m => m.Cedula, "", new { @class = "text-danger" })
                         </div>
 
                         <div class="form-group">
                             @Html.LabelFor(m => m.Correo)
-                            @Html.TextBoxFor(m => m.Correo, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.Correo)
+                            @Html.TextBoxFor(m => m.Correo, new { @class = "form-control", type = "email", required = "required" })
+                            @Html.ValidationMessageFor(m => m.Correo, "", new { @class = "text-danger" })
                         </div>
 
                         <div class="form-group">
                             @Html.LabelFor(m => m.Clave)
-                            @Html.PasswordFor(m => m.Clave, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.Clave)
+                            @Html.PasswordFor(m => m.Clave, new { @class = "form-control", minlength = "8", required = "required", pattern = "(?=.*[a-zA-Z])(?=.*\\d).{8,}", title = "La contraseña debe tener al menos 8 caracteres, incluyendo al menos una letra y un número" })
+                            @Html.ValidationMessageFor(m => m.Clave, "", new { @class = "text-danger" })
                         </div>
 
                         <div class="form-group">
                             @Html.LabelFor(m => m.Telefono)
-                            @Html.TextBoxFor(m => m.Telefono, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.Telefono)
+                            @Html.TextBoxFor(m => m.Telefono, new { @class = "form-control", pattern = "\\d{8}", title = "El teléfono debe contener exactamente 8 dígitos", maxlength = "8", required = "required", oninput = "this.value = this.value.replace(/\\s/g, '')" })
+                            @Html.ValidationMessageFor(m => m.Telefono, "", new { @class = "text-danger" })
                         </div>
-                        <!--  Nueva linea de codigo para las notificaciones  -->
-                        <div class="form-group">
 
+                        <div class="form-group">
                             <div class="col-md-10">
                                 <div class="form-check">
                                     @Html.CheckBoxFor(model => model.NotifCli, new { @class = "form-check-input" })
@@ -68,33 +76,13 @@
                             </div>
                         </div>
 
-                        <!-- Mensaje de registro completado -->
-                        <div id="mensajeRegistro" style="display:none; margin-top:10px;" class="alert alert-success text-center">
-                            Registro completado
-                        </div>
-
                         <!-- Botón para registrarse -->
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary" onclick="mostrarMensaje()">Registrar</button>
+                            <button type="submit" class="btn btn-primary">Registrar</button>
                         </div>
-
-                        <script>
-                            function mostrarMensaje() {
-                                var mensaje = document.getElementById("mensajeRegistro");
-                                mensaje.style.display = "block";
-
-                                // Mostrar el mensaje durante 3 segundos, luego redirigir
-
-
-
-
-                            }
-                        </script>
                     }
-
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- Registro Clientes Interfaz -->

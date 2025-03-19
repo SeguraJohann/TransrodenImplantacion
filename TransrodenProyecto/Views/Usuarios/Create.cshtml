@@ -22,7 +22,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control", pattern = "[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+", minlength = "2", required = "required" } })
                     @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -30,7 +30,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Apellidos, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.Apellidos, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.Apellidos, new { htmlAttributes = new { @class = "form-control", pattern = "[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+", minlength = "2", required = "required" } })
                     @Html.ValidationMessageFor(model => model.Apellidos, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -38,7 +38,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Cedula, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.Cedula, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.Cedula, new { htmlAttributes = new { @class = "form-control", pattern = "\\d{9}", maxlength = "9", required = "required", title = "La cédula debe contener exactamente 9 dígitos", oninput = "this.value = this.value.replace(/\\s/g, '')" } })
                     @Html.ValidationMessageFor(model => model.Cedula, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -46,7 +46,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Correo, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.Correo, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.Correo, new { htmlAttributes = new { @class = "form-control", type = "email", required = "required" } })
                     @Html.ValidationMessageFor(model => model.Correo, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -54,7 +54,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Clave, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.Clave, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.Clave, new { htmlAttributes = new { @class = "form-control", type = "password", minlength = "8", required = "required", pattern = "(?=.*[a-zA-Z])(?=.*\\d).{8,}", title = "La contraseña debe tener al menos 8 caracteres, incluyendo al menos una letra y un número" } })
                     @Html.ValidationMessageFor(model => model.Clave, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -62,7 +62,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Telefono, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.Telefono, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.Telefono, new { htmlAttributes = new { @class = "form-control", pattern = "\\d{8}", maxlength = "8", required = "required", title = "El teléfono debe contener exactamente 8 dígitos", oninput = "this.value = this.value.replace(/\\s/g, '')" } })
                     @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -118,17 +118,20 @@
 
 </div>
 
-<script src="~/Content/assets/js/main.js"></script>
-<script>
-    $(document).ready(function () {
-        $("#rolSelect").change(function () {
-            var selectedRole = $(this).val();
-            if (selectedRole == "1") { // Bodeguero
-                $("#sedeDiv").show();
-            } else {
-                $("#sedeDiv").hide();
-                $("#sedeSelect").val("0"); // Reset the Sede dropdown
-            }
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+            $("#rolSelect").change(function () {
+                var selectedRole = $(this).val();
+                if (selectedRole == "1") { // Bodeguero
+                    $("#sedeDiv").show();
+                } else {
+                    $("#sedeDiv").hide();
+                    $("#sedeSelect").val("0"); // Reset the Sede dropdown
+                }
+            });
         });
-    });
-</script>
+    </script>
+}
