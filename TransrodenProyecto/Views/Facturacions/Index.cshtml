@@ -27,7 +27,7 @@
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <label class="form-label">Búsqueda por ID de Factura</label>
-                                    <input type="number" id="searchId" class="form-control" placeholder="Ingrese ID de la Factura">
+                                    <input type="number" id="searchId" class="form-control" placeholder="Ingrese ID de la Factura" min="1">
                                 </div>
                             </div>
                         </div>
@@ -204,4 +204,12 @@ $(document).ready(function () {
     // Cargar facturaciones iniciales
     loadFacturaciones(currentPage);
 });
+</script>
+<script>
+    document.getElementById('searchId').addEventListener('input', function (event) {
+        const value = parseInt(event.target.value); // Obtiene el valor del campo
+        if (value < 1 || isNaN(value)) { // Si el valor es menor a 1 o no es un número
+            event.target.value = 1; // Establece el valor mínimo permitido (1)
+        }
+    });
 </script>
