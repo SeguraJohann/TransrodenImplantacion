@@ -560,6 +560,49 @@ namespace TransrodenProyecto.Controllers
             return Redirect(Request.UrlReferrer.ToString());
         }
 
+        /******************************************************************* EDITANDO**********************************************************************************************/
+
+        // Metodo para quitar los paquetes de una carga
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult QuitarPaquete(int idPaquete, int idEnvio)
+        {
+
+            //Se busca primero el paquete
+            var paquete = db.Paquetes.FirstOrDefault(p => p.Id_Paquete == idPaquete && p.Id_Envio == idEnvio);
+            var envio = db.Envios.FirstOrDefault(c => c.Id_Envio.Equals(idEnvio));
+
+
+            if (paquete == null)
+            {
+                return HttpNotFound("El paquete no fue encontrado o no pertenece a la carga especificada.");
+            }
+
+
+            // Aqui vuelve a pasar a nulo (estado original del campo)
+            paquete.Id_Envio = null;
+
+
+            // Poner el estado original del paquete
+            if (paquete.Origen == OrigenPaquete.SanJose)
+            {
+                paquete.Estado = EstadoPaquete.BodegaPZ;
+            }
+            else if (paquete.Origen == OrigenPaquete.PerezZeledon)
+            {
+                paquete.Estado = EstadoPaquete.BodegaSJ;
+            }
+            else
+            {
+                paquete.Estado = EstadoPaquete.SinAsignar;
+            }
+
+            envio.NumeroPaquetes = (envio.NumeroPaquetes ?? 0) - 1;
+
+            db.SaveChanges();
+
+            return RedirectToAction("EnvioPaquetes", new { idEnvio = idEnvio });
+        }
 
 
 

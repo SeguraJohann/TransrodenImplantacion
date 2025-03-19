@@ -53,7 +53,7 @@
                     </div>
 
                     <!-- Columna derecha -->
-                    <div class="col-md-6">
+                    <!-- <div class="col-md-6">
                         <div class="border rounded p-3 h-100 bg-light">
                             <h5 class="border-bottom pb-2 mb-3">Información de Pago</h5>
 
@@ -81,18 +81,64 @@
                                 @Html.ValidationMessageFor(model => model.Fecha, "", new { @class = "text-danger" })
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </div> -->
 
-                <div class="row mt-4">
-                    <div class="col-12 text-center">
-                        <button type="submit" class="btn btn-positivo me-2">
-                            <i class="fas fa-save me-2"></i>Crear
-                        </button>
-                        @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-primary" })
+                    <div class="col-md-6">
+                        <div class="border rounded p-3 h-100 bg-light">
+                            <h5 class="border-bottom pb-2 mb-3">Detalles de Facturación</h5>
+
+                            <div class="form-group mb-3">
+                                @Html.LabelFor(model => model.Total, "Total", new { @class = "form-label fw-bold" })
+                                @Html.EditorFor(model => model.Total, new { htmlAttributes = new { @class = "form-control", @id = "total" } })
+                                @Html.ValidationMessageFor(model => model.Total, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group mb-3">
+                                @Html.LabelFor(model => model.Precio, "Precio Base", new { @class = "form-label fw-bold" })
+                                @Html.EditorFor(model => model.Precio, new { htmlAttributes = new { @class = "form-control", @id = "precio" } })
+                                @Html.ValidationMessageFor(model => model.Precio, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group mb-3">
+                                @Html.LabelFor(model => model.Iva, "IVA", new { @class = "form-label fw-bold" })
+                                @Html.EditorFor(model => model.Iva, new { htmlAttributes = new { @class = "form-control", @id = "iva" } })
+                                @Html.ValidationMessageFor(model => model.Iva, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group mb-3">
+                                @Html.LabelFor(model => model.Fecha, "Fecha de Emisión", new { @class = "form-label fw-bold" })
+                                @Html.EditorFor(model => model.Fecha, new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                                @Html.ValidationMessageFor(model => model.Fecha, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
                     </div>
+
+
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-12 text-center">
+                    <button type="submit" class="btn btn-positivo me-2">
+                        <i class="fas fa-save me-2"></i>Crear
+                    </button>
+                    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-primary" })
                 </div>
             </div>
         </div>
+    </div>
+}
+    </div>
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+        <script>
+            document.getElementById('total').addEventListener('input', function () {
+                var total = parseFloat(this.value) || 0;
+                var precio = total / 1.13;
+                var iva = precio * 0.13;
+
+                document.getElementById('precio').value = precio.toFixed(2);
+                document.getElementById('iva').value = iva.toFixed(2);
+            });
+        </script>
     }
-</div>

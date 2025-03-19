@@ -23,9 +23,7 @@
                     <th>Direccion</th>
                     <th>Pago</th>
                     <th>Detalles</th>
-                    <!--
                     <th>Accion</th>
-                        -->
                 </tr>
             </thead>
             <tbody>
@@ -52,24 +50,16 @@
                                 Ver
                             </a>
                         </td>
-
-                        <!--
                         <td>
-                            @using (Html.BeginForm("ActualizarEstadoPaquete", "PaquetesEnviosController", FormMethod.Post))
+                            @using (Html.BeginForm("QuitarPaquete", "PaquetesEnviosController", FormMethod.Post))
                             {
                                 @Html.AntiForgeryToken()
                                 @Html.Hidden("idPaquete", paquete.Id_Paquete)
-
-                            <select name="nuevoEstado" class="form-control">
-                                <option value="">Estado</option>
-                                <option value="EnTransito">EnTransito</option>
-                                <option value="Entregado">Entregado</option>
-                                <option value="NoEntregado">No Entregado</option>
-                            </select>
-
-                                <button type="submit" class="btn btn-danger mt-2">Actualizar</button>
+                                @Html.Hidden("idEnvio", Model.Envios.First().Id_Envio)
+                                <button type="submit" class="btn btn-danger">Quitar</button>
                             }
-                        </td> -->
+                        </td>
+
                     </tr>
                 }
             </tbody>

@@ -82,7 +82,7 @@ namespace TransrodenProyecto.Controllers
         {
             var viewModel = new PaqueteCargaViewModel
             {
-                Cargas = db.Cargas.Include(c => c.Usuario).Where(c => c.Estado == EstadoCarga.EnTransito).ToList(),
+                Cargas = db.Cargas.Include(c => c.Usuario).Where(c => c.Estado == EstadoCarga.EnTransito || c.Estado == EstadoCarga.Averia).ToList(),
                 Envios = db.Envios.Include(c => c.Usuario).Where(c => c.Estado == EstadoEnvio.EnTransito).ToList()
             };
 
@@ -832,7 +832,8 @@ namespace TransrodenProyecto.Controllers
                 //MUESTRA LAS CARGAS QUE SON PERTENECIENTES AL TRANSPORTISTA Y TENGAN ESTADO ENTRANSITO, BODEGASJ, BODEGAPZ
                 cargas = db.Cargas.Include(c => c.Usuario).Where(c => c.Id_Usuario == usuarioId && c.Estado == EstadoCarga.EnTransito 
                     || c.Id_Usuario == usuarioId && c.Estado == EstadoCarga.BodegaSJ 
-                    || c.Id_Usuario == usuarioId && c.Estado == EstadoCarga.BodegaPZ).ToList();
+                    || c.Id_Usuario == usuarioId && c.Estado == EstadoCarga.BodegaPZ
+                    || c.Id_Usuario == usuarioId && c.Estado == EstadoCarga.Averia).ToList();
             }
 
             var viewModel = new PaqueteCargaViewModel

@@ -15,7 +15,7 @@ namespace TransrodenProyecto.Models
 
 
         // Para que acepte null
-        public int? Id_Usuario { get; set; }
+        public int Id_Usuario { get; set; }
         public Usuario Usuario { get; set; }
 
 

@@ -8,7 +8,7 @@
 <div class="container-fluid bg-light py-4">
     <!-- Header Section -->
     <div class="text-center mb-4">
-        <h1 class="display-4 mb-4">Envíos Domicilios Perez Zeledón</h1>
+        <h1 class="display-4 mb-4">Envíos Domicilios San José</h1>
         <a href="@Url.Action("VistaCargaTransito", "PaquetesCargasController")" class="btn btn-primary">
             <i class="fa fa-truck me-2"></i> Ver cargas en Tránsito
         </a>
@@ -24,7 +24,7 @@
                     </h3>
                 </div>
                 <div class="card-body">
-                    @using (Html.BeginForm("AsignarPaqueteAEnvioPZ", "PaquetesEnviosController", FormMethod.Post))
+                    @using (Html.BeginForm("AsignarPaqueteAEnvioSJ", "PaquetesEnviosController", FormMethod.Post))
                     {
                         @Html.AntiForgeryToken()
 
