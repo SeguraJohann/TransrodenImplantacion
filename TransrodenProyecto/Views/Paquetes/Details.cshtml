@@ -114,16 +114,47 @@
                     </div>
                 </div>
             </div>
+            <br>
+            @if (Session["Usuario"] != null)
+            {
+                // Enlace para regresar a la vista anterior
+                <a href="javascript:void(0);" onclick="goBack()" class="btn btn-success">Regresar</a>
+                <script>
+function goBack() {
+    if (document.referrer) {
+        window.history.back();
+    } else {
+        @*window.location.href = '@Url.Action("DefaultAction", "DefaultController")';*@
+        if (sedeUsuario == Sede.SanJose) {
+            urlEnvios = Url.Action("DomicilioSJCarga", "PaquetesEnviosController");
+        }
+        else if (sedeUsuario == Sede.PerezZeledon) {
+            urlEnvios = Url.Action("DomicilioPZCarga", "PaquetesEnviosController");
+        }
+        else {
+            urlEnvios = "#";
+        }
+    }
+}
+                </script>
+            }
+            else
+            {
+                <a href="@Url.Action("Login", "Cuenta")" class="btn btn-danger">
+                    <span class="d-block"><i class="fas fa-user"></i></span>
+                    Login
+                </a>
+            }
 
             <!-- Botones de Acción -->
-            <div class="row mt-4">
-                <div class="col-12">
-                    <div class="d-flex justify-content-center gap-2">
-                        @Html.ActionLink("Editar", "Edit", new { id = Model.Id_Paquete }, new { @class = "btn btn-positivo d-flex align-items-center" })
-                        @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-primary d-flex align-items-center justify-content-center" })
-                    </div>
+            @*<div class="row mt-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-center gap-2">
+                    @Html.ActionLink("Editar", "Edit", new { id = Model.Id_Paquete }, new { @class = "btn btn-positivo d-flex align-items-center" })
+                    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-primary d-flex align-items-center justify-content-center" })
                 </div>
             </div>
+        </div>*@
         </div>
     </div>
 </div>

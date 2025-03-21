@@ -200,7 +200,7 @@ namespace TransrodenProyecto.Controllers
         {
             if (paqueteCargaAsignaciones == null || !paqueteCargaAsignaciones.Any())
             {
-                ModelState.AddModelError("", "No se han seleccionado cargas o paquetes");
+                TempData["ErrorMessage"] = "No se han seleccionado cargas o paquetes.";
                 return RedirectToAction("AsignarPaqueteSJCarga");
             }
 
@@ -233,6 +233,7 @@ namespace TransrodenProyecto.Controllers
 
 
             db.SaveChanges();
+            //TempData["SuccessMessage"] = "Los paquetes se han asignado correctamente.";
             return RedirectToAction("AsignarPaqueteSJCarga");
         }
 
@@ -245,7 +246,7 @@ namespace TransrodenProyecto.Controllers
         {
             if (paqueteCargaAsignaciones == null || !paqueteCargaAsignaciones.Any())
             {
-                ModelState.AddModelError("", "No se han seleccionado cargas o paquetes");
+                TempData["ErrorMessage"] = "No se han seleccionado cargas o paquetes.";
                 return RedirectToAction("AsignarPaquetePZCarga");
             }
 
@@ -276,6 +277,7 @@ namespace TransrodenProyecto.Controllers
 
 
             db.SaveChanges();
+            //TempData["SuccessMessage"] = "Los paquetes se han asignado correctamente.";
             return RedirectToAction("AsignarPaquetePZCarga");
         }
 
@@ -415,7 +417,7 @@ namespace TransrodenProyecto.Controllers
 
             if (string.IsNullOrEmpty(nuevoEstado))
             {
-                ModelState.AddModelError("", "Seleccione un Estado!!");
+                TempData["ErrorMessageCarga"] = "No se han seleccionado un estado";
                 return RedirectToAction("AsignarPaqueteSJCarga");
             }
 
@@ -466,7 +468,7 @@ namespace TransrodenProyecto.Controllers
                     db.Historiales.Add(nuevoRastreo);
 
                 }
-
+                TempData["SuccessMessageCarga"] = "La carga se encuentra en Transito!";
                 db.SaveChanges();
             }
             else
@@ -487,7 +489,7 @@ namespace TransrodenProyecto.Controllers
 
             if (string.IsNullOrEmpty(nuevoEstado))
             {
-                ModelState.AddModelError("", "Seleccione un Estado!!");
+                TempData["ErrorMessageCarga"] = "No se han seleccionado un estado";
                 return RedirectToAction("AsignarPaquetePZCarga");
             }
 
@@ -537,7 +539,7 @@ namespace TransrodenProyecto.Controllers
                     db.Historiales.Add(nuevoRastreo);
 
                 }
-
+                TempData["SuccessMessageCarga"] = "La carga se encuentra en Transito!";
                 db.SaveChanges();
             }
             else
@@ -584,13 +586,14 @@ namespace TransrodenProyecto.Controllers
                 if (carga.Estado == EstadoCarga.Recibido)
                 {
                     carga.fecha_entrega = DateTime.Now;
+                    TempData["SuccessMessageReceptor"] = "La carga ha sido aceptada";
                 }
-
+                TempData["ErrorMessageReceptor"] = "La carga no fue aceptada";
                 db.SaveChanges();
             }
             else
             {
-                ModelState.AddModelError("", "Estado invalido!!");
+                TempData["ErrorMessageReceptor"] = "La carga no fue aceptada";
             }
 
             return RedirectToAction("AsignarPaqueteSJCarga");
@@ -626,13 +629,14 @@ namespace TransrodenProyecto.Controllers
                 if (carga.Estado == EstadoCarga.Recibido)
                 {
                     carga.fecha_entrega = DateTime.Now;
+                    TempData["SuccessMessageReceptor"] = "La carga ha sido aceptada";
                 }
-
+                TempData["ErrorMessageReceptor"] = "La carga no fue aceptada";
                 db.SaveChanges();
             }
             else
             {
-                ModelState.AddModelError("", "Estado invalido!!");
+                TempData["ErrorMessageReceptor"] = "La carga no fue aceptada";
             }
 
             return RedirectToAction("AsignarPaquetePZCarga");
@@ -687,7 +691,7 @@ namespace TransrodenProyecto.Controllers
 
             if (string.IsNullOrEmpty(nuevoEstado))
             {
-                ModelState.AddModelError("", "Seleccione un Estado!!");
+                TempData["ErrorMessageGlobalCarga"] = "No se ha seleccionado un estado!! ";
                 return RedirectToAction("VistaCargaTransito");
             }
 
@@ -712,10 +716,12 @@ namespace TransrodenProyecto.Controllers
                     if (carga.Estado == EstadoCarga.BodegaSJ)
                     {
                         paquete.Estado = EstadoPaquete.BodegaSJ;
+                        
                     }
                     else if (carga.Estado == EstadoCarga.BodegaPZ)
                     {
                         paquete.Estado = EstadoPaquete.BodegaPZ;
+                        
                     }
                     else if (carga.Estado == EstadoCarga.EnTransito)
                     {
@@ -738,10 +744,20 @@ namespace TransrodenProyecto.Controllers
 
                 }
 
+                if (carga.Estado == EstadoCarga.BodegaPZ)
+                {
+                    TempData["SuccessMessageGlobalCarga"] = "La carga se encuentra en la Bodega Perez Zeledon";
+                }
+                else if (carga.Estado == EstadoCarga.BodegaSJ)
+                {
+                    TempData["SuccessMessageGlobalCarga"] = "La carga se encuentra en la Bodega San Jose";
+                }
+                
                 db.SaveChanges();
             }
             else
             {
+                TempData["ErrorMessageGlobalCarga"] = "No se ha seleccionado un estado!! ";
                 ModelState.AddModelError("", "Estado invalido!!");
             }
 

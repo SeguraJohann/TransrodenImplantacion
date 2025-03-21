@@ -9,12 +9,47 @@
     var sedeUser = Session["Sede"] != null ? (Sede)Session["Sede"] : Sede.SanJose;
 }
 
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 <div class="container-fluid bg-light py-4">
     <!-- Header Section -->
     <div class="text-center mb-4">
         <h1 class="display-4 mb-4">Cargas y Envíos Domicilio en Tránsito</h1>
     </div>
-
+    <br>
+    @if (Session["Usuario"] != null)
+    {
+        // Enlace para regresar a la vista anterior
+        <a href="javascript:void(0);" onclick="goBack()" class="btn btn-success">Regresar</a>
+        <script>
+    function goBack() {
+        if (document.referrer) {
+            window.history.back();
+        } else {
+            @*window.location.href = '@Url.Action("DefaultAction", "DefaultController")';*@
+            if (sedeUsuario == Sede.SanJose) {
+                urlEnvios = Url.Action("DomicilioSJCarga", "PaquetesEnviosController");
+            }
+            else if (sedeUsuario == Sede.PerezZeledon) {
+                urlEnvios = Url.Action("DomicilioPZCarga", "PaquetesEnviosController");
+            }
+            else {
+                urlEnvios = "#";
+            }
+        }
+    }
+        </script>
+    }
+    else
+    {
+        <a href="@Url.Action("Login", "Cuenta")" class="btn btn-danger">
+            <span class="d-block"><i class="fas fa-user"></i></span>
+            Login
+        </a>
+    }
+    <br>
+    <br>
     <div class="row g-4">
         <!-- Cargas en Tránsito Section - First Column -->
         <div class="col-lg-6">
@@ -24,6 +59,30 @@
                         <i class="fa fa-truck-moving me-2"></i>Cargas en Tránsito
                     </h3>
                 </div>
+
+
+                @if (TempData["ErrorMessageGlobalCarga"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Error:</strong> @TempData["ErrorMessageGlobalCarga"]
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                }
+
+                @if (TempData["SuccessMessageGlobalCarga"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Éxito:</strong> @TempData["SuccessMessageGlobalCarga"]
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                }
+
+
+
                 <div class="card-body">
                     <div class="table-responsive shadow-sm rounded">
                         <table class="table table-hover align-middle mb-0 bg-white">
@@ -65,7 +124,7 @@
                                                         <option value="">Estado</option>
                                                         <option value="BodegaSJ">BodegaSJ</option>
                                                         <option value="BodegaPZ">BodegaPZ</option>
-                                                        <option value="EnTransito">EnTransito</option>
+                                                        @*<option value="EnTransito">EnTransito</option>*@
                                                     </select>
                                                     <button type="submit" class="btn btn-outline-primary">
                                                         <i class="fa fa-sync-alt"></i>
