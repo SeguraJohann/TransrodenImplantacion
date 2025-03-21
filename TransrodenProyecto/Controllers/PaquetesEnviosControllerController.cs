@@ -59,7 +59,7 @@ namespace TransrodenProyecto.Controllers
         {
             if (paqueteEnvioAsignaciones == null || !paqueteEnvioAsignaciones.Any())
             {
-                ModelState.AddModelError("", "No se han seleccionado envios o paquetes");
+                TempData["ErrorMessage"] = "No se han seleccionado cargas o paquetes.";
                 return RedirectToAction("DomicilioSJCarga");
             }
 
@@ -87,6 +87,7 @@ namespace TransrodenProyecto.Controllers
                     paquete.Estado = EstadoPaquete.Asignado;
 
                     envio.NumeroPaquetes = (envio.NumeroPaquetes ?? 0) + 1;
+                    TempData["SuccessMessage"] = "Los paquetes se han asignado correctamente.";
                 }
             }
 
@@ -104,7 +105,7 @@ namespace TransrodenProyecto.Controllers
         {
             if (paqueteEnvioAsignaciones == null || !paqueteEnvioAsignaciones.Any())
             {
-                ModelState.AddModelError("", "No se han seleccionado envios o paquetes");
+                TempData["ErrorMessage"] = "No se han seleccionado cargas o paquetes.";
                 return RedirectToAction("DomicilioPZCarga");
             }
 
@@ -132,6 +133,7 @@ namespace TransrodenProyecto.Controllers
                     paquete.Estado = EstadoPaquete.Asignado;
 
                     envio.NumeroPaquetes = (envio.NumeroPaquetes ?? 0) + 1;
+                    TempData["SuccessMessage"] = "Los paquetes se han asignado correctamente.";
                 }
             }
 
@@ -207,7 +209,7 @@ namespace TransrodenProyecto.Controllers
 
             if (string.IsNullOrEmpty(nuevoEstado))
             {
-                ModelState.AddModelError("", "Seleccione un Estado!!");
+                TempData["ErrorMessageCarga"] = "Selecciona un estado valido";
                 return RedirectToAction("DomicilioSJCarga");
             }
 
@@ -259,10 +261,11 @@ namespace TransrodenProyecto.Controllers
                 }
 
                 db.SaveChanges();
+                TempData["SuccessMessageCarga"] = "Los paquetes se han asignado correctamente.";
             }
             else
             {
-                ModelState.AddModelError("", "Estado invalido!!");
+                TempData["ErrorMessageCarga"] = "Estado invalido";
             }
 
             return RedirectToAction("DomicilioSJCarga");
@@ -275,7 +278,7 @@ namespace TransrodenProyecto.Controllers
 
             if (string.IsNullOrEmpty(nuevoEstado))
             {
-                ModelState.AddModelError("", "Seleccione un Estado!!");
+                TempData["ErrorMessageCarga"] = "Selecciona un estado valido";
                 return RedirectToAction("DomicilioPZCarga");
             }
 
@@ -327,10 +330,11 @@ namespace TransrodenProyecto.Controllers
                 }
 
                 db.SaveChanges();
+                TempData["SuccessMessageCarga"] = "Los paquetes se han asignado correctamente.";
             }
             else
             {
-                ModelState.AddModelError("", "Estado invalido!!");
+                TempData["ErrorMessageCarga"] = "Estado invalido";
             }
 
             return RedirectToAction("DomicilioPZCarga");

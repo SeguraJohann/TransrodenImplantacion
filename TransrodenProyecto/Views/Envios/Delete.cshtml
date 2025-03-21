@@ -58,11 +58,11 @@
                     string urlCargas;
                     if (sedeUsuario == Sede.SanJose)
                     {
-                        urlCargas = Url.Action("BodegaSJCarga", "PaquetesCargasController");
+                        urlCargas = Url.Action("DomicilioSJCarga", "PaquetesEnviosController");
                     }
                     else if (sedeUsuario == Sede.PerezZeledon)
                     {
-                        urlCargas = Url.Action("BodegaPZCarga", "PaquetesCargasController");
+                        urlCargas = Url.Action("DomicilioPZCarga", "PaquetesEnviosController");
                     }
                     else
                     {
@@ -82,5 +82,6 @@
             </div>
         }
     </div>
-
+    <br>
+    <br>
 </div>

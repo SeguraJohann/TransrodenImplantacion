@@ -125,7 +125,7 @@ namespace TransrodenProyecto.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.Id_Usuario = new SelectList(db.Usuarios, "Id_Usuario", "Nombre", envio.Id_Usuario);
+            ViewBag.Id_Usuario = new SelectList(db.Usuarios.Where(u => u.Rol == Rol.Transportista), "Id_Usuario", "Nombre");
             return View(envio);
         }
 

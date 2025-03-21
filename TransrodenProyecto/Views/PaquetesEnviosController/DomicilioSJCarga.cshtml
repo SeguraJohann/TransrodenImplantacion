@@ -5,6 +5,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 <div class="container-fluid bg-light py-4">
     <!-- Header Section -->
     <div class="text-center mb-4">
@@ -13,6 +16,26 @@
             <i class="fa fa-truck me-2"></i> Ver cargas en Tránsito
         </a>
     </div>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Error:</strong> @TempData["ErrorMessage"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Éxito:</strong> @TempData["SuccessMessage"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
 
     <div class="row g-4">
         <!-- Packages Section - First Column -->
@@ -28,43 +51,43 @@
                     {
                         @Html.AntiForgeryToken()
 
-                     <div class="table-responsive shadow-sm rounded">
-                        <table class="table table-hover align-middle mb-0 bg-white">
-                            <thead class="bg-lightt">
-                                <tr>
-                                    <th>Número de Rastreo</th>
-                                    <th>Emisor</th>
-                                    <th>Receptor</th>
-                                    <th>Estado</th>
-                                    <th>Asignar a Envío</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @for (int i = 0; i < Model.Paquetes.Count; i++)
-                                {
-                                    var paquete = Model.Paquetes[i];
+                        <div class="table-responsive shadow-sm rounded">
+                            <table class="table table-hover align-middle mb-0 bg-white">
+                                <thead class="bg-lightt">
                                     <tr>
-                                        <td><span class="badge" style="background-color: var(--bg-info); color: white;">@paquete.NumeroRastreo</span></td>
-                                        <td>@paquete.NombreEmisor</td>
-                                        <td>@paquete.NombreReceptor</td>
-                                        <td><span class="badge" style="background-color: var(--bg-info);">@paquete.Estado.ToString()</span></td>
-                                        <td>
-                                            @Html.Hidden($"PaqueteEnvioAsignaciones[{i}].IdPaquete", paquete.Id_Paquete)
-                                            <select name="PaqueteEnvioAsignaciones[@i].IdEnvio" class="form-select form-select-sm">
-                                                <option value="">Seleccionar Envío</option>
-                                                @foreach (var envio in Model.Envios)
-                                                {
-                                                    <option value="@envio.Id_Envio">
-                                                        Envío: @envio.Id_Envio - Usuario: @envio.Usuario.Nombre
-                                                    </option>
-                                                }
-                                            </select>
-                                        </td>
+                                        <th>Número de Rastreo</th>
+                                        <th>Emisor</th>
+                                        <th>Receptor</th>
+                                        <th>Estado</th>
+                                        <th>Asignar a Envío</th>
                                     </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < Model.Paquetes.Count; i++)
+                                    {
+                                        var paquete = Model.Paquetes[i];
+                                        <tr>
+                                            <td><span class="badge" style="background-color: var(--bg-info); color: white;">@paquete.NumeroRastreo</span></td>
+                                            <td>@paquete.NombreEmisor</td>
+                                            <td>@paquete.NombreReceptor</td>
+                                            <td><span class="badge" style="background-color: var(--bg-info);">@paquete.Estado.ToString()</span></td>
+                                            <td>
+                                                @Html.Hidden($"PaqueteEnvioAsignaciones[{i}].IdPaquete", paquete.Id_Paquete)
+                                                <select name="PaqueteEnvioAsignaciones[@i].IdEnvio" class="form-select form-select-sm">
+                                                    <option value="">Seleccionar Envío</option>
+                                                    @foreach (var envio in Model.Envios)
+                                                    {
+                                                        <option value="@envio.Id_Envio">
+                                                            Envío: @envio.Id_Envio - Usuario: @envio.Usuario.Nombre
+                                                        </option>
+                                                    }
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                         <div class="text-end mt-3">
                             <button type="submit" class="btn" style="background-color: var(--bg-positivo); color: white;">
                                 <i class="fa fa-save me-2"></i>Asignar Envío
@@ -80,12 +103,31 @@
             <div class="card shadow-sm">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <h3 class="card-title mb-0">
-                        <i class="fa fa-truck-loading me-2"></i>Envíos Activos
+                        <i class="fa fa-truck-loading me-2"></i>Carga Envío Domicilio
                     </h3>
                     <a href="@Url.Action("Create", "Envios")" class="btn btn-positivo" style="color: white;">
                         <i class="fas fa-plus me-2"></i>Agregar Envío
                     </a>
                 </div>
+                @if (TempData["ErrorMessageCarga"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Error:</strong> @TempData["ErrorMessageCarga"]
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                }
+
+                @if (TempData["SuccessMessageCarga"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Éxito:</strong> @TempData["SuccessMessageCarga"]
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                }
                 <div class="card-body">
                     <div class="table-responsive shadow-sm rounded">
                         <table class="table table-hover align-middle mb-0 bg-white">
@@ -126,14 +168,14 @@
                                             </div>
                                         </td>
                                         <td>
-                                            @using (Html.BeginForm("ActualizarEstadoEnvioPZ", "PaquetesEnviosController", FormMethod.Post))
+                                            @using (Html.BeginForm("ActualizarEstadoEnvioSJ", "PaquetesEnviosController", FormMethod.Post))
                                             {
                                                 @Html.AntiForgeryToken()
                                                 @Html.Hidden("idEnvio", envio.Id_Envio)
                                                 <div class="input-group input-group-sm">
                                                     <select name="nuevoEstado" class="form-select">
                                                         <option value="">Estado</option>
-                                                        <option value="BodegaPZ">BodegaPZ</option>
+                                                        @*<option value="BodegaPZ">BodegaPZ</option>*@
                                                         <option value="EnTransito">EnTransito</option>
                                                     </select>
                                                     <button type="submit" class="btn btn-outline-secondary">
