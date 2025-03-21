@@ -12,6 +12,14 @@
                 <div class="bg-white rounded p-4 p-sm-5 shadow-sm">
                     <h2 class="text-center mb-4">Lista de Usuarios</h2>
 
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            @TempData["ErrorMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
                     <div class="d-flex justify-content-center mb-4">
                         <a href="@Url.Action("Create", "Usuarios")" class="btn btn-action button-add">
                             <i class="fas fa-user-plus me-2"></i><span>Agregar Usuario</span>
@@ -74,6 +82,17 @@ $(document).ready(function () {
     let totalPages = 1;
     let isLoading = false;
 
+    // Función para convertir el número de rol en su representación textual
+    function getRolName(rolNumber) {
+        const roles = {
+            0: "Administrador",
+            1: "Bodeguero",
+            2: "Transportista",
+            3: "Cliente"
+        };
+        return roles[rolNumber] || rolNumber.toString();
+    }
+
     function loadUsuarios(page, searchQuery = '') {
         if (isLoading) return;
         isLoading = true;
@@ -88,6 +107,11 @@ $(document).ready(function () {
 
                 let tableBody = '';
                 usuarios.forEach(usuario => {
+                    // Verificar si es administrador para modificar botones
+                    const deleteButton = usuario.Rol == 0
+                        ? `<button class="btn btn-icon button-delete disabled" title="No se puede eliminar administradores"><i class="fas fa-trash"></i></button>`
+                        : `<a href="/Usuarios/Delete/${usuario.Id_Usuario}" class="btn btn-icon button-delete" title="Borrar"><i class="fas fa-trash"></i></a>`;
+
                     tableBody += `
                         <tr>
                             <td>${usuario.Nombre}</td>
@@ -95,7 +119,7 @@ $(document).ready(function () {
                             <td>${usuario.Cedula}</td>
                             <td>${usuario.Correo}</td>
                             <td>${usuario.Telefono}</td>
-                            <td>${usuario.Rol}</td>
+                            <td>${getRolName(usuario.Rol)}</td>
                             <td>
                                 <a href="/Usuarios/Edit/${usuario.Id_Usuario}" class="btn btn-icon button-edit" title="Editar">
                                     <i class="fas fa-edit"></i>
@@ -103,9 +127,7 @@ $(document).ready(function () {
                                 <a href="/Usuarios/Details/${usuario.Id_Usuario}" class="btn btn-icon button-details" title="Detalles">
                                     <i class="fas fa-info-circle"></i>
                                 </a>
-                                <a href="/Usuarios/Delete/${usuario.Id_Usuario}" class="btn btn-icon button-delete" title="Borrar">
-                                    <i class="fas fa-trash"></i>
-                                </a>
+                                ${deleteButton}
                             </td>
                         </tr>`;
                 });
