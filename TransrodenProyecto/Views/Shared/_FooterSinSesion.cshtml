@@ -1,4 +1,4 @@
-﻿<!-- Footer Start -->
+﻿ <!-- Footer Start -->
 <div class="container-fluid footer py-5 wow fadeIn" data-wow-delay="0.2s">
     <div class="container py-5">
         <div class="row g-5">
@@ -7,34 +7,35 @@
                     <div class="row g-4">
                         <div class="col-md-6 col-lg-6 col-xl-5">
                             <div class="footer-item">
-                                <a href="index.html" class="p-0">
+                                <a href="" class="p-0">
                                     <h3 class="text-white"><i class="fas fa-truck-loading me-3"></i> Transroden Express SA</h3>
                                     <!-- <img src="~/Content/assets/img/logo.png" alt="Logo"> -->
                                 </a>
                                 <p class="text-white mb-4">Dolor amet sit justo amet elitr clita ipsum elitr est.Lorem ipsum dolor sit amet, consectetur adipiscing...</p>
                             </div>
                         </div>
+
+                        <div class="col-md-6 col-lg-6 col-xl-3">
+                            <div class="footer-item">
+                                <h4 class="text-white mb-4"> </h4>
+                            </div>
+                        </div>
+
+
                         <div class="col-md-6 col-lg-6 col-xl-3">
                             <div class="footer-item">
                                 <h4 class="text-white mb-4">Acceso Rapido</h4>
-                                <a href="#" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Inicio </a>
-                                <a href="#" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Administracion </a>
-                                <a href="#" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Clientes </a>
-                                <a href="#" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Inventario </a>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-6 col-xl-3">
-                            <div class="footer-item">
-                                <h4 class="mb-4" style="color: rgb(192, 27, 28);">Acceso Rápido</h4>
-                                <a href="#" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Tracking </a>
-                                <a href="#" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Contabilidad </a>
-                                <a href="#" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Mercadeo </a>
+                                <a href="@Url.Action("Index", "Home")" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Inicio </a>
+                                <a href="@Url.Action("Sucursales", "Home")" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Sucursales </a>
+                                <a href="@Url.Action("Rastreo", "HistorialPaquete")" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Rastreo </a>
+                                <a href="@Url.Action("FacturasUsuario", "Facturacions")" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Facturas </a>
+                                <a href="@Url.Action("Calculadora", "Calculadora")" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Calculadora </a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!--
+
                 <div class="pt-5" style="border-top: 1px solid rgba(255, 255, 255, 0.08);">
                     <div class="row g-0">
                         <div class="col-12">
@@ -75,7 +76,7 @@
                             </div>
                         </div>
                     </div>
-                </div> -->
+                </div>
             </div>
         </div>
     </div>
