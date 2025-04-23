@@ -10,52 +10,55 @@
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-
-
-
 <div class="container-fluid bg-light py-4">
     <!-- Header Section -->
     <div class="text-center mb-4">
-        <h1 class="display-4 mb-4">Envíos Domicilios Pérez Zeledón</h1>
-        <a href="@Url.Action("VistaCargaTransito", "PaquetesCargasController")" class="btn btn-primary" ; color: white;">
+        <h1 class="display-4 mb-4">Cargas Pérez Zeledón</h1>
+        <a href="@Url.Action("VistaCargaTransito", "PaquetesCargasController")" class="btn btn-primary" style="color: white;">
             <i class="fa fa-truck me-2"></i> Ver cargas en Tránsito
         </a>
     </div>
-
 
     <div class="row g-4">
         <!-- Packages Section - First Column -->
         <div class="col-lg-4">
             <div class="card shadow-sm">
-                <div class="card-header bg-white">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <h3 class="card-title mb-0">
                         <i class="fa fa-box me-2"></i>Paquetes Sin Carga Asignada
                     </h3>
-
-                    @if (TempData["ErrorMessage"] != null)
-                    {
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <strong>Error:</strong> @TempData["ErrorMessage"]
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    }
-
-                    @if (TempData["SuccessMessage"] != null)
-                    {
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <strong>Éxito:</strong> @TempData["SuccessMessage"]
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    }
-
-
+                    <div class="form-inline">
+                        <label class="mr-2">Mostrar:</label>
+                        <select class="form-control form-control-sm" onchange="changePageSize(this.value)">
+                            <option value="5" @(Model.PageSize == 5 ? "selected" : "")>5</option>
+                            <option value="10" @(Model.PageSize == 10 ? "selected" : "")>10</option>
+                            <option value="20" @(Model.PageSize == 20 ? "selected" : "")>20</option>
+                            <option value="50" @(Model.PageSize == 50 ? "selected" : "")>50</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="card-body">
 
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show m-3" role="alert">
+                        <strong>Error:</strong> @TempData["ErrorMessage"]
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                }
+
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show m-3" role="alert">
+                        <strong>Éxito:</strong> @TempData["SuccessMessage"]
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                }
+
+                <div class="card-body">
                     @using (Html.BeginForm("AsignarPaqueteACargaPZ", "PaquetesCargasController", FormMethod.Post))
                     {
                         @Html.AntiForgeryToken()
@@ -96,6 +99,51 @@
                                 </tbody>
                             </table>
                         </div>
+
+                        <!-- Paginacion Paquetes -->
+                        <div class="card-footer">
+                            <div class="row align-items-center">
+                                <div class="col-md-6">
+                                    <span>Mostrando @((Model.PaquetePageNumber - 1) * Model.PageSize + 1) a @Math.Min(Model.PaquetePageNumber * Model.PageSize, Model.PaqueteTotalCount) de @Model.PaqueteTotalCount registros</span>
+                                </div>
+                                <div class="col-md-6">
+                                    <nav aria-label="Page navigation">
+                                        <ul class="pagination justify-content-end mb-0">
+                                            <li class="page-item @(Model.PaquetePageNumber == 1 ? "disabled" : "")">
+                                                <a class="page-link" href="@Url.Action("AsignarPaquetePZCarga", new {
+                                                    paquetePage = Model.PaquetePageNumber - 1,
+                                                    cargaPage = Model.CargaPageNumber,
+                                                    cargaRecibidaPage = Model.CargaRecibidaPageNumber,
+                                                    pageSize = Model.PageSize
+                                                })">Anterior</a>
+                                            </li>
+
+                                            @for (int i = 1; i <= Model.PaqueteTotalPages; i++)
+                                            {
+                                                <li class="page-item @(i == Model.PaquetePageNumber ? "active" : "")">
+                                                    <a class="page-link" href="@Url.Action("AsignarPaquetePZCarga", new {
+                                                        paquetePage = i,
+                                                        cargaPage = Model.CargaPageNumber,
+                                                        cargaRecibidaPage = Model.CargaRecibidaPageNumber,
+                                                        pageSize = Model.PageSize
+                                                    })">@i</a>
+                                                </li>
+                                            }
+
+                                            <li class="page-item @(Model.PaquetePageNumber == Model.PaqueteTotalPages ? "disabled" : "")">
+                                                <a class="page-link" href="@Url.Action("AsignarPaquetePZCarga", new {
+                                                    paquetePage = Model.PaquetePageNumber + 1,
+                                                    cargaPage = Model.CargaPageNumber,
+                                                    cargaRecibidaPage = Model.CargaRecibidaPageNumber,
+                                                    pageSize = Model.PageSize
+                                                })">Siguiente</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="text-end mt-3">
                             <button type="submit" class="btn" style="background-color: var(--bg-positivo); color: white;">
                                 <i class="fa fa-save me-2"></i>Asignar Carga
@@ -106,39 +154,37 @@
             </div>
         </div>
 
-        <!-- Active Loads Section - Second Column -->
         <div class="col-lg-4">
             <div class="card shadow-sm">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <h3 class="card-title mb-0">
                         <i class="fa fa-truck-loading me-2"></i>Cargas
                     </h3>
-                    <a href="@Url.Action("Create", "Cargas")" class="btn btn-positivo" color: white;">
+                    <a href="@Url.Action("Create", "Cargas")" class="btn" style="background-color: var(--bg-positivo); color: white;">
                         <i class="fas fa-plus me-2"></i>Agregar Carga
                     </a>
-
-                    @if (TempData["ErrorMessageCarga"] != null)
-                    {
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <strong>Error:</strong> @TempData["ErrorMessageCarga"]
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    }
-
-                    @if (TempData["SuccessMessageCarga"] != null)
-                    {
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <strong>Éxito:</strong> @TempData["SuccessMessageCarga"]
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    }
-
-
                 </div>
+
+                @if (TempData["ErrorMessageCarga"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show m-3" role="alert">
+                        <strong>Error:</strong> @TempData["ErrorMessageCarga"]
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                }
+
+                @if (TempData["SuccessMessageCarga"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show m-3" role="alert">
+                        <strong>Éxito:</strong> @TempData["SuccessMessageCarga"]
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                }
+
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-hover">
@@ -186,7 +232,6 @@
                                                 <div class="input-group input-group-sm">
                                                     <select name="nuevoEstado" class="form-select">
                                                         <option value="">Estado</option>
-                                                        @*<option value="BodegaPZ">BodegaPZ</option>*@
                                                         <option value="EnTransito">EnTransito</option>
                                                     </select>
                                                     <button type="submit" class="btn btn-outline-secondary">
@@ -200,11 +245,54 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- Paginacion Cargas -->
+                    <div class="card-footer">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <span>Mostrando @((Model.CargaPageNumber - 1) * Model.PageSize + 1) a @Math.Min(Model.CargaPageNumber * Model.PageSize, Model.CargaTotalCount) de @Model.CargaTotalCount registros</span>
+                            </div>
+                            <div class="col-md-6">
+                                <nav aria-label="Page navigation">
+                                    <ul class="pagination justify-content-end mb-0">
+                                        <li class="page-item @(Model.CargaPageNumber == 1 ? "disabled" : "")">
+                                            <a class="page-link" href="@Url.Action("AsignarPaquetePZCarga", new {
+                                                cargaPage = Model.CargaPageNumber - 1,
+                                                paquetePage = Model.PaquetePageNumber,
+                                                cargaRecibidaPage = Model.CargaRecibidaPageNumber,
+                                                pageSize = Model.PageSize
+                                            })">Anterior</a>
+                                        </li>
+
+                                        @for (int i = 1; i <= Model.CargaTotalPages; i++)
+                                        {
+                                            <li class="page-item @(i == Model.CargaPageNumber ? "active" : "")">
+                                                <a class="page-link" href="@Url.Action("AsignarPaquetePZCarga", new {
+                                                    cargaPage = i,
+                                                    paquetePage = Model.PaquetePageNumber,
+                                                    cargaRecibidaPage = Model.CargaRecibidaPageNumber,
+                                                    pageSize = Model.PageSize
+                                                })">@i</a>
+                                            </li>
+                                        }
+
+                                        <li class="page-item @(Model.CargaPageNumber == Model.CargaTotalPages ? "disabled" : "")">
+                                            <a class="page-link" href="@Url.Action("AsignarPaquetePZCarga", new {
+                                                cargaPage = Model.CargaPageNumber + 1,
+                                                paquetePage = Model.PaquetePageNumber,
+                                                cargaRecibidaPage = Model.CargaRecibidaPageNumber,
+                                                pageSize = Model.PageSize
+                                            })">Siguiente</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Received Loads Section - Third Column -->
         <div class="col-lg-4">
             <div class="card shadow-sm">
                 <div class="card-header bg-white">
@@ -215,7 +303,7 @@
 
                 @if (TempData["ErrorMessageReceptor"] != null)
                 {
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <div class="alert alert-danger alert-dismissible fade show m-3" role="alert">
                         <strong>Error:</strong> @TempData["ErrorMessageReceptor"]
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -225,7 +313,7 @@
 
                 @if (TempData["SuccessMessageReceptor"] != null)
                 {
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <div class="alert alert-success alert-dismissible fade show m-3" role="alert">
                         <strong>Éxito:</strong> @TempData["SuccessMessageReceptor"]
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -282,11 +370,96 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- Paginacion Cargas Recibidas -->
+                    <div class="card-footer">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <span>Mostrando @((Model.CargaRecibidaPageNumber - 1) * Model.PageSize + 1) a @Math.Min(Model.CargaRecibidaPageNumber * Model.PageSize, Model.CargaRecibidaTotalCount) de @Model.CargaRecibidaTotalCount registros</span>
+                            </div>
+                            <div class="col-md-6">
+                                <nav aria-label="Page navigation">
+                                    <ul class="pagination justify-content-end mb-0">
+                                        <li class="page-item @(Model.CargaRecibidaPageNumber == 1 ? "disabled" : "")">
+                                            <a class="page-link" href="@Url.Action("AsignarPaquetePZCarga", new {
+                                                cargaRecibidaPage = Model.CargaRecibidaPageNumber - 1,
+                                                paquetePage = Model.PaquetePageNumber,
+                                                cargaPage = Model.CargaPageNumber,
+                                                pageSize = Model.PageSize
+                                            })">Anterior</a>
+                                        </li>
+
+                                        @for (int i = 1; i <= Model.CargaRecibidaTotalPages; i++)
+                                        {
+                                            <li class="page-item @(i == Model.CargaRecibidaPageNumber ? "active" : "")">
+                                                <a class="page-link" href="@Url.Action("AsignarPaquetePZCarga", new {
+                                                    cargaRecibidaPage = i,
+                                                    paquetePage = Model.PaquetePageNumber,
+                                                    cargaPage = Model.CargaPageNumber,
+                                                    pageSize = Model.PageSize
+                                                })">@i</a>
+                                            </li>
+                                        }
+
+                                        <li class="page-item @(Model.CargaRecibidaPageNumber == Model.CargaRecibidaTotalPages ? "disabled" : "")">
+                                            <a class="page-link" href="@Url.Action("AsignarPaquetePZCarga", new {
+                                                cargaRecibidaPage = Model.CargaRecibidaPageNumber + 1,
+                                                paquetePage = Model.PaquetePageNumber,
+                                                cargaPage = Model.CargaPageNumber,
+                                                pageSize = Model.PageSize
+                                            })">Siguiente</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    function changePageSize(size) {
+        window.location.href = '@Url.Action("AsignarPaquetePZCarga")' +
+            '?paquetePage=@Model.PaquetePageNumber' +
+            '&cargaPage=@Model.CargaPageNumber' +
+            '&cargaRecibidaPage=@Model.CargaRecibidaPageNumber' +
+            '&pageSize=' + size;
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

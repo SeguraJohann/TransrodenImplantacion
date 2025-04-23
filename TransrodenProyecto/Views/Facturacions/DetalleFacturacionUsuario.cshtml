@@ -30,13 +30,13 @@
                             <dd>@Model.Fecha.ToString("dd/MM/yyyy")</dd>
 
                             <dt>Precio:</dt>
-                            <dd>@String.Format("{0:C}", Model.Precio)</dd>
+                            <dd>₡@String.Format("{0:N2}", Model.Precio)</dd>
 
                             <dt>Subtotal:</dt>
-                            <dd>@String.Format("{0:C}", Model.Iva)</dd>
+                            <dd>₡@String.Format("{0:N2}", Model.Iva)</dd>
 
                             <dt>Total:</dt>
-                            <dd>@String.Format("{0:C}", Model.Total)</dd>
+                            <dd>₡@String.Format("{0:N2}", Model.Total)</dd>
 
 
 
@@ -96,5 +96,5 @@
     </div>
 
     <a href="@Url.Action("FacturasUsuario", "Facturacions")" class="btn btn-primary">Volver a Mis Facturas</a>
-
+    <br>
 </div>

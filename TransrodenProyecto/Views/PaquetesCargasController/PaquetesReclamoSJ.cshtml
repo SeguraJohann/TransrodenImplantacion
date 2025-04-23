@@ -2,6 +2,10 @@
 @model TransrodenProyecto.ViewModels.PaqueteCargaViewModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentPage = (int)ViewBag.CurrentPage;
+    var totalPages = (int)ViewBag.TotalPages;
+    var searchTerm = ViewBag.SearchTerm as string;
+    var filterBy = ViewBag.FilterBy as string;
 }
 
 <div class="login-outer-container">
@@ -11,9 +15,29 @@
                 <div class="bg-white rounded p-4 p-sm-5 shadow-sm">
                     <h2 class="text-center mb-4">Paquetes pendientes de reclamo</h2>
 
+
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <input type="text" id="searchTerm" class="form-control" placeholder="Buscar..." value="@searchTerm">
+                                <select id="filterBy" class="form-select">
+                                    <option value="NumeroRastreo" @(filterBy == "NumeroRastreo" ? "selected" : "")>Número de Rastreo</option>
+                                    <option value="NombreEmisor" @(filterBy == "NombreEmisor" ? "selected" : "")>Nombre Emisor</option>
+                                    <option value="NombreReceptor" @(filterBy == "NombreReceptor" ? "selected" : "")>Nombre Receptor</option>
+                                    <option value="CedulaReceptor" @(filterBy == "CedulaReceptor" ? "selected" : "")>Cédula Receptor</option>
+                                </select>
+                                <button id="searchButton" class="btn btn-primary">Buscar</button>
+                                @if (!string.IsNullOrEmpty(searchTerm))
+                                {
+                                    <button id="clearButton" class="btn btn-secondary">Mostrar Todos</button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="table-responsive shadow-sm rounded">
                         <table class="table table-hover align-middle mb-0 bg-white">
-                            <thead class="bg-lightt">
+                            <thead class="bg-light">
                                 <tr>
                                     <th>Numero de Rastreo</th>
                                     <th>Emisor</th>
@@ -26,58 +50,130 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var paquete in Model.Paquetes)
+                                @if (Model.Paquetes.Any())
+                                {
+                                    foreach (var paquete in Model.Paquetes)
+                                    {
+                                        <tr>
+                                            <td>@paquete.NumeroRastreo</td>
+                                            <td>@paquete.NombreEmisor</td>
+                                            <td>@paquete.NombreReceptor</td>
+                                            <td>@paquete.CedulaReceptor</td>
+                                            <td class="text-center">
+                                                @if (paquete.Domicilio)
+                                                {
+                                                    <i class="fas fa-check text-success"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="far fa-times-circle text-danger"></i>
+                                                }
+                                            </td>
+                                            <td class="text-center">
+                                                @if (paquete.Pago)
+                                                {
+                                                    <i class="fas fa-check text-success"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="far fa-times-circle text-danger"></i>
+                                                }
+                                            </td>
+                                            <td>@paquete.Estado.ToString()</td>
+                                            <td>
+                                                @using (Html.BeginForm("ActualizarEstadoPaquete", "PaquetesCargasController", FormMethod.Post))
+                                                {
+                                                    @Html.AntiForgeryToken()
+                                                    @Html.Hidden("idPaquete", paquete.Id_Paquete)
+                                                    <div class="d-flex flex-column gap-2">
+                                                        <select name="nuevoEstado" class="form-select">
+                                                            <option value="">Estado</option>
+                                                            <option value="BodegaSJ">BodegaSJ</option>
+                                                            <option value="Entregado">Entregado</option>
+                                                        </select>
+                                                        <button type="submit" class="btn btn-success">
+                                                            <i class="fas fa-sync-alt me-2"></i>Actualizar
+                                                        </button>
+                                                    </div>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
                                 {
                                     <tr>
-                                        <td>@paquete.NumeroRastreo</td>
-                                        <td>@paquete.NombreEmisor</td>
-                                        <td>@paquete.NombreReceptor</td>
-                                        <td>@paquete.CedulaReceptor</td>
-                                        <td class="text-center">
-                                            @if (paquete.Domicilio)
-                                            {
-                                                <i class="fas fa-check text-success"></i>
-                                            }
-                                            else
-                                            {
-                                                <i class="far fa-times-circle text-danger"></i>
-                                            }
-                                        </td>
-                                        <td class="text-center">
-                                            @if (@paquete.Pago)
-                                            {
-                                                <i class="fas fa-check text-success"></i>
-                                            }
-                                            else
-                                            {
-                                                <i class="far fa-times-circle text-danger"></i>
-                                            }
-                                        </td>
-                                        <td>@paquete.Estado.ToString()</td>
-                                        <td>
-                                            @using (Html.BeginForm("ActualizarEstadoPaquete", "PaquetesCargasController", FormMethod.Post))
-                                            {
-                                                @Html.AntiForgeryToken()
-                                                @Html.Hidden("idPaquete", paquete.Id_Paquete)
-                                                <div class="d-flex flex-column gap-2">
-                                                    <select name="nuevoEstado" class="form-select">
-                                                        <option value="">Estado</option>
-                                                        <option value="BodegaSJ">BodegaSJ</option>
-                                                        <option value="Entregado">Entregado</option>
-                                                    </select>
-                                                    <button type="submit" class="btn btn-action">
-                                                        <i class="fas fa-sync-alt me-2"></i>Actualizar
-                                                    </button>
-                                                </div>
-                                            }
-                                        </td>
+                                        <td colspan="8" class="text-center">No se encontraron paquetes</td>
                                     </tr>
                                 }
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- Paginacion -->
+                    @if (totalPages > 1)
+                    {
+                        <nav class="mt-4">
+                            <ul class="pagination justify-content-center">
+                                @if (currentPage > 1)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" href="@Url.Action("PaquetesReclamoSJ", new { page = currentPage - 1, searchTerm = searchTerm, filterBy = filterBy })">
+                                            &laquo; Anterior
+                                        </a>
+                                    </li>
+                                }
+
+                                @for (int i = 1; i <= totalPages; i++)
+                                {
+                                    <li class="page-item @(i == currentPage ? "active" : "")">
+                                        <a class="page-link" href="@Url.Action("PaquetesReclamoSJ", new { page = i, searchTerm = searchTerm, filterBy = filterBy })">@i</a>
+                                    </li>
+                                }
+
+                                @if (currentPage < totalPages)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" href="@Url.Action("PaquetesReclamoSJ", new { page = currentPage + 1, searchTerm = searchTerm, filterBy = filterBy })">
+                                            Siguiente &raquo;
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </nav>
+
+                        <div class="text-center text-muted small mt-2">
+                            Mostrando página @currentPage de @totalPages - Total de registros: @ViewBag.TotalRecords
+                        </div>
+                    }
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Busqueda
+            $('#searchButton').click(function() {
+                var searchTerm = $('#searchTerm').val();
+                var filterBy = $('#filterBy').val();
+                window.location.href = '@Url.Action("PaquetesReclamoSJ")' +
+                    '?searchTerm=' + encodeURIComponent(searchTerm) +
+                    '&filterBy=' + encodeURIComponent(filterBy) +
+                    '&page=1';
+            });
+
+            $('#clearButton').click(function() {
+                window.location.href = '@Url.Action("PaquetesReclamoSJ")' + '?page=1';
+            });
+
+            $('#searchTerm').keypress(function(e) {
+                if (e.which == 13) {
+                    $('#searchButton').click();
+                }
+            });
+        });
+    </script>
+}

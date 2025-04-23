@@ -63,6 +63,15 @@ namespace TransrodenProyecto.Controllers
             return View(model);
         }
 
+
+
+        public ActionResult ObtenerCostoDomicilio()
+        {
+            var costoDomicilio = db.CalcDomicilios.FirstOrDefault()?.Costo ?? 0;
+
+            return Json(new { costo = costoDomicilio }, JsonRequestBehavior.AllowGet);
+        }
+
     }
 
 }

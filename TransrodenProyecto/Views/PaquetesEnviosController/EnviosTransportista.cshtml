@@ -1,9 +1,18 @@
 ﻿@using TransrodenProyecto.Models
 @model TransrodenProyecto.ViewModels.PaqueteEnvioViewModel
-
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentPage = (int)ViewBag.CurrentPage;
+    var totalPages = (int)ViewBag.TotalPages;
+    var totalRecords = (int)ViewBag.TotalRecords;
+    var searchId = ViewBag.SearchId as int?;
+    var searchEstado = ViewBag.SearchEstado as EstadoEnvio?;
+    var estadosEnvio = ViewBag.EstadosEnvio as List<EstadoEnvio>;
 }
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 
 <div class="login-outer-container">
     <div class="container d-flex align-items-center justify-content-center min-vh-50 py-5 login-container">
@@ -11,6 +20,60 @@
             <div class="col-12">
                 <div class="bg-white rounded p-4 p-sm-5 shadow-sm">
                     <h2 class="text-center mb-4">Envío Domicilios Asignados</h2>
+
+                    <!-- Formulario de búsqueda -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="input-group mb-3">
+                                <input type="number" id="searchId" class="form-control" placeholder="Buscar por ID" value="@(searchId.HasValue ? searchId.Value.ToString() : "")">
+                                <button id="searchIdButton" class="btn btn-primary">Buscar ID</button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group mb-3">
+                                <select id="searchEstado" class="form-select">
+                                    <option value="">Todos los estados</option>
+                                    @foreach (var estado in estadosEnvio)
+                                    {
+                                        <option value="@estado" @(searchEstado.HasValue && searchEstado.Value == estado ? "selected" : "")>@estado.ToString()</option>
+                                    }
+                                </select>
+                                <button id="searchEstadoButton" class="btn btn-primary">Buscar Estado</button>
+                                @if (searchId.HasValue || searchEstado.HasValue)
+                                {
+                                    <button id="clearButton" class="btn btn-secondary">Limpiar</button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Información de paginación -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="text-muted small">
+                            Mostrando página @currentPage de @totalPages - Total: @totalRecords registros
+                        </div>
+                    </div>
+
+                    <!-- Alertas -->
+                    @if (TempData["ErrorMessageEnvioEstado"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>Error:</strong> @TempData["ErrorMessageEnvioEstado"]
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    }
+
+                    @if (TempData["SuccessMessageEnvio"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Éxito:</strong> @TempData["SuccessMessageEnvio"]
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    }
 
                     <div class="table-responsive">
                         <table class="table table-hover">
@@ -25,46 +88,101 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var envio in Model.Envios)
+                                @if (Model.Envios.Any())
+                                {
+                                    foreach (var envio in Model.Envios)
+                                    {
+                                        <tr>
+                                            <td>@envio.Id_Envio</td>
+                                            <td>@envio.Usuario.Nombre</td>
+                                            <td>@envio.Estado.ToString()</td>
+                                            <td>@envio.NumeroPaquetes</td>
+                                            <td>
+                                                <a href="@Url.Action("EnvioPaquetesTransport", "PaquetesEnviosController", new { idEnvio = envio.Id_Envio })"
+                                                   class="btn" style="background-color: var(--bg-positivo); color: white;">
+                                                    Ver
+                                                </a>
+                                            </td>
+                                            <td>
+                                                @using (Html.BeginForm("EstadoEnvioTransp", "PaquetesEnviosController", FormMethod.Post))
+                                                {
+                                                    @Html.AntiForgeryToken()
+                                                    @Html.Hidden("idEnvio", envio.Id_Envio)
+
+                                                    <div class="d-flex gap-2">
+                                                        <select name="nuevoEstado" class="form-select">
+                                                            <option value="">Estado</option>
+                                                            <option value="EnTransito">En Tránsito</option>
+                                                            <option value="Entregado">Entregado</option>
+                                                        </select>
+
+                                                        <button type="submit" class="btn" style="background-color: var(--bg-dark); color: white;">
+                                                            Actualizar
+                                                        </button>
+                                                    </div>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
                                 {
                                     <tr>
-                                        <td>@envio.Id_Envio</td>
-                                        <td>@envio.Usuario.Nombre</td>
-                                        <td>@envio.Estado.ToString()</td>
-                                        <td>@envio.NumeroPaquetes</td>
-                                        <td>
-                                            <a href="@Url.Action("EnvioPaquetesTransport", "PaquetesEnviosController", new { idEnvio = envio.Id_Envio })"
-                                               class="btn" style="background-color: var(--bg-positivo); color: white;">
-                                                Ver
-                                            </a>
-                                        </td>
-                                        <td>
-                                            @using (Html.BeginForm("EstadoEnvioTransp", "PaquetesEnviosController", FormMethod.Post))
-                                            {
-                                                @Html.AntiForgeryToken()
-                                                @Html.Hidden("idEnvio", envio.Id_Envio)
-
-                                                <div class="d-flex gap-2">
-                                                    <select name="nuevoEstado" class="form-select">
-                                                        <option value="">Estado</option>
-                                                        <option value="EnTransito">En Tránsito</option>
-                                                        <option value="Entregado">Entregado</option>
-                                                    </select>
-
-                                                    <button type="submit" class="btn" style="background-color: var(--bg-dark); color: white;">
-                                                        Actualizar
-                                                    </button>
-                                                </div>
-                                            }
-                                        </td>
+                                        <td colspan="6" class="text-center">No se encontraron envíos</td>
                                     </tr>
                                 }
                             </tbody>
                         </table>
                     </div>
 
-                    <div class="text-center mt-4">
+                    <!-- Paginación -->
+                    @if (totalPages > 1)
+                    {
+                        <nav class="mt-4">
+                            <ul class="pagination justify-content-center">
+                                @if (currentPage > 1)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           href="@Url.Action("EnviosTransportista", new {
+                                               page = currentPage - 1,
+                                               searchId = searchId,
+                                               searchEstado = searchEstado })">
+                                            &laquo; Anterior
+                                        </a>
+                                    </li>
+                                }
 
+                                @for (int i = 1; i <= totalPages; i++)
+                                {
+                                    <li class="page-item @(i == currentPage ? "active" : "")">
+                                        <a class="page-link"
+                                           href="@Url.Action("EnviosTransportista", new {
+                                               page = i,
+                                               searchId = searchId,
+                                               searchEstado = searchEstado })">
+                                            @i
+                                        </a>
+                                    </li>
+                                }
+
+                                @if (currentPage < totalPages)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           href="@Url.Action("EnviosTransportista", new {
+                                               page = currentPage + 1,
+                                               searchId = searchId,
+                                               searchEstado = searchEstado })">
+                                            Siguiente &raquo;
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </nav>
+                    }
+
+                    <div class="text-center mt-4">
                         <a href="@Url.Action("AsignTransportista", "Admin")"
                            class="btn" style="background-color: var(--bg-info); color: white;">
                             Regresar <i class="bi bi-arrow-return-left"></i>
@@ -75,3 +193,44 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Buscar por ID
+            $('#searchIdButton').click(function() {
+                var searchId = $('#searchId').val();
+                var searchEstado = $('#searchEstado').val();
+                window.location.href = '@Url.Action("EnviosTransportista")' +
+                    '?searchId=' + encodeURIComponent(searchId) +
+                    '&searchEstado=' + encodeURIComponent(searchEstado) +
+                    '&page=1';
+            });
+
+            // Buscar por estado
+            $('#searchEstadoButton').click(function() {
+                var searchId = $('#searchId').val();
+                var searchEstado = $('#searchEstado').val();
+                window.location.href = '@Url.Action("EnviosTransportista")' +
+                    '?searchId=' + encodeURIComponent(searchId) +
+                    '&searchEstado=' + encodeURIComponent(searchEstado) +
+                    '&page=1';
+            });
+
+            // Limpiar búsqueda
+            $('#clearButton').click(function() {
+                window.location.href = '@Url.Action("EnviosTransportista")';
+            });
+
+            // Buscar con Enter en campo ID
+            $('#searchId').keypress(function(e) {
+                if (e.which == 13) {
+                    $('#searchIdButton').click();
+                }
+            });
+        });
+    </script>
+}
+
+
+

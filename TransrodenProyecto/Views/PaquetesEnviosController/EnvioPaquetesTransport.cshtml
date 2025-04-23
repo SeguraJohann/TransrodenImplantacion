@@ -1,176 +1,81 @@
 ﻿@using TransrodenProyecto.Models
 @model TransrodenProyecto.ViewModels.PaqueteEnvioViewModel
-
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentPage = (int)ViewBag.CurrentPage;
+    var totalPages = (int)ViewBag.TotalPages;
+    var totalRecords = (int)ViewBag.TotalRecords;
+    var searchTracking = ViewBag.SearchTracking as string;
+    var searchCedula = ViewBag.SearchCedula as string;
+    var searchEstado = ViewBag.SearchEstado as EstadoPaquete?;
+    var estadosPaquete = ViewBag.EstadosPaquete as List<EstadoPaquete>;
+    var idEnvio = ViewBag.IdEnvio;
 }
 
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="utf-8">
-    <title>LifeSure - Life Insurance Website Template</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="" name="keywords">
-    <meta content="" name="description">
+<div class="container mt-5">
+    <h2 class="text-center">Paquetes del Envío</h2>
+    <br>
+    <h4>Transportista: @Model.Envios.First().Usuario.Nombre</h4>
+    <h4>Estado: @Model.Envios.First().Estado.ToString()</h4>
+    <h4>Paquetes Asignados: @Model.Envios.First().NumeroPaquetes</h4>
+    <br>
+    <br>
 
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <!-- Icon Font Stylesheet -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-
-    <!-- Libraries Stylesheet -->
-    <link rel="stylesheet" href="~/Content/assets/lib/animate/animate.min.css" />
-    <link href="~/Content/assets/lib/lightbox/css/lightbox.min.css" rel="stylesheet">
-    <link href="~/Content/assets/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-
-
-    <!-- Customized Bootstrap Stylesheet -->
-    <link href="~/Content/assets/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Template Stylesheet -->
-    <link href="~/Content/assets/css/style.css" rel="stylesheet">
-
-
-    <!-- Bootrap, ventanas de dialogo 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-        -->
-</head>
-
-<body>
-
-    <!-- Spinner Start -->
-    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-            <span class="sr-only">Loading...</span>
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="input-group mb-3">
+                <input type="text" id="searchTracking" class="form-control" placeholder="Número de rastreo" value="@searchTracking">
+                <button id="searchTrackingButton" class="btn btn-primary search-button">Buscar</button>
+            </div>
         </div>
-    </div>
-    <!-- Spinner End -->
-    <!-- Topbar -->
-    <div class="container-fluid topbar px-0 px-lg-4 bg-light py-2 d-none d-lg-block">
-        <div class="container">
-            <div class="row gx-0 align-items-center">
-                <div class="col-lg-8 text-center text-lg-start mb-lg-0">
-                    <div class="d-flex flex-wrap">
-                        <div class="border-end border-primary pe-3">
-                            <a href="#" class="text-muted small"><i class="fas fa-house-user text-primary me-2"></i>ESTE ES EL MODULO DE ADMINISTRATIVO</a>
-                        </div>
-                        <div class="ps-3">
-                            <a href="mailto:example@gmail.com" class="text-muted small"></i> <!-- Aqui puede ir el nombre del usuario--></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 text-center text-lg-end">
-                    <div class="d-flex justify-content-end">
-                        <div class="d-flex border-end border-primary pe-3">
-                            <a class="btn p-0 text-primary me-3" href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a class="btn p-0 text-primary me-3" href="#"><i class="fab fa-twitter"></i></a>
-                            <a class="btn p-0 text-primary me-3" href="#"><i class="fab fa-instagram"></i></a>
-                        </div>
-                        <!--
-                        <div class="dropdown ms-3">
-                            <a href="#" class="dropdown-toggle text-dark" data-bs-toggle="dropdown"><small><i class="fas fa-globe-europe text-primary me-2"></i> English</small></a>
-                            <div class="dropdown-menu rounded">
-                                <a href="#" class="dropdown-item">English</a>
-                                <a href="#" class="dropdown-item">Bangla</a>
-                                <a href="#" class="dropdown-item">French</a>
-                                <a href="#" class="dropdown-item">Spanish</a>
-                                <a href="#" class="dropdown-item">Arabic</a>
-                            </div>
-                        </div>
-                        -->
-                    </div>
-                </div>
+        <div class="col-md-4">
+            <div class="input-group mb-3">
+                <input type="text" id="searchCedula" class="form-control" placeholder="Cédula receptor" value="@searchCedula">
+                <button id="searchCedulaButton" class="btn btn-primary search-button">Buscar</button>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="input-group mb-3">
+                <select id="searchEstado" class="form-select">
+                    <option value="">Todos los estados</option>
+                    <option value="Domicilio" @(searchEstado.HasValue && searchEstado.Value == EstadoPaquete.Domicilio ? "selected" : "")>Domicilio</option>
+                    <option value="Entregado" @(searchEstado.HasValue && searchEstado.Value == EstadoPaquete.Entregado ? "selected" : "")>Entregado</option>
+                    <option value="NoEntregado" @(searchEstado.HasValue && searchEstado.Value == EstadoPaquete.NoEntregado ? "selected" : "")>No Entregado</option>
+                </select>
+                <button id="searchEstadoButton" class="btn btn-primary search-button">Filtrar</button>
+                @if (!string.IsNullOrEmpty(searchTracking) || !string.IsNullOrEmpty(searchCedula) || searchEstado.HasValue)
+                {
+                    <button id="clearButton" class="btn btn-secondary">Limpiar</button>
+                }
             </div>
         </div>
     </div>
-    <!-- Topbar -->
-    <!-- Navbar -->
-    <div class="container-fluid nav-bar px-0 px-lg-0 py-lg-0" id="maincontainer">
-        <div class="container" id="containertop">
-            <nav class="navbar navbar-expand-lg navbar-light">
-                <!-- <a href="#" class="navbar-brand p-0"> -->
-                <!--<h1 class="text-primary mb-0"><i class="fab fa-slack me-2"></i> LifeSure</h1> -->
-                <img src="~/Content/assets/img/Logo.png" alt="Logo" width="230" height="150">
-                <!-- </a> -->
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                    <span class="fa fa-bars"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarCollapse">
-
-                    <div class="navbar-nav mx-0 mx-lg-auto">
-                        <!-- <a href="index.html" class="nav-item nav-link active">Inicio</a> -->
-                        <a href="@Url.Action("IndexTransportista", "Admin")" class="nav-item nav-link active">
-                            Inicio
-                        </a>
 
 
-                        <a href="about.html" class="nav-item nav-link">
-                            Cuenta
-                        </a>
-
-
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link" data-bs-toggle="dropdown">
-                                <span class="dropdown-toggle">Tracking</span>
-                            </a>
-                            <div class="dropdown-menu">
-                                <a href="@Url.Action("AsignTransportista", "Admin")" class="dropdown-item">Tracking Admin</a>
-                                <a href="@Url.Action("TrackingAdmin", "Modulo4")" class="dropdown-item">Rastreo Paquete</a>
-                            </div>
-                        </div>
-
-
-                        @if (Session["Usuario"] != null)
-                        {
-                            <a href="@Url.Action("Logout", "Cuenta")" class="nav-item nav-link">
-                                <span class="d-block"><i class="fas fa-sign-out-alt"></i></span>
-                                @Session["Usuario"]
-                            </a>
-                        }
-                        else
-                        {
-                            <a href="@Url.Action("Login", "Cuenta")" class="nav-item nav-link">
-                                <span class="d-block"><i class="fas fa-user"></i></span>
-                                Cuenta
-                            </a>
-                        }
-                    </div>
-                </div>
-            </nav>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="text-muted small">
+            Mostrando página @currentPage de @totalPages - Total: @totalRecords registros
         </div>
     </div>
-    <!-- Navbar -->
 
-
-    <div class="container mt-5">
-
-        <h2 class="text-center">Paquetes del Envio</h2>
-        <br>
-        <h4>Transportista: @Model.Envios.First().Usuario.Nombre</h4>
-        <h4>Estado: @Model.Envios.First().Estado.ToString()</h4>
-        <h4>Paquetes Asignados: @Model.Envios.First().NumeroPaquetes</h4>
-
-        <table class="table mt-4">
-            <thead>
-                <tr>
-                    <th>Número de Rastreo</th>
-                    <th>Estado</th>
-                    <th>Receptor</th>
-                    <th>Cedula del Receptor</th>
-                    <th>Direccion</th>
-                    <th>Pago</th>
-                    <th>Detalles</th>
-                    <th>Accion</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var paquete in Model.Paquetes)
+    <table class="table mt-4">
+        <thead>
+            <tr>
+                <th>Número de Rastreo</th>
+                <th>Estado</th>
+                <th>Receptor</th>
+                <th>Cédula del Receptor</th>
+                <th>Dirección</th>
+                <th>Pago</th>
+                <th>Detalles</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Paquetes.Any())
+            {
+                foreach (var paquete in Model.Paquetes)
                 {
                     <tr>
                         <td style="color: #000000; font-weight: bold;">@paquete.NumeroRastreo</td>
@@ -179,13 +84,13 @@
                         <td>@paquete.CedulaReceptor</td>
                         <td>@paquete.Direccion</td>
                         <td style="color: #000000; font-weight: bold;">
-                            @if (@paquete.Pago)
+                            @if (paquete.Pago)
                             {
-                                <i class="fas fa-check"></i>
+                                <i class="fas fa-check text-success"></i>
                             }
                             else
                             {
-                                <i class="far fa-times-circle"></i>
+                                <i class="far fa-times-circle text-danger"></i>
                             }
                         </td>
                         <td>
@@ -193,33 +98,6 @@
                                 Ver
                             </a>
                         </td>
-                        <!--
-                    <td>
-                        @using (Html.BeginForm("ActualizarEstadoPaquete", "PaquetesEnviosController", FormMethod.Post))
-                        {
-                            @Html.AntiForgeryToken()
-                            @Html.Hidden("idPaquete", paquete.Id_Paquete)
-
-                            <select name="nuevoEstado" class="form-control">
-                                <option value="">Estado</option>
-                                <option value="EnTransito">En Transito</option>
-                                <option value="Entregado">Entregado</option>
-                                <option value="NoEntregado">No Entregado</option>
-                            </select>
-
-                            <button type="submit" class="btn btn-danger mt-2">Actualizar</button>
-                        }
-                    </td>
-                        <td>
-                            <select name="nuevoEstado" class="form-control" onchange="handleEstadoChange(this, @paquete.Id_Paquete, '@paquete.CedulaReceptor')">
-                                <option value="">Estado</option>
-                                <option value="Domicilio">En Transito</option>
-                                <option value="Entregado">Entregado</option>
-                                <option value="NoEntregado">No Entregado</option>
-                            </select>
-                        </td>
-
-                    -->
                         <td>
                             <form method="post" action="@Url.Action("ActualizarEstadoPaquete", "PaquetesEnviosController")" id="form-estado-@paquete.Id_Paquete">
                                 @Html.AntiForgeryToken()
@@ -227,54 +105,137 @@
 
                                 <select name="nuevoEstado" class="form-control" onchange="handleEstadoChange(this, @paquete.Id_Paquete, '@paquete.CedulaReceptor')">
                                     <option value="">Estado</option>
-                                    <option value="Domicilio">En Transito</option>
+                                    <option value="Domicilio">En Tránsito</option>
                                     <option value="Entregado">Entregado</option>
                                     <option value="NoEntregado">No Entregado</option>
                                 </select>
                             </form>
                         </td>
                     </tr>
-
-
                 }
-            </tbody>
-        </table>
+            }
+            else
+            {
+                <tr>
+                    <td colspan="8" class="text-center">No se encontraron paquetes</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
+    <!-- Paginacion -->
+    @if (totalPages > 1)
+    {
+        <nav class="mt-4">
+            <ul class="pagination justify-content-center">
+                @if (currentPage > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="/PaquetesEnviosController/EnvioPaquetesTransport/@idEnvio?page=@(currentPage - 1)&searchTracking=@searchTracking&searchCedula=@searchCedula&searchEstado=@searchEstado">
+                            &laquo; Anterior
+                        </a>
+                    </li>
+                }
 
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    <li class="page-item @(i == currentPage ? "active" : "")">
+                        <a class="page-link"
+                           href="/PaquetesEnviosController/EnvioPaquetesTransport/@idEnvio?page=@i&searchTracking=@searchTracking&searchCedula=@searchCedula&searchEstado=@searchEstado">
+                            @i
+                        </a>
+                    </li>
+                }
 
-        <!-- Modal para ingresar la cédula -->
-        <div class="modal fade" id="cedulaModal" tabindex="-1" aria-labelledby="cedulaModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form id="modalForm" method="post" action="@Url.Action("ActualizarEstadoPaquete", "PaquetesEnviosController")">
-                        @Html.AntiForgeryToken()
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="cedulaModalLabel">Confirmar Entrega</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                @if (currentPage < totalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="/PaquetesEnviosController/EnvioPaquetesTransport/@idEnvio?page=@(currentPage + 1)&searchTracking=@searchTracking&searchCedula=@searchCedula&searchEstado=@searchEstado">
+                            Siguiente &raquo;
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+
+    <!-- Modal para confirmar entrega -->
+    <div class="modal fade" id="cedulaModal" tabindex="-1" aria-labelledby="cedulaModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="modalForm" method="post" action="@Url.Action("ActualizarEstadoPaquete", "PaquetesEnviosController")">
+                    @Html.AntiForgeryToken()
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="cedulaModalLabel">Confirmar Entrega</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="modalIdPaquete" name="idPaquete" />
+                        <input type="hidden" id="modalEstado" name="nuevoEstado" />
+                        <div class="mb-3">
+                            <label for="modalCedula" class="form-label">Ingrese la Cédula del Receptor</label>
+                            <input type="text" class="form-control" id="modalCedula" name="cedulaReceptor" required />
                         </div>
-                        <div class="modal-body">
-                            <input type="hidden" id="modalIdPaquete" name="idPaquete" />
-                            <input type="hidden" id="modalEstado" name="nuevoEstado" />
-                            <div class="mb-3">
-                                <label for="modalCedula" class="form-label">Ingrese la Cédula del Receptor</label>
-                                <input type="text" class="form-control" id="modalCedula" name="cedulaReceptor" required />
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary">Confirmar</button>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Confirmar</button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
 
+    <a href="@Url.Action("EnviosTransportista", "PaquetesEnviosController")" class="btn btn-success">
+        Regresar
+    </a>
+</div>
+<br>
 
+@section Scripts {
+    <script>
+        $(document).ready(function() {
 
+            var idEnvio = @idEnvio;
 
-        <!--Para validar la cedula-->
-        <script>
-            function handleEstadoChange(select, idPaquete, cedulaReceptor) {
+            function buildUrlWithParams(page) {
+                var url = '@Url.Action("EnvioPaquetesTransport", "PaquetesEnviosController", new { idEnvio = "_idEnvio_" })'
+                    .replace('_idEnvio_', idEnvio);
+
+                var params = [];
+                var searchTracking = $('#searchTracking').val();
+                var searchCedula = $('#searchCedula').val();
+                var searchEstado = $('#searchEstado').val();
+
+                if (searchTracking) params.push('searchTracking=' + encodeURIComponent(searchTracking));
+                if (searchCedula) params.push('searchCedula=' + encodeURIComponent(searchCedula));
+                if (searchEstado) params.push('searchEstado=' + encodeURIComponent(searchEstado));
+
+                params.push('page=' + page);
+
+                return url + (params.length > 0 ? '&' + params.join('&') : '');
+            }
+
+            $('.search-button').on('click', function() {
+                window.location.href = buildUrlWithParams(1);
+            });
+
+            // Limpiar busqueda
+            $('#clearButton').on('click', function() {
+                window.location.href = '@Url.Action("EnvioPaquetesTransport", "PaquetesEnviosController", new { idEnvio = "_idEnvio_" })'
+                    .replace('_idEnvio_', idEnvio);
+            });
+
+            $('#searchTracking, #searchCedula').keypress(function(e) {
+                if (e.which == 13) {
+                    window.location.href = buildUrlWithParams(1);
+                }
+            });
+
+            // Para el cambio de estado
+            window.handleEstadoChange = function(select, idPaquete, cedulaReceptor) {
                 if (select.value === "Entregado") {
                     const modal = new bootstrap.Modal(document.getElementById('cedulaModal'));
                     document.getElementById('modalIdPaquete').value = idPaquete;
@@ -282,103 +243,9 @@
                     document.getElementById('modalCedula').value = '';
                     modal.show();
                 } else if (select.value) {
-                    // Esto envia el estado automaticamente, no se hace validacion de cedula
                     document.getElementById(`form-estado-${idPaquete}`).submit();
                 }
-            }
-        </script>
-
-
-
-
-        <a href="@Url.Action("EnviosTransportista", "PaquetesEnviosController")" class="btn btn-success">
-            Regresar
-        </a>
-
-
-    </div>
-    <br>
-
-
-
-
-    <!-- Footer Start -->
-    <div class="container-fluid footer py-5 wow fadeIn" data-wow-delay="0.2s">
-        <div class="container py-5">
-            <div class="row g-5">
-                <div class="col-xl-9">
-                    <div class="mb-5">
-                        <div class="row g-4">
-                            <div class="col-md-6 col-lg-6 col-xl-5">
-                                <div class="footer-item">
-                                    <a href="index.html" class="p-0">
-                                        <h3 class="text-white"><i class="fas fa-truck-loading me-3"></i> Transroden Express SA</h3>
-                                        <!-- <img src="~/Content/assets/img/logo.png" alt="Logo"> -->
-                                    </a>
-                                    <p class="text-white mb-4">Dolor amet sit justo amet elitr clita ipsum elitr est.Lorem ipsum dolor sit amet, consectetur adipiscing...</p>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-6 col-xl-3">
-                                <div class="footer-item">
-                                    <h4 class="text-white mb-4">Acceso Rapido</h4>
-                                    <a href="#" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Inicio </a>
-                                    <a href="#" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Administracion </a>
-                                    <a href="#" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Clientes </a>
-                                    <a href="#" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Inventario </a>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-6 col-xl-3">
-                                <div class="footer-item">
-                                    <h4 class="mb-4" style="color: rgb(192, 27, 28);">Acceso Rápido</h4>
-                                    <a href="#" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Tracking </a>
-                                    <a href="#" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Contabilidad </a>
-                                    <a href="#" class="text-white"><i class="text-white fas fa-angle-right me-2"></i> Mercadeo </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Footer End -->
-    <!-- Copyright Start -->
-    <div class="container-fluid copyright py-4">
-        <div class="container">
-            <div class="row g-4 align-items-center">
-                <div class="col-md-6 text-center text-md-end mb-md-0">
-                    <span class="text-body"><a href="#" class="border-bottom text-white"><i class="fas fa-copyright text-light me-2"></i>transroden.com</a>, Todos los derechos reservados 2024.</span>
-                </div>
-                <div class="col-md-6 text-center text-md-start text-body">
-                    <!--/*** This template is free as long as you keep the below author’s credit link/attribution link/backlink. ***/-->
-                    <!--/*** If you'd like to use the template without the below author’s credit link/attribution link/backlink, ***/-->
-                    <!--/*** you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". ***/-->
-                    <!-- Designed By <a class="border-bottom text-white" href="https://htmlcodex.com">HTML Codex</a> Distributed By <a class="border-bottom text-white" href="https://themewagon.com">ThemeWagon</a>-->
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Copyright End -->
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-primary btn-lg-square rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>
-
-
-    <!-- JavaScript Libraries -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/Content/assets/lib/wow/wow.min.js"></script>
-    <script src="~/Content/assets/lib/easing/easing.min.js"></script>
-    <script src="~/Content/assets/lib/waypoints/waypoints.min.js"></script>
-    <script src="~/Content/assets/lib/counterup/counterup.min.js"></script>
-    <script src="~/Content/assets/lib/lightbox/js/lightbox.min.js"></script>
-    <script src="~/Content/assets/lib/owlcarousel/owl.carousel.min.js"></script>
-
-
-    <!-- Template Javascript -->
-    <script src="~/Content/assets/js/main.js"></script>
-
-
-
-</body>
-
-</html>
+            };
+        });
+    </script>
+}

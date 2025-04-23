@@ -27,15 +27,15 @@
                             </div>
                             <div class="row mb-2">
                                 <div class="col-5 fw-bold">Precio:</div>
-                                <div class="col-7">@String.Format("{0:C}", Model.Precio)</div>
+                                <div class="col-7">₡@String.Format("{0:N2}", Model.Precio)</div>
                             </div>
                             <div class="row mb-2">
                                 <div class="col-5 fw-bold">Subtotal:</div>
-                                <div class="col-7">@String.Format("{0:C}", Model.Iva)</div>
+                                <div class="col-7">₡@String.Format("{0:N2}", Model.Iva)</div>
                             </div>
                             <div class="row mb-2">
                                 <div class="col-5 fw-bold">Total:</div>
-                                <div class="col-7">@String.Format("{0:C}", Model.Total)</div>
+                                <div class="col-7">₡@String.Format("{0:N2}", Model.Total)</div>
                             </div>
                         </div>
                     </div>

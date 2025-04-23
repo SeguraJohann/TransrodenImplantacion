@@ -39,8 +39,8 @@
                                 <thead>
                                     <tr class="bg-light">
                                         <th class="px-4 py-3 text-uppercase small font-weight-bold">@Html.DisplayNameFor(model => model.Id_Facturacion)</th>
-                                        <th class="px-4 py-3 text-uppercase small font-weight-bold">@Html.DisplayNameFor(model => model.Paquete.NumeroRastreo)</th>
-                                        <th class="px-4 py-3 text-uppercase small font-weight-bold">@Html.DisplayNameFor(model => model.Usuario.Nombre)</th>
+                                        @*<th class="px-4 py-3 text-uppercase small font-weight-bold">@Html.DisplayNameFor(model => model.Paquete.NumeroRastreo)</th>
+                                        <th class="px-4 py-3 text-uppercase small font-weight-bold">@Html.DisplayNameFor(model => model.Usuario.Nombre)</th>*@
                                         <th class="px-4 py-3 text-uppercase small font-weight-bold">@Html.DisplayNameFor(model => model.NombreEmisor)</th>
                                         <th class="px-4 py-3 text-uppercase small font-weight-bold">@Html.DisplayNameFor(model => model.CedulaEmisor)</th>
                                         <th class="px-4 py-3 text-uppercase small font-weight-bold">@Html.DisplayNameFor(model => model.Precio)</th>
@@ -73,25 +73,22 @@ $(document).ready(function () {
     let isLoading = false;
 
     function renderPagination(totalPages, searchId = '') {
-        const maxVisiblePages = 5; // Número de páginas visibles
+        const maxVisiblePages = 5;
         let paginationHtml = '';
 
-        // Botón Anterior
         paginationHtml += `
             <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
                 <a class="page-link" href="#" data-page="${currentPage - 1}">&laquo;</a>
             </li>`;
 
-        // Lógica para determinar qué números de página mostrar
+  
         let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
         let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
 
-        // Ajustar startPage si estamos cerca del final
         if (endPage - startPage + 1 < maxVisiblePages) {
             startPage = Math.max(1, endPage - maxVisiblePages + 1);
         }
 
-        // Primera página y ellipsis si es necesario
         if (startPage > 1) {
             paginationHtml += `
                 <li class="page-item">
@@ -105,7 +102,6 @@ $(document).ready(function () {
             }
         }
 
-        // Páginas intermedias
         for (let i = startPage; i <= endPage; i++) {
             paginationHtml += `
                 <li class="page-item ${i === currentPage ? 'active' : ''}">
@@ -113,7 +109,6 @@ $(document).ready(function () {
                 </li>`;
         }
 
-        // Última página y ellipsis si es necesario
         if (endPage < totalPages) {
             if (endPage < totalPages - 1) {
                 paginationHtml += `
@@ -127,7 +122,6 @@ $(document).ready(function () {
                 </li>`;
         }
 
-        // Botón Siguiente
         paginationHtml += `
             <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
                 <a class="page-link" href="#" data-page="${currentPage + 1}">&raquo;</a>
@@ -135,12 +129,10 @@ $(document).ready(function () {
 
         $('#pagination').html(paginationHtml);
 
-        // Evento de clic para los números de página
         $('#pagination .page-link').click(function(e) {
             e.preventDefault();
             const page = $(this).data('page');
 
-            // Verificar que el número de página sea válido
             if (page && page >= 1 && page <= totalPages && page !== currentPage) {
                 currentPage = page;
                 loadFacturaciones(currentPage, searchId);
@@ -165,8 +157,6 @@ $(document).ready(function () {
                     tableBody += `
                         <tr>
                             <td>${factura.Id_Facturacion}</td>
-                            <td>${factura.Paquete?.NumeroRastreo || '-'}</td>
-                            <td>${factura.Usuario?.Nombre || '-'}</td>
                             <td>${factura.NombreEmisor}</td>
                             <td>${factura.CedulaEmisor}</td>
                             <td>${factura.Precio}</td>
@@ -196,20 +186,19 @@ $(document).ready(function () {
         const searchId = $(this).val();
         clearTimeout(searchTimeout);
         searchTimeout = setTimeout(() => {
-            currentPage = 1; // Reiniciar a la primera página
+            currentPage = 1;
             loadFacturaciones(currentPage, searchId);
-        }, 300); // Esperar 300ms después de que el usuario deje de escribir
+        }, 300);
     });
 
-    // Cargar facturaciones iniciales
     loadFacturaciones(currentPage);
 });
 </script>
 <script>
     document.getElementById('searchId').addEventListener('input', function (event) {
-        const value = parseInt(event.target.value); // Obtiene el valor del campo
-        if (value < 1 || isNaN(value)) { // Si el valor es menor a 1 o no es un número
-            event.target.value = 1; // Establece el valor mínimo permitido (1)
+        const value = parseInt(event.target.value);
+        if (value < 1 || isNaN(value)) { 
+            event.target.value = 1; 
         }
     });
 </script>

@@ -2,6 +2,12 @@
 @model TransrodenProyecto.ViewModels.PaqueteCargaViewModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentPage = (int)ViewBag.CurrentPage;
+    var totalPages = (int)ViewBag.TotalPages;
+    var totalRecords = (int)ViewBag.TotalRecords;
+    var searchId = ViewBag.SearchId as int?;
+    var searchEstado = ViewBag.SearchEstado as EstadoCarga?;
+    var estadosCarga = ViewBag.EstadosCarga as List<EstadoCarga>;
 }
 
 <div class="login-outer-container">
@@ -10,6 +16,38 @@
             <div class="col-12">
                 <div class="bg-white rounded p-4 p-sm-5 shadow-sm">
                     <h2 class="text-center mb-4">Cargas Asignadas</h2>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="input-group mb-3">
+                                <input type="number" id="searchId" class="form-control" placeholder="Buscar por ID" value="@(searchId.HasValue ? searchId.Value.ToString() : "")">
+                                <button id="searchIdButton" class="btn btn-primary">Buscar ID</button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group mb-3">
+                                <select id="searchEstado" class="form-select">
+                                    <option value="">Todos los estados</option>
+                                    @foreach (var estado in estadosCarga)
+                                    {
+                                        <option value="@estado" @(searchEstado.HasValue && searchEstado.Value == estado ? "selected" : "")>@estado.ToString()</option>
+                                    }
+                                </select>
+                                <button id="searchEstadoButton" class="btn btn-primary">Buscar Estado</button>
+                                @if (searchId.HasValue || searchEstado.HasValue)
+                                {
+                                    <button id="clearButton" class="btn btn-secondary">Limpiar</button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="text-muted small">
+                            Mostrando página @currentPage de @totalPages - Total: @totalRecords registros
+                        </div>
+                    </div>
 
                     <div class="table-responsive">
                         <table class="table table-hover">
@@ -24,43 +62,99 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var carga in Model.Cargas)
+                                @if (Model.Cargas.Any())
+                                {
+                                    foreach (var carga in Model.Cargas)
+                                    {
+                                        <tr>
+                                            <td>@carga.Id_Carga</td>
+                                            <td>@carga.Usuario.Nombre</td>
+                                            <td>@carga.Estado.ToString()</td>
+                                            <td>@carga.NumeroPaquetes</td>
+                                            <td>
+                                                <a href="@Url.Action("CargaPaquetesViewTransp", "PaquetesCargasController", new { idCarga = carga.Id_Carga })"
+                                                   class="btn" style="background-color: var(--bg-positivo); color: white;">
+                                                    Ver
+                                                </a>
+                                            </td>
+                                            <td>
+                                                @using (Html.BeginForm("EstadoCargaTransp", "PaquetesCargasController", FormMethod.Post))
+                                                {
+                                                    @Html.AntiForgeryToken()
+                                                    @Html.Hidden("idCarga", carga.Id_Carga)
+
+                                                    <div class="d-flex gap-2">
+                                                        <select name="nuevoEstado" class="form-select">
+                                                            <option value="">Estado</option>
+                                                            <option value="Averia">Averia</option>
+                                                            <option value="EnTransito">EnTransito</option>
+                                                        </select>
+
+                                                        <button type="submit" class="btn" style="background-color: var(--bg-dark); color: white;">
+                                                            Actualizar
+                                                        </button>
+                                                    </div>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
                                 {
                                     <tr>
-                                        <td>@carga.Id_Carga</td>
-                                        <td>@carga.Usuario.Nombre</td>
-                                        <td>@carga.Estado.ToString()</td>
-                                        <td>@carga.NumeroPaquetes</td>
-                                        <td>
-                                            <a href="@Url.Action("CargaPaquetesViewTransp", "PaquetesCargasController", new { idCarga = carga.Id_Carga })"
-                                               class="btn" style="background-color: var(--bg-positivo); color: white;">
-                                                Ver
-                                            </a>
-                                        </td>
-                                        <td>
-                                            @using (Html.BeginForm("EstadoCargaTransp", "PaquetesCargasController", FormMethod.Post))
-                                            {
-                                                @Html.AntiForgeryToken()
-                                                @Html.Hidden("idCarga", carga.Id_Carga)
-
-                                                <div class="d-flex gap-2">
-                                                    <select name="nuevoEstado" class="form-select">
-                                                        <option value="">Estado</option>
-                                                        <option value="Averia">Averia</option>
-                                                        <option value="EnTransito">EnTransito</option>
-                                                    </select>
-
-                                                    <button type="submit" class="btn" style="background-color: var(--bg-dark); color: white;">
-                                                        Actualizar
-                                                    </button>
-                                                </div>
-                                            }
-                                        </td>
+                                        <td colspan="6" class="text-center">No se encontraron cargas</td>
                                     </tr>
                                 }
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- Paginacion -->
+                    @if (totalPages > 1)
+                    {
+                        <nav class="mt-4">
+                            <ul class="pagination justify-content-center">
+                                @if (currentPage > 1)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           href="@Url.Action("CargasTransportista", new {
+                                               page = currentPage - 1,
+                                               searchId = searchId,
+                                               searchEstado = searchEstado })">
+                                            &laquo; Anterior
+                                        </a>
+                                    </li>
+                                }
+
+                                @for (int i = 1; i <= totalPages; i++)
+                                {
+                                    <li class="page-item @(i == currentPage ? "active" : "")">
+                                        <a class="page-link"
+                                           href="@Url.Action("CargasTransportista", new {
+                                               page = i,
+                                               searchId = searchId,
+                                               searchEstado = searchEstado })">
+                                            @i
+                                        </a>
+                                    </li>
+                                }
+
+                                @if (currentPage < totalPages)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           href="@Url.Action("CargasTransportista", new {
+                                               page = currentPage + 1,
+                                               searchId = searchId,
+                                               searchEstado = searchEstado })">
+                                            Siguiente &raquo;
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </nav>
+                    }
 
                     <div class="text-center mt-4">
                         <a href="@Url.Action("AsignTransportista", "Admin")"
@@ -73,3 +167,41 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Buscar por ID
+            $('#searchIdButton').click(function() {
+                var searchId = $('#searchId').val();
+                var searchEstado = $('#searchEstado').val();
+                window.location.href = '@Url.Action("CargasTransportista")' +
+                    '?searchId=' + encodeURIComponent(searchId) +
+                    '&searchEstado=' + encodeURIComponent(searchEstado) +
+                    '&page=1';
+            });
+
+            // Buscar por estado
+            $('#searchEstadoButton').click(function() {
+                var searchId = $('#searchId').val();
+                var searchEstado = $('#searchEstado').val();
+                window.location.href = '@Url.Action("CargasTransportista")' +
+                    '?searchId=' + encodeURIComponent(searchId) +
+                    '&searchEstado=' + encodeURIComponent(searchEstado) +
+                    '&page=1';
+            });
+
+            // Limpiar búsqueda
+            $('#clearButton').click(function() {
+                window.location.href = '@Url.Action("CargasTransportista")';
+            });
+
+            // Buscar con Enter en campo ID
+            $('#searchId').keypress(function(e) {
+                if (e.which == 13) {
+                    $('#searchIdButton').click();
+                }
+            });
+        });
+    </script>
+}

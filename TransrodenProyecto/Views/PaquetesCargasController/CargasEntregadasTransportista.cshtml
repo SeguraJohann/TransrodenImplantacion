@@ -1,8 +1,12 @@
 ﻿@using TransrodenProyecto.Models
 @model TransrodenProyecto.ViewModels.PaqueteCargaViewModel
-
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentPage = (int)ViewBag.CurrentPage;
+    var totalPages = (int)ViewBag.TotalPages;
+    var totalRecords = (int)ViewBag.TotalRecords;
+    var searchId = ViewBag.SearchId as int?;
+    var searchDate = ViewBag.SearchDate as string;
 }
 
 <div class="login-outer-container">
@@ -11,6 +15,32 @@
             <div class="col-12">
                 <div class="bg-white rounded p-4 p-sm-5 shadow-sm">
                     <h2 class="text-center mb-4">Cargas Entregadas</h2>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="input-group mb-3">
+                                <input type="number" id="searchId" class="form-control" placeholder="Buscar por ID" value="@(searchId.HasValue ? searchId.Value.ToString() : "")">
+                                <button id="searchIdButton" class="btn btn-primary">Buscar ID</button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group mb-3">
+                                <input type="date" id="searchDate" class="form-control" value="@searchDate">
+                                <button id="searchDateButton" class="btn btn-primary">Buscar Fecha</button>
+                                @if (searchId.HasValue || !string.IsNullOrEmpty(searchDate))
+                                {
+                                    <button id="clearButton" class="btn btn-secondary">Limpiar</button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="text-muted small">
+                            Mostrando página @currentPage de @totalPages - Total: @totalRecords registros
+                        </div>
+                    </div>
 
                     <div class="table-responsive">
                         <table class="table table-hover">
@@ -26,26 +56,83 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var carga in Model.Cargas)
+                                @if (Model.Cargas.Any())
+                                {
+                                    foreach (var carga in Model.Cargas)
+                                    {
+                                        <tr>
+                                            <td>@carga.Id_Carga</td>
+                                            <td>@carga.Usuario.Nombre</td>
+                                            <td>@carga.Origen</td>
+                                            <td>@carga.NumeroPaquetes</td>
+                                            <td>@carga.Estado.ToString()</td>
+                                            <td>@(carga.fecha_creacion?.ToString("dd/MM/yyyy"))</td>
+                                            <td>
+                                                <a href="@Url.Action("CargaPaquetesViewTransp", "PaquetesCargasController", new { idCarga = carga.Id_Carga })"
+                                                   class="btn" style="background-color: var(--bg-positivo); color: white;">
+                                                    Ver
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
                                 {
                                     <tr>
-                                        <td>@carga.Id_Carga</td>
-                                        <td>@carga.Usuario.Nombre</td>
-                                        <td>@carga.Origen</td>
-                                        <td>@carga.NumeroPaquetes</td>
-                                        <td>@carga.Estado.ToString()</td>
-                                        <td>@carga.fecha_creacion</td>
-                                        <td>
-                                            <a href="@Url.Action("CargaPaquetesViewTransp", "PaquetesCargasController", new { idCarga = carga.Id_Carga })"
-                                               class="btn" style="background-color: var(--bg-positivo); color: white;">
-                                                Ver
-                                            </a>
-                                        </td>
+                                        <td colspan="7" class="text-center">No se encontraron cargas</td>
                                     </tr>
                                 }
                             </tbody>
                         </table>
                     </div>
+
+
+                    @if (totalPages > 1)
+                    {
+                        <nav class="mt-4">
+                            <ul class="pagination justify-content-center">
+
+                                @if (currentPage > 1)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           href="@Url.Action("CargasEntregadasTransportista", new {
+                                               page = currentPage - 1,
+                                               searchId = searchId,
+                                               searchDate = searchDate })">
+                                            &laquo; Anterior
+                                        </a>
+                                    </li>
+                                }
+
+                                @for (int i = 1; i <= totalPages; i++)
+                                {
+                                    <li class="page-item @(i == currentPage ? "active" : "")">
+                                        <a class="page-link"
+                                           href="@Url.Action("CargasEntregadasTransportista", new {
+                                               page = i,
+                                               searchId = searchId,
+                                               searchDate = searchDate })">
+                                            @i
+                                        </a>
+                                    </li>
+                                }
+
+                                @if (currentPage < totalPages)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           href="@Url.Action("CargasEntregadasTransportista", new {
+                                               page = currentPage + 1,
+                                               searchId = searchId,
+                                               searchDate = searchDate })">
+                                            Siguiente &raquo;
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </nav>
+                    }
 
                     <div class="text-center mt-4">
                         <a href="@Url.Action("AsignTransportista", "Admin")"
@@ -58,3 +145,37 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Busqueda por ID
+            $('#searchIdButton').click(function() {
+                var searchId = $('#searchId').val();
+                window.location.href = '@Url.Action("CargasEntregadasTransportista")' +
+                    '?searchId=' + encodeURIComponent(searchId) +
+                    '&page=1';
+            });
+
+            // Busqueda por fecha
+            $('#searchDateButton').click(function() {
+                var searchDate = $('#searchDate').val();
+                window.location.href = '@Url.Action("CargasEntregadasTransportista")' +
+                    '?searchDate=' + encodeURIComponent(searchDate) +
+                    '&page=1';
+            });
+
+            // Limpiar
+            $('#clearButton').click(function() {
+                window.location.href = '@Url.Action("CargasEntregadasTransportista")';
+            });
+
+            $('#searchId').keypress(function(e) {
+                if (e.which == 13) {
+                    $('#searchIdButton').click();
+                }
+            });
+        });
+    </script>
+}
+

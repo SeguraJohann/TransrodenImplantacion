@@ -35,10 +35,13 @@
                             <input type="number" id="cantidad" name="Cantidad" class="form-control" value="@Model.Cantidad" min="1" />
                         </div>
                         <br>
+
                         <div>
                             <label for="domicilio">Entrega a Domicilio:</label>
                             <input type="checkbox" id="domicilio" name="Domicilio" value="true" @(Model.Domicilio ? "checked" : "") />
+                            <span id="costoDomicilio" style="display:none; margin-left:10px;"></span>
                         </div>
+
                         <br>
                         <div>
                             <label for="tipoEntrega">Tipo de Entrega:</label>
@@ -66,12 +69,42 @@
                         }
                     </form>
 
-
-
-
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            
+            obtenerCostoDomicilio();
+
+            // Checkbox
+            $('#domicilio').change(function() {
+                if ($(this).is(':checked')) {
+                    obtenerCostoDomicilio();
+                } else {
+                    $('#costoDomicilio').hide();
+                }
+            });
+
+            function obtenerCostoDomicilio() {
+                if ($('#domicilio').is(':checked')) {
+                    $.ajax({
+                        url: '@Url.Action("ObtenerCostoDomicilio", "Calculadora")',
+                        type: 'GET',
+                        success: function(data) {
+                            if (data.costo) {
+                                $('#costoDomicilio').text('+ ₡' + data.costo).show();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+
+    }

@@ -2,6 +2,11 @@
 @model TransrodenProyecto.ViewModels.PaqueteCargaViewModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var currentPage = (int)ViewBag.CurrentPage;
+    var totalPages = (int)ViewBag.TotalPages;
+    var searchTerm = ViewBag.SearchTerm as string;
+    var filterBy = ViewBag.FilterBy as string;
+    var selectedTipo = ViewBag.SearchTerm as string; // Para mantener seleccionado el tipo
 }
 
 <div class="login-outer-container">
@@ -11,43 +16,200 @@
                 <div class="bg-white rounded p-4 p-sm-5 shadow-sm">
                     <h2 class="text-center mb-4">Paquetes en Bodega PZ</h2>
 
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <input type="text" id="searchTerm" class="form-control" placeholder="Buscar..."
+                                       value="@(filterBy != "Tipo" ? searchTerm : "")"
+                                       style="@(filterBy == "Tipo" ? "display:none;" : "")">
+
+                                <select id="tipoSelect" class="form-select" style="@(filterBy != "Tipo" ? "display:none;" : "")">
+                                    <option value="">Seleccione un tipo</option>
+                                    @foreach (TipoPaquete tipo in Enum.GetValues(typeof(TipoPaquete)))
+                                    {
+                                        <option value="@tipo.ToString()" @(selectedTipo == tipo.ToString() ? "selected" : "")>@tipo.ToString()</option>
+                                    }
+                                </select>
+
+                                <select id="filterBy" class="form-select">
+                                    <option value="NumeroRastreo" @(filterBy == "NumeroRastreo" ? "selected" : "")>Número de Rastreo</option>
+                                    <option value="CedulaEmisor" @(filterBy == "CedulaEmisor" ? "selected" : "")>Cédula Emisor</option>
+                                    <option value="Tipo" @(filterBy == "Tipo" ? "selected" : "")>Tipo de Paquete</option>
+                                </select>
+
+                                <button id="searchButton" class="btn btn-primary">Buscar</button>
+                                @if (!string.IsNullOrEmpty(searchTerm))
+                                {
+                                    <button id="clearButton" class="btn btn-secondary">Mostrar Todos</button>
+                                }
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="table-responsive shadow-sm rounded">
                         <table class="table table-hover align-middle mb-0 bg-white" id="paquetesTable">
-                            <thead class="bg-lightt">
+                            <thead class="bg-light">
                                 <tr>
                                     <th>Número de Rastreo</th>
                                     <th>Emisor</th>
+                                    <th>Cedula Emisor</th>
                                     <th>Receptor</th>
+                                    <th>Tipo</th>
                                     <th>Estado</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var paquete in Model.Paquetes)
+                                @if (Model.Paquetes.Any())
+                                {
+                                    foreach (var paquete in Model.Paquetes)
+                                    {
+                                        <tr>
+                                            <td>@paquete.NumeroRastreo</td>
+                                            <td>@paquete.NombreEmisor</td>
+                                            <td>@paquete.CedulaEmisor</td>
+                                            <td>@paquete.NombreReceptor</td>
+                                            <td>@paquete.Tipo</td>
+                                            <td>@paquete.Estado.ToString()</td>
+                                            <td>
+                                                <a href="@Url.Action("Details", "Paquetes", new { id = paquete.Id_Paquete })"
+                                                   class="btn btn-icon btn-details" title="Ver Detalles">
+                                                    <i class="fas fa-info-circle"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
                                 {
                                     <tr>
-                                        <td>@paquete.NumeroRastreo</td>
-                                        <td>@paquete.NombreEmisor</td>
-                                        <td>@paquete.NombreReceptor</td>
-                                        <td>@paquete.Estado.ToString()</td>
-                                        <td>
-                                            <a href="@Url.Action("Details", "Paquetes", new { id = paquete.Id_Paquete })"
-                                               class="btn btn-icon btn-details" title="Ver Detalles">
-                                                <i class="fas fa-info-circle"></i>
-                                            </a>
-                                        </td>
+                                        <td colspan="5" class="text-center">No se encontraron paquetes</td>
                                     </tr>
                                 }
                             </tbody>
                         </table>
                     </div>
 
-                    <nav class="mt-4">
-                        <ul class="pagination justify-content-center" id="pagination"></ul>
-                    </nav>
+                    <!-- Paginacion -->
+                    @if (totalPages > 1)
+                    {
+                        <nav class="mt-4">
+                            <ul class="pagination justify-content-center">
+                                @if (currentPage > 1)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           href="@Url.Action("PaquetesBodegaPZ", new { page = currentPage - 1, searchTerm = searchTerm, filterBy = filterBy })">
+                                            &laquo; Anterior
+                                        </a>
+                                    </li>
+                                }
+
+                                @{
+                                    int startPage = Math.Max(1, currentPage - 2);
+                                    int endPage = Math.Min(totalPages, currentPage + 2);
+
+                                    if (startPage > 1)
+                                    {
+                                        <li class="page-item">
+                                            <a class="page-link" href="@Url.Action("PaquetesBodegaPZ", new { page = 1, searchTerm = searchTerm, filterBy = filterBy })">1</a>
+                                        </li>
+                                        if (startPage > 2)
+                                        {
+                                            <li class="page-item disabled">
+                                                <span class="page-link">...</span>
+                                            </li>
+                                        }
+                                    }
+
+                                    for (int i = startPage; i <= endPage; i++)
+                                    {
+                                        <li class="page-item @(i == currentPage ? "active" : "")">
+                                            <a class="page-link" href="@Url.Action("PaquetesBodegaPZ", new { page = i, searchTerm = searchTerm, filterBy = filterBy })">@i</a>
+                                        </li>
+                                    }
+
+                                    if (endPage < totalPages)
+                                    {
+                                        if (endPage < totalPages - 1)
+                                        {
+                                            <li class="page-item disabled">
+                                                <span class="page-link">...</span>
+                                            </li>
+                                        }
+                                        <li class="page-item">
+                                            <a class="page-link" href="@Url.Action("PaquetesBodegaPZ", new { page = totalPages, searchTerm = searchTerm, filterBy = filterBy })">@totalPages</a>
+                                        </li>
+                                    }
+                                }
+
+                                @if (currentPage < totalPages)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           href="@Url.Action("PaquetesBodegaPZ", new { page = currentPage + 1, searchTerm = searchTerm, filterBy = filterBy })">
+                                            Siguiente &raquo;
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </nav>
+
+                        <div class="text-center text-muted small mt-2">
+                            Mostrando página @currentPage de @totalPages - Total de registros: @ViewBag.TotalRecords
+                        </div>
+                    }
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            
+            $('#filterBy').change(function() {
+                if ($(this).val() === 'Tipo') {
+                    $('#searchTerm').hide();
+                    $('#tipoSelect').show();
+                } else {
+                    $('#searchTerm').show();
+                    $('#tipoSelect').hide();
+                }
+            }).trigger('change');
+
+            // Busqueda
+            $('#searchButton').click(function() {
+                var filterBy = $('#filterBy').val();
+                var searchTerm = filterBy === 'Tipo'
+                    ? $('#tipoSelect').val()
+                    : $('#searchTerm').val();
+
+                if (filterBy === 'Tipo' && !searchTerm) {
+                    alert('Por favor seleccione un tipo de paquete');
+                    return;
+                }
+
+                window.location.href = '@Url.Action("PaquetesBodegaPZ")' +
+                    '?searchTerm=' + encodeURIComponent(searchTerm) +
+                    '&filterBy=' + encodeURIComponent(filterBy) +
+                    '&page=1';
+            });
+
+            // Limpiar busqueda
+            $('#clearButton').click(function() {
+                window.location.href = '@Url.Action("PaquetesBodegaPZ")' + '?page=1';
+            });
+
+            
+            $('#searchTerm').keypress(function(e) {
+                if (e.which == 13) {
+                    $('#searchButton').click();
+                }
+            });
+        });
+    </script>
+}

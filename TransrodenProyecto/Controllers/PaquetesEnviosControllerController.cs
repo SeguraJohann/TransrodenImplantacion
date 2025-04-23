@@ -13,32 +13,95 @@ namespace TransrodenProyecto.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        public ActionResult DomicilioSJCarga()
+
+        public ActionResult DomicilioSJCarga(int? paquetePage, int? envioPage, int? pageSize)
         {
+            int currentPageSize = pageSize ?? 10;
+
             var viewModel = new PaqueteEnvioViewModel
             {
-                Paquetes = db.Paquetes.Where(p => p.Origen == OrigenPaquete.PerezZeledon && p.Estado == EstadoPaquete.BodegaSJ && p.Domicilio == true && p.Carga.Estado == EstadoCarga.Recibido
-                || p.Origen == OrigenPaquete.PerezZeledon && p.Estado == EstadoPaquete.Reenvio && p.Domicilio == true && p.Carga.Estado == EstadoCarga.Recibido).ToList(),
-                Envios = db.Envios.Include(c => c.Usuario).Where(c => c.Estado == EstadoEnvio.BodegaSJ).ToList()
+                PageSize = currentPageSize,
 
+                // Paquetes
+                Paquetes = db.Paquetes
+                    .Where(p => (p.Origen == OrigenPaquete.PerezZeledon && p.Estado == EstadoPaquete.BodegaSJ && p.Domicilio == true && p.Carga.Estado == EstadoCarga.Recibido)
+                             || (p.Origen == OrigenPaquete.PerezZeledon && p.Estado == EstadoPaquete.Reenvio && p.Domicilio == true && p.Carga.Estado == EstadoCarga.Recibido))
+                    .OrderBy(p => p.Id_Paquete)
+                    .Skip(((paquetePage ?? 1) - 1) * currentPageSize)
+                    .Take(currentPageSize)
+                    .ToList(),
+
+                PaquetePageNumber = paquetePage ?? 1,
+                PaqueteTotalCount = db.Paquetes
+                    .Count(p => (p.Origen == OrigenPaquete.PerezZeledon && p.Estado == EstadoPaquete.BodegaSJ && p.Domicilio == true && p.Carga.Estado == EstadoCarga.Recibido)
+                             || (p.Origen == OrigenPaquete.PerezZeledon && p.Estado == EstadoPaquete.Reenvio && p.Domicilio == true && p.Carga.Estado == EstadoCarga.Recibido)),
+
+                // Envíos
+                Envios = db.Envios
+                    .Include(c => c.Usuario)
+                    .Where(c => c.Estado == EstadoEnvio.BodegaSJ)
+                    .OrderBy(c => c.Id_Envio)
+                    .Skip(((envioPage ?? 1) - 1) * currentPageSize)
+                    .Take(currentPageSize)
+                    .ToList(),
+
+                EnvioPageNumber = envioPage ?? 1,
+                EnvioTotalCount = db.Envios.Count(c => c.Estado == EstadoEnvio.BodegaSJ)
             };
+
+            viewModel.PaqueteTotalPages = (int)Math.Ceiling((double)viewModel.PaqueteTotalCount / currentPageSize);
+            viewModel.EnvioTotalPages = (int)Math.Ceiling((double)viewModel.EnvioTotalCount / currentPageSize);
 
             return View(viewModel);
         }
 
 
-        public ActionResult DomicilioPZCarga()
+
+        public ActionResult DomicilioPZCarga(int? paquetePage, int? envioPage, int? pageSize)
         {
+            int currentPageSize = pageSize ?? 10;
+
             var viewModel = new PaqueteEnvioViewModel
             {
-                Paquetes = db.Paquetes.Where(p => p.Origen == OrigenPaquete.SanJose && p.Estado == EstadoPaquete.BodegaPZ && p.Domicilio == true && p.Carga.Estado == EstadoCarga.Recibido
-                || p.Origen == OrigenPaquete.SanJose && p.Estado == EstadoPaquete.Reenvio && p.Domicilio == true && p.Carga.Estado == EstadoCarga.Recibido).ToList(),
-                Envios = db.Envios.Include(c => c.Usuario).Where(c => c.Estado == EstadoEnvio.BodegaPZ).ToList()
+                PageSize = currentPageSize,
 
+                // Paquetes 
+                Paquetes = db.Paquetes
+                    .Where(p => (p.Origen == OrigenPaquete.SanJose && p.Estado == EstadoPaquete.BodegaPZ && p.Domicilio == true && p.Carga.Estado == EstadoCarga.Recibido)
+                             || (p.Origen == OrigenPaquete.SanJose && p.Estado == EstadoPaquete.Reenvio && p.Domicilio == true && p.Carga.Estado == EstadoCarga.Recibido))
+                    .OrderBy(p => p.Id_Paquete)
+                    .Skip(((paquetePage ?? 1) - 1) * currentPageSize)
+                    .Take(currentPageSize)
+                    .ToList(),
+
+                PaquetePageNumber = paquetePage ?? 1,
+                PaqueteTotalCount = db.Paquetes
+                    .Count(p => (p.Origen == OrigenPaquete.SanJose && p.Estado == EstadoPaquete.BodegaPZ && p.Domicilio == true && p.Carga.Estado == EstadoCarga.Recibido)
+                             || (p.Origen == OrigenPaquete.SanJose && p.Estado == EstadoPaquete.Reenvio && p.Domicilio == true && p.Carga.Estado == EstadoCarga.Recibido)),
+
+                // Envíos
+                Envios = db.Envios
+                    .Include(c => c.Usuario)
+                    .Where(c => c.Estado == EstadoEnvio.BodegaPZ)
+                    .OrderBy(c => c.Id_Envio)
+                    .Skip(((envioPage ?? 1) - 1) * currentPageSize)
+                    .Take(currentPageSize)
+                    .ToList(),
+
+                EnvioPageNumber = envioPage ?? 1,
+                EnvioTotalCount = db.Envios.Count(c => c.Estado == EstadoEnvio.BodegaPZ)
             };
+
+            viewModel.PaqueteTotalPages = (int)Math.Ceiling((double)viewModel.PaqueteTotalCount / currentPageSize);
+            viewModel.EnvioTotalPages = (int)Math.Ceiling((double)viewModel.EnvioTotalCount / currentPageSize);
 
             return View(viewModel);
         }
+
+
+
+
+
 
         public ActionResult VistaEnvioTransito()
         {
@@ -173,22 +236,60 @@ namespace TransrodenProyecto.Controllers
 
         // Para Transportista
 
-        public ActionResult EnvioPaquetesTransport(int idEnvio)
+
+        [HttpGet]
+        public ActionResult EnvioPaquetesTransport(int idEnvio, string searchTracking = "", string searchCedula = "", EstadoPaquete? searchEstado = null, int page = 1)
         {
-
-
+            // Verificar y obtener el envío
             var envio = db.Envios.Include(c => c.Usuario).FirstOrDefault(c => c.Id_Envio == idEnvio);
-
             if (envio == null)
             {
-                return HttpNotFound("Envios no encontradas");
+                return HttpNotFound("Envío no encontrado");
             }
 
-            // Paquetes asociados a la carga
-            var paquetes = db.Paquetes.Where(p => p.Id_Envio == idEnvio).ToList();
+            int pageSize = 10;
 
+            IQueryable<Paquete> query = db.Paquetes.Where(p => p.Id_Envio == idEnvio);
 
-            // Este viewModel funciona para cargar la vista
+            if (!string.IsNullOrEmpty(searchTracking))
+            {
+                query = query.Where(p => p.NumeroRastreo.Contains(searchTracking));
+            }
+
+            if (!string.IsNullOrEmpty(searchCedula))
+            {
+                query = query.Where(p => p.CedulaReceptor.Contains(searchCedula));
+            }
+
+            if (searchEstado.HasValue)
+            {
+                query = query.Where(p => p.Estado == searchEstado.Value);
+            }
+
+            int totalRecords = query.Count();
+            int totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
+
+            var paquetes = query.OrderBy(p => p.NumeroRastreo)
+                               .Skip((page - 1) * pageSize)
+                               .Take(pageSize)
+                               .ToList();
+
+            var estadosFiltrados = new List<EstadoPaquete>
+                {
+                    EstadoPaquete.Domicilio,
+                    EstadoPaquete.Entregado,
+                    EstadoPaquete.NoEntregado
+                };
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.TotalRecords = totalRecords;
+            ViewBag.SearchTracking = searchTracking;
+            ViewBag.SearchCedula = searchCedula;
+            ViewBag.SearchEstado = searchEstado;
+            ViewBag.EstadosPaquete = estadosFiltrados;
+            ViewBag.IdEnvio = idEnvio;
+
             var viewModel = new PaqueteEnvioViewModel
             {
                 Envios = new List<Envio> { envio },
@@ -197,6 +298,9 @@ namespace TransrodenProyecto.Controllers
 
             return View(viewModel);
         }
+
+
+
 
 
 
@@ -426,7 +530,8 @@ namespace TransrodenProyecto.Controllers
         {
             if (string.IsNullOrEmpty(nuevoEstado))
             {
-                ModelState.AddModelError("", "Seleccione un Estado!!");
+                //ModelState.AddModelError("", "Seleccione un Estado!!");
+                TempData["ErrorMessageEnvio"] = "No se han seleccionado un estado";
                 return Redirect(Request.UrlReferrer.ToString());
             }
 
@@ -444,77 +549,24 @@ namespace TransrodenProyecto.Controllers
                 if (Enum.TryParse<EstadoEnvio>(nuevoEstado, out var estadoResult))
                 {
                     envio.Estado = estadoResult;
+                    TempData["SuccessMessageEnvio"] = "El Envio ha sido completado!";
                     db.SaveChanges();
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Estado inválido!!");
+                    //ModelState.AddModelError("", "Estado inválido!!");
+                    TempData["ErrorMessageEnvio"] = "No se han seleccionado un estado";
                 }
             }
             else
             {
                 // Mostrar mensaje de error si hay paquetes pendientes de entrega
-                ModelState.AddModelError("", "Existen paquetes pendientes de entrega para completar la entrega.");
+                //ModelState.AddModelError("", "Existen paquetes pendientes de entrega para completar la entrega.");
+                TempData["ErrorMessageEnvioEstado"] = "Aun existen paquetes pendiente de entrega!!";
             }
 
             return Redirect(Request.UrlReferrer.ToString());
         }
-
-
-
-
-        /*
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult ActualizarEstadoPaquete(int idPaquete, string nuevoEstado)
-        {
-            if (string.IsNullOrEmpty(nuevoEstado))
-            {
-                TempData["Error"] = "Seleccione un estado válido.";
-                return Redirect(Request.UrlReferrer.ToString());
-            }
-
-            var paquete = db.Paquetes.Find(idPaquete);
-            if (paquete == null)
-            {
-                TempData["Error"] = "Paquete no encontrado!!";
-                return Redirect(Request.UrlReferrer.ToString());
-            }
-
-
-            paquete.Estado = (EstadoPaquete)Enum.Parse(typeof(EstadoPaquete), nuevoEstado);
-
-
-
-
-            if (paquete.Estado == EstadoPaquete.Entregado)
-            {
-                paquete.fecha_entrega = DateTime.Now;
-            }
-
-
-            var nuevoRastreo = new Historial
-            {
-                Id_Paquete = paquete.Id_Paquete,
-                Estado = paquete.Estado,
-                NumeroRastreo = paquete.NumeroRastreo,
-                Fecha = DateTime.Now
-            };
-
-            db.Historiales.Add(nuevoRastreo);
-
-
-            db.SaveChanges();
-
-
-
-            TempData["Success"] = "El estado del paquete se ha actualizado correctamente.";
-            //return RedirectToAction("PaquetesBodegaSJ");
-            //Redirige a la vista desde donde fue accionado el metodo
-            return Redirect(Request.UrlReferrer.ToString());
-        }*/
-
-
 
 
         [HttpPost]
@@ -729,29 +781,56 @@ namespace TransrodenProyecto.Controllers
 
 
         //Para ver las cargas de envios asignadas al transportista
-        public ActionResult EnviosTransportista()
+
+        public ActionResult EnviosTransportista(int? searchId, EstadoEnvio? searchEstado, int page = 1)
         {
-            // Verificar si la sesión contiene la información del usuario
+            // Verificar sesión
             if (Session["UsuarioId"] == null)
             {
                 return RedirectToAction("Login", "Cuenta");
             }
 
-            // Obtener el usuario
+            int pageSize = 10;
             var usuarioId = (int)Session["UsuarioId"];
             var usuarioRol = (Rol)Session["UsuarioRol"];
 
 
-            // Verificar si 'sede' tiene un valor antes de convertirlo
-            var envios = new List<Envio>();
+            IQueryable<Envio> query = db.Envios.Include(e => e.Usuario)
+                .Where(e => e.Id_Usuario == usuarioId &&
+                          (e.Estado == EstadoEnvio.EnTransito ||
+                           e.Estado == EstadoEnvio.BodegaSJ ||
+                           e.Estado == EstadoEnvio.BodegaPZ));
 
-            if (usuarioRol == Rol.Transportista)
+            if (searchId.HasValue)
             {
-                //MUESTRA LAS CARGAS QUE SON PERTENECIENTES AL TRANSPORTISTA Y TENGAN ESTADO ENTRANSITO, BODEGASJ, BODEGAPZ
-                envios = db.Envios.Include(c => c.Usuario).Where(c => c.Id_Usuario == usuarioId && c.Estado == EstadoEnvio.EnTransito
-                    || c.Id_Usuario == usuarioId && c.Estado == EstadoEnvio.BodegaSJ
-                    || c.Id_Usuario == usuarioId && c.Estado == EstadoEnvio.BodegaPZ).ToList();
+                query = query.Where(e => e.Id_Envio == searchId.Value);
             }
+
+            if (searchEstado.HasValue)
+            {
+                query = query.Where(e => e.Estado == searchEstado.Value);
+            }
+
+            // Paginación
+            int totalRecords = query.Count();
+            int totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
+
+            var envios = query.OrderBy(e => e.Id_Envio)
+                             .Skip((page - 1) * pageSize)
+                             .Take(pageSize)
+                             .ToList();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.TotalRecords = totalRecords;
+            ViewBag.SearchId = searchId;
+            ViewBag.SearchEstado = searchEstado;
+            ViewBag.EstadosEnvio = Enum.GetValues(typeof(EstadoEnvio))
+                                      .Cast<EstadoEnvio>()
+                                      .Where(e => e == EstadoEnvio.EnTransito ||
+                                                e == EstadoEnvio.BodegaSJ ||
+                                                e == EstadoEnvio.BodegaPZ)
+                                      .ToList();
 
             var viewModel = new PaqueteEnvioViewModel
             {
@@ -760,6 +839,7 @@ namespace TransrodenProyecto.Controllers
 
             return View(viewModel);
         }
+
 
 
 
