@@ -50,14 +50,14 @@ namespace TransrodenProyecto.Controllers
                 var smtpClient = new SmtpClient("smtp.gmail.com")
                 {
                     Port = 587,
-                    Credentials = new NetworkCredential("anthonyibarrasperez@gmail.com", "swtg adap vlig xwqi"),
+                    Credentials = new NetworkCredential("transrodenservice@gmail.com", "emwt uaal prfd crgl"),
                     EnableSsl = true,
                 };
 
                 // Crear el mensaje de correo
                 var mailMessage = new MailMessage
                 {
-                    From = new MailAddress("anthonyibarrasperez@gmail.com"),
+                    From = new MailAddress("transrodenservice@gmail.com"),
                     Subject = Asunto,
                     Body = Mensaje,
                     IsBodyHtml = true,
@@ -104,14 +104,14 @@ namespace TransrodenProyecto.Controllers
                 var smtpClient = new SmtpClient("smtp.gmail.com")
                 {
                     Port = 587,
-                    Credentials = new NetworkCredential("anthonyibarrasperez@gmail.com", "swtg adap vlig xwqi"),
+                    Credentials = new NetworkCredential("transrodenservice@gmail.com", "emwt uaal prfd crgl"),
                     EnableSsl = true,
                 };
 
                 // Crear el mensaje de correo
                 var mailMessage = new MailMessage
                 {
-                    From = new MailAddress("anthonyibarrasperez@gmail.com"),
+                    From = new MailAddress("transrodenservice@gmail.com"),
                     Subject = Asunto,
                     Body = Mensaje,
                     IsBodyHtml = true,

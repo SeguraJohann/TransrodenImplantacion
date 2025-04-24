@@ -52,14 +52,14 @@ namespace TransrodenProyecto.Controllers
                 var smtpClient = new SmtpClient("smtp.gmail.com")
                 {
                     Port = 587,
-                    Credentials = new NetworkCredential("anthonyibarrasperez@gmail.com", "swtg adap vlig xwqi"),
+                    Credentials = new NetworkCredential("transrodenservice@gmail.com", "emwt uaal prfd crgl"),
                     EnableSsl = true,
                 };
 
                 // Cambio: Modificar el cuerpo del mensaje para enviar la clave sin encriptar
                 var mailMessage = new MailMessage
                 {
-                    From = new MailAddress("anthonyibarrasperez@gmail.com"),
+                    From = new MailAddress("transrodenservice@gmail.com"),
                     Subject = "Recuperación de contraseña",
                     Body = $"Tu nueva contraseña es: {nuevaClavesinEncriptar}",
                     IsBodyHtml = false,
