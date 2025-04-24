@@ -103,6 +103,11 @@ namespace TransrodenProyecto.Controllers
         [HttpGet]
         public ActionResult Login()
         {
+            if (Session["UsuarioId"] != null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             return View();
         }
 
