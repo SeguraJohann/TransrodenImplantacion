@@ -1,100 +1,97 @@
 ﻿@model TransrodenProyecto.Models.Facturacion
-
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="container mt-5">
-    <h2 class="text-center">Mis Facturas</h2>
-    <br>
 
+<div class="login-outer-container">
+    <div class="container d-flex align-items-center justify-content-center min-vh-50 py-5 login-container">
+        <div class="row justify-content-center w-100">
+            <div class="col-12">
+                <div class="bg-white rounded p-4 p-sm-5 shadow-sm">
+                    <h2 class="text-center mb-4">Mis Facturas</h2>
 
-    <div class="form-horizontal">
+                    <div class="row g-4">
+                        <!-- Columna izquierda -->
+                        <div class="col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-header bg-light">
+                                    <h4 class="mb-0">Información de la Factura</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <div class="row mb-2">
+                                            <div class="col-5 fw-bold">Factura N°:</div>
+                                            <div class="col-7">@Model.Id_Facturacion</div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-5 fw-bold">Fecha de Emisión:</div>
+                                            <div class="col-7">@Model.Fecha.ToString("dd/MM/yyyy")</div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-5 fw-bold">Precio:</div>
+                                            <div class="col-7">₡@String.Format("{0:N2}", Model.Precio)</div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-5 fw-bold">Subtotal:</div>
+                                            <div class="col-7">₡@String.Format("{0:N2}", Model.Iva)</div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-5 fw-bold">Total:</div>
+                                            <div class="col-7">₡@String.Format("{0:N2}", Model.Total)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-
-        <div class="row">
-
-            <!-- Columna izquierda -->
-            <div class="col-md-6">
-
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Información de la Factura</h3>
+                        <!-- Columna derecha -->
+                        <div class="col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-header bg-light">
+                                    <h4 class="mb-0">Detalles del Paquete</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <div class="row mb-2">
+                                            <div class="col-5 fw-bold">Paquete N°:</div>
+                                            <div class="col-7">@Model.Paquete.Id_Paquete</div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-5 fw-bold">Rastreo N°:</div>
+                                            <div class="col-7">@Model.Paquete.NumeroRastreo</div>
+                                        </div>
+                                        @*<div class="row mb-2">
+                                                <div class="col-5 fw-bold">Cantidad:</div>
+                                                <div class="col-7">@Model.Paquete.Cantidad</div>
+                                            </div>*@
+                                        <div class="row mb-2">
+                                            <div class="col-5 fw-bold">Emisor:</div>
+                                            <div class="col-7">@Model.Paquete.NombreEmisor</div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-5 fw-bold">Cédula del Emisor:</div>
+                                            <div class="col-7">@Model.Paquete.CedulaEmisor</div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-5 fw-bold">Receptor:</div>
+                                            <div class="col-7">@Model.Paquete.NombreReceptor</div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-5 fw-bold">Destino:</div>
+                                            <div class="col-7">@Model.Paquete.Direccion</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="panel-body">
-                        <dl class="dl-horizontal">
 
-                            <dt>Factura N°:</dt>
-                            <dd>@Model.Id_Facturacion</dd>
-
-                            <dt>Fecha de Emisión:</dt>
-                            <dd>@Model.Fecha.ToString("dd/MM/yyyy")</dd>
-
-                            <dt>Precio:</dt>
-                            <dd>₡@String.Format("{0:N2}", Model.Precio)</dd>
-
-                            <dt>Subtotal:</dt>
-                            <dd>₡@String.Format("{0:N2}", Model.Iva)</dd>
-
-                            <dt>Total:</dt>
-                            <dd>₡@String.Format("{0:N2}", Model.Total)</dd>
-
-
-
-
-                        </dl>
+                    <!-- Botones -->
+                    <div class="d-flex justify-content-center mt-4">
+                        <a href="@Url.Action("FacturasUsuario", "Facturacions")" class="btn btn-primary">Volver a Mis Facturas</a>
                     </div>
                 </div>
-
-
-            </div>
-
-
-            <!-- Columna derecha -->
-            <div class="col-md-6">
-
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Detalles del Paquete</h3>
-                    </div>
-                    <div class="panel-body">
-                        <dl class="dl-horizontal">
-
-                            <dt>Paquete N°:</dt>
-                            <dd>@Model.Paquete.Id_Paquete</dd>
-
-                            <dt>Rastreo N°:</dt>
-                            <dd>@Model.Paquete.NumeroRastreo</dd>
-
-                            @*<dt>Cantidad:</dt>
-                                <dd>@Model.Paquete.Cantidad</dd>*@
-
-                            <dt>Emisor:</dt>
-                            <dd>@Model.Paquete.NombreEmisor</dd>
-
-                            <dt>Cédula del Emisor:</dt>
-                            <dd>@Model.Paquete.CedulaEmisor</dd>
-
-                            <dt>Receptor:</dt>
-                            <dd>@Model.Paquete.NombreReceptor</dd>
-
-                            <dt>Destino:</dt>
-                            <dd>@Model.Paquete.Direccion</dd>
-
-
-
-                        </dl>
-                    </div>
-                </div>
-
-
             </div>
         </div>
-        <br>
-
-
-
     </div>
-
-    <a href="@Url.Action("FacturasUsuario", "Facturacions")" class="btn btn-primary">Volver a Mis Facturas</a>
-    <br>
 </div>
