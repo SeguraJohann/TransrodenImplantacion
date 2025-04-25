@@ -543,7 +543,10 @@ namespace TransrodenProyecto.Controllers
             }
 
             // Se valida que el envio no tenga paquetes y si los tiene que estos esten Entregados
-            if (envio.Paquetes == null || !envio.Paquetes.Any() || envio.Paquetes.All(p => p.Estado == EstadoPaquete.Entregado) || envio.Paquetes.All(p => p.Estado == EstadoPaquete.NoEntregado))
+            //if (envio.Paquetes == null || !envio.Paquetes.Any() || envio.Paquetes.All(p => p.Estado == EstadoPaquete.Entregado) || envio.Paquetes.All(p => p.Estado == EstadoPaquete.NoEntregado))
+            //if (envio.Paquetes == null || !envio.Paquetes.Any() || envio.Paquetes.Any(p => p.Estado != EstadoPaquete.EnTransito))
+            //if (envio.Paquetes == null || !envio.Paquetes.Any() || envio.Paquetes.Any(p => p.Estado == EstadoPaquete.Entregado) || envio.Paquetes.Any(p => p.Estado == EstadoPaquete.NoEntregado))
+            if ((envio.Paquetes == null || !envio.Paquetes.Any() || envio.Paquetes.Any(p => p.Estado == EstadoPaquete.Entregado) || envio.Paquetes.Any(p => p.Estado == EstadoPaquete.NoEntregado)) && !envio.Paquetes.Any(p => p.Estado == EstadoPaquete.Domicilio) && !envio.Paquetes.Any(p => p.Estado == EstadoPaquete.EnTransito))
             {
 
                 if (Enum.TryParse<EstadoEnvio>(nuevoEstado, out var estadoResult))
