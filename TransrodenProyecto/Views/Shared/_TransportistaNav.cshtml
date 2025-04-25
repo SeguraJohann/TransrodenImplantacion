@@ -109,16 +109,15 @@
                             Camión
                         </a>
 
+                        <a href="@Url.Action("AsignTransportista", "Admin")" class="nav-item nav-link">
+                            Tracking Admin
+                        </a>
 
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link" data-bs-toggle="dropdown">
-                                <span class="dropdown-toggle">Tracking</span>
-                            </a>
-                            <div class="dropdown-menu">
-                                <a href="@Url.Action("AsignTransportista", "Admin")" class="dropdown-item">Tracking Admin</a>
-                                <a href="@Url.Action("Rastreo", "HistorialPaquete")" class="dropdown-item">Rastreo Paquete</a>
-                            </div>
-                        </div>
+                        <a href="@Url.Action("Rastreo", "HistorialPaquete")" class="nav-item nav-link">
+                            Rastreo Paquete
+                        </a>
+
+                        
 
 
                         @if (Session["Usuario"] != null)
