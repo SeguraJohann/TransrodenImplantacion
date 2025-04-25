@@ -9,7 +9,7 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")
 
-    @using (Html.BeginForm("RegistrarPaquete", "Paquetes", FormMethod.Post))
+    @using (Html.BeginForm("RegistrarPaquete", "Paquetes", FormMethod.Post, new { id = "formPaquete" }))
     {
         @Html.AntiForgeryToken()
 
@@ -50,26 +50,74 @@
 
                             <div class="form-group mb-3">
                                 @Html.LabelFor(model => model.NombreEmisor, "Nombre del Emisor", new { @class = "form-label fw-bold" })
-                                @Html.EditorFor(model => model.NombreEmisor, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.EditorFor(model => model.NombreEmisor, new
+                                {
+                                    htmlAttributes = new
+                                    {
+                                        @class = "form-control nombre-input",
+                                        pattern = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$",
+                                        minlength = "2",
+                                        maxlength = "50",
+                                        required = "required",
+                                        title = "Solo se permiten letras y espacios (mínimo 2 caracteres)",
+                                        oninput = "validarNombre(this)"
+                                    }
+                                })
                                 @Html.ValidationMessageFor(model => model.NombreEmisor, "", new { @class = "text-danger" })
+                                <small class="form-text text-muted nombre-ayuda" style="display: none;">Solo letras y espacios (2-50 caracteres)</small>
                             </div>
 
                             <div class="form-group mb-3" id="cedulaEmisor-group" style="display: none;">
                                 @Html.LabelFor(model => model.CedulaEmisor, "Cédula del Emisor", new { @class = "form-label fw-bold" })
-                                @Html.EditorFor(model => model.CedulaEmisor, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.EditorFor(model => model.CedulaEmisor, new
+                                {
+                                    htmlAttributes = new
+                                    {
+                                        @class = "form-control cedula-input",
+                                        maxlength = "9",
+                                        required = "required",
+                                        title = "La cédula debe contener exactamente 9 dígitos",
+                                        oninput = "validarCedula(this)"
+                                    }
+                                })
                                 @Html.ValidationMessageFor(model => model.CedulaEmisor, "", new { @class = "text-danger" })
+                                <small class="form-text text-muted cedula-ayuda" style="display: none;">Exactamente 9 dígitos</small>
                             </div>
 
                             <div class="form-group mb-3">
                                 @Html.LabelFor(model => model.NombreReceptor, "Nombre del Receptor", new { @class = "form-label fw-bold" })
-                                @Html.EditorFor(model => model.NombreReceptor, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.EditorFor(model => model.NombreReceptor, new
+                                {
+                                    htmlAttributes = new
+                                    {
+                                        @class = "form-control nombre-input",
+                                        pattern = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$",
+                                        minlength = "2",
+                                        maxlength = "50",
+                                        required = "required",
+                                        title = "Solo se permiten letras y espacios (mínimo 2 caracteres)",
+                                        oninput = "validarNombre(this)"
+                                    }
+                                })
                                 @Html.ValidationMessageFor(model => model.NombreReceptor, "", new { @class = "text-danger" })
+                                <small class="form-text text-muted nombre-ayuda" style="display: none;">Solo letras y espacios (2-50 caracteres)</small>
                             </div>
 
-                            <div class="form-group mb-3" id="cedulaReceptor-group" style="display: none;">
+                            <div class="form-group mb-3" id="cedulaReceptor-group">
                                 @Html.LabelFor(model => model.CedulaReceptor, "Cédula del Receptor", new { @class = "form-label fw-bold" })
-                                @Html.EditorFor(model => model.CedulaReceptor, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.EditorFor(model => model.CedulaReceptor, new
+                                {
+                                    htmlAttributes = new
+                                    {
+                                        @class = "form-control cedula-input",
+                                        maxlength = "9",
+                                        required = "required",
+                                        title = "La cédula debe contener exactamente 9 dígitos",
+                                        oninput = "validarCedula(this)"
+                                    }
+                                })
                                 @Html.ValidationMessageFor(model => model.CedulaReceptor, "", new { @class = "text-danger" })
+                                <small class="form-text text-muted cedula-ayuda" style="display: none;">Exactamente 9 dígitos</small>
                             </div>
 
                             <div class="form-group mb-3">
@@ -92,7 +140,7 @@
                             <div class="form-group mb-3">
                                 <div class="d-flex align-items-center">
                                     <div class="form-check form-switch">
-                                        @Html.EditorFor(model => model.Domicilio, new { htmlAttributes = new { @class = "form-check-input", id = "pago-checkbox" } })
+                                        @Html.EditorFor(model => model.Domicilio, new { htmlAttributes = new { @class = "form-check-input", id = "domicilio-checkbox" } })
                                         @Html.LabelFor(model => model.Domicilio, "Entrega a Domicilio", new { @class = "form-check-label ms-2 fw-bold" })
                                     </div>
                                 </div>
@@ -101,20 +149,31 @@
 
                             <div class="form-group mb-3">
                                 @Html.LabelFor(model => model.Descripcion, "Descripción del Paquete", new { @class = "form-label fw-bold" })
-                                @Html.TextAreaFor(model => model.Descripcion, new { @class = "form-control", rows = 4 })
+                                @Html.TextAreaFor(model => model.Descripcion, new { @class = "form-control", rows = 4, required = "required" })
                                 @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
                             </div>
 
                             <div id="direccion-group" class="form-group mb-3" style="display: none;">
                                 @Html.LabelFor(model => model.Direccion, "Dirección de Entrega", new { @class = "form-label fw-bold" })
-                                @Html.EditorFor(model => model.Direccion, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.EditorFor(model => model.Direccion, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                                 @Html.ValidationMessageFor(model => model.Direccion, "", new { @class = "text-danger" })
                             </div>
 
                             <div id="telefono-group" class="form-group mb-3" style="display: none;">
                                 @Html.LabelFor(model => model.TelefonoDomicilio, "Teléfono", new { @class = "form-label fw-bold" })
-                                @Html.EditorFor(model => model.TelefonoDomicilio, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.EditorFor(model => model.TelefonoDomicilio, new
+                                {
+                                    htmlAttributes = new
+                                    {
+                                        @class = "form-control telefono-input",
+                                        required = "required",
+                                        maxlength = "15",
+                                        title = "Ingrese un número de teléfono válido (8-15 dígitos)",
+                                        oninput = "validarTelefono(this)"
+                                    }
+                                })
                                 @Html.ValidationMessageFor(model => model.TelefonoDomicilio, "", new { @class = "text-danger" })
+                                <small class="form-text text-muted telefono-ayuda" style="display: none;">8-15 dígitos</small>
                             </div>
                         </div>
                     </div>
@@ -122,7 +181,7 @@
 
                 <div class="row mt-4">
                     <div class="col-12 text-center">
-                        <button type="submit" class="btn btn-positivo me-2">
+                        <button type="submit" class="btn btn-positivo me-2" id="btnRegistrar">
                             <i class="fas fa-save me-2"></i>Registrar Paquete
                         </button>
                         @Html.ActionLink("Volver a la lista", "Index", null, new { @class = "btn btn-primary" })
@@ -135,35 +194,158 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-<script>
-    $(document).ready(function () {
-        function toggleDireccion() {
-            if ($('#pago-checkbox').is(':checked')) {
-                $('#direccion-group').show();
-                $('#telefono-group').show();
-            } else {
-                $('#direccion-group').hide();
-                $('#telefono-group').hide();
-            }
+    <style>
+        input:invalid, select:invalid, textarea:invalid {
+            border-color: #dc3545 !important;
         }
-        toggleDireccion();
-        $('#pago-checkbox').change(function () {
-            toggleDireccion();
-        });
-        function toggleCedulaFields() {
-            var selectedValue = $("#tipoCliente").val();
-            if (selectedValue == 1) {
-                $("#cedulaEmisor-group").hide();
+
+        .field-validation-error {
+            color: #dc3545;
+            font-size: 0.875em;
+        }
+
+        .is-valid {
+            border-color: #28a745 !important;
+        }
+
+        .is-invalid {
+            border-color: #dc3545 !important;
+        }
+
+        .nombre-ayuda, .cedula-ayuda, .telefono-ayuda {
+            color: #6c757d;
+            font-size: 0.875em;
+        }
+    </style>
+    <script>
+        // Función para validar nombres (solo letras y espacios)
+        function validarNombre(input) {
+            // Eliminar caracteres no permitidos
+            input.value = input.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+
+            // Validar longitud mínima
+            if (input.value.length >= 2) {
+                $(input).removeClass("is-invalid").addClass("is-valid");
+                $(input).nextAll('.nombre-ayuda').hide();
             } else {
-                $("#cedulaEmisor-group").show();
-                $("#cedulaReceptor-group").show();
+                $(input).removeClass("is-valid").addClass("is-invalid");
+                $(input).nextAll('.nombre-ayuda').show();
             }
         }
 
-        toggleCedulaFields();
-        $("#tipoCliente").change(function () {
-            toggleCedulaFields();
+        // Función para validar cédulas (exactamente 9 dígitos)
+        function validarCedula(input) {
+            // Solo números y máximo 9 dígitos
+            input.value = input.value.replace(/[^0-9]/g, '').substring(0, 9);
+
+            // Validar longitud exacta
+            if (input.value.length === 9) {
+                $(input).removeClass("is-invalid").addClass("is-valid");
+                $(input).nextAll('.cedula-ayuda').hide();
+            } else {
+                $(input).removeClass("is-valid").addClass("is-invalid");
+                $(input).nextAll('.cedula-ayuda').show();
+            }
+        }
+
+        // Función para validar teléfonos (8-15 dígitos)
+        function validarTelefono(input) {
+            // Solo números
+            input.value = input.value.replace(/[^0-9]/g, '');
+
+            // Validar longitud
+            if (input.value.length >= 8 && input.value.length <= 15) {
+                $(input).removeClass("is-invalid").addClass("is-valid");
+                $(input).nextAll('.telefono-ayuda').hide();
+            } else {
+                $(input).removeClass("is-valid").addClass("is-invalid");
+                $(input).nextAll('.telefono-ayuda').show();
+            }
+        }
+
+        $(document).ready(function () {
+            // Mostrar/ocultar campos según tipo de cliente
+            function toggleCamposCliente() {
+                var tipoCliente = $("#tipoCliente").val();
+
+                if (tipoCliente == "1") { // Cliente normal
+                    $("#cedulaEmisor-group").hide();
+                    $("#CedulaEmisor").removeAttr('required');
+                } else { // Cliente con cédula
+                    $("#cedulaEmisor-group").show();
+                    $("#CedulaEmisor").attr('required', 'required');
+                }
+            }
+
+            // Mostrar/ocultar campos de domicilio
+            function toggleDomicilio() {
+                if ($("#domicilio-checkbox").is(":checked")) {
+                    $("#direccion-group").show();
+                    $("#telefono-group").show();
+                    $("#Direccion").attr('required', 'required');
+                    $("#TelefonoDomicilio").attr('required', 'required');
+                } else {
+                    $("#direccion-group").hide();
+                    $("#telefono-group").hide();
+                    $("#Direccion").removeAttr('required');
+                    $("#TelefonoDomicilio").removeAttr('required');
+                }
+            }
+
+            // Eventos para mostrar mensajes de ayuda
+            $(".nombre-input").on("focus", function () {
+                $(this).nextAll('.nombre-ayuda').show();
+            }).on("blur", function () {
+                if ($(this).hasClass("is-valid")) {
+                    $(this).nextAll('.nombre-ayuda').hide();
+                }
+            });
+
+            $(".cedula-input").on("focus", function () {
+                $(this).nextAll('.cedula-ayuda').show();
+            }).on("blur", function () {
+                if ($(this).hasClass("is-valid")) {
+                    $(this).nextAll('.cedula-ayuda').hide();
+                }
+            });
+
+            $(".telefono-input").on("focus", function () {
+                $(this).nextAll('.telefono-ayuda').show();
+            }).on("blur", function () {
+                if ($(this).hasClass("is-valid")) {
+                    $(this).nextAll('.telefono-ayuda').hide();
+                }
+            });
+
+            // Validar antes de enviar
+            $("#formPaquete").submit(function (e) {
+                // Mostrar temporalmente todos los campos requeridos
+                $("[required]").each(function () {
+                    $(this).closest(".form-group").show();
+                });
+
+                // Validar formulario
+                var form = $(this);
+                form.validate();
+
+                if (!form.valid()) {
+                    e.preventDefault();
+
+                    // Restaurar visibilidad original
+                    toggleCamposCliente();
+                    toggleDomicilio();
+
+                    return false;
+                }
+            });
+
+            // Event listeners
+            $("#tipoCliente").change(toggleCamposCliente);
+            $("#domicilio-checkbox").change(toggleDomicilio);
+
+            // Inicializar
+            toggleCamposCliente();
+            toggleDomicilio();
         });
-    });
-</script>
+    </script>
 }
